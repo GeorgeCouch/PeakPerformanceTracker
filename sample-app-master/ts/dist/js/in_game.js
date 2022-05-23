@@ -259,36 +259,236 @@ class OWHotkeys {
           if (result && result.name === hotkeyId) action(result);
           //localStorage.clear();
           console.log(localStorage);
-          // Fake Data
-          // localStorage.setItem("0", "10826 5 3 2 victory 00:15:04 19:13 02/12/2022");
-          // localStorage.setItem("1", "5426 6 1 8 victory 00:16:04 19:13 02/11/2022");
-          // localStorage.setItem("2", "10826 7 4 3 victory 00:18:04 19:13 02/10/2022");
-          // localStorage.setItem("3", "21640 2 3 2 victory 00:25:04 19:13 02/13/2022");
-          // localStorage.setItem("4", "5426 8 9 0 victory 00:45:04 19:13 02/02/2022");
-          // localStorage.setItem("5", "21640 6 4 2 victory 00:35:04 19:13 02/09/2022");
-          // Retrieve based on Game
+          
+          // Get minimum key to loop through localStorage properly since it's an associative array
+          var currentMinimumKey;
+          for (var key in localStorage){
+            var keyToInt = parseInt(key);
+            if (currentMinimumKey == undefined) {
+              currentMinimumKey = keyToInt;
+            }
+
+            if (keyToInt < currentMinimumKey) {
+              currentMinimumKey = keyToInt;
+            }
+          }
+
+          // Get maximum key to loop through localStorage properly since it's an associative array
+          var currentMaximumKey;
+          for (var key in localStorage){
+            var keyToInt = parseInt(key);
+            if (currentMaximumKey == undefined) {
+              currentMaximumKey = keyToInt;
+            }
+
+            if (keyToInt > currentMaximumKey) {
+              currentMaximumKey = keyToInt;
+            }
+          }
+
+          // Convert localStorage to array of correct values
+          var localStorageConverted = [];
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var localStorageDataEntry = localStorage.getItem(i.toString());
+            localStorageDataEntry = localStorageDataEntry.split(" ");
+            var convertGameID = parseInt(localStorageDataEntry[0]);
+            var convertKills = parseInt(localStorageDataEntry[1]);
+            var convertDeaths = parseInt(localStorageDataEntry[2]);
+            var convertAssists = parseInt(localStorageDataEntry[3]);
+            var convertOutcome = localStorageDataEntry[4];
+            // Convert match time to miliseconds
+            var convertMatchLength = localStorageDataEntry[5].split(":");
+            // convert hours to miliseconds
+            var hours = parseInt(convertMatchLength[0]) * 360000;
+            // convert minutes to miliseconds
+            var minutes = parseInt(convertMatchLength[1]) * 60000;
+            // convert seconds to miliseconds
+            var seconds = parseInt(convertMatchLength[2]) * 1000;
+            convertMatchLength = hours + minutes + seconds;
+            // convert time of day to miliseconds
+            var convertTimeofDay = localStorageDataEntry[6].split(":");
+            // convert hours to miliseconds
+            hours = parseInt(convertTimeofDay[0]) * 3600000;
+            minutes = parseInt(convertTimeofDay[1]) * 60000;
+            // convert minutes to miliseconds
+            convertTimeofDay = hours + minutes;
+            var convertDay = Date.parse(localStorageDataEntry[7]);
+            localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+          }
+          console.log(localStorageConverted);
+
+          // get previous week
+          var today = new Date();
+          var dd = String(today.getDate()).padStart(2, "0");
+          var mm = String(today.getMonth() + 1).padStart(2, "0");
+          var yyyy = today.getFullYear();
+          today = new Date(mm + "/" + dd + "/" + yyyy);
+          var yesterday = today - 86400000;
+          var lastWeek = yesterday - 604800000;
+          var gamesFromPreviousWeek = [];
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++)
+          {
+            if (localStorageConverted[i][7] <= localStorageConverted[currentMaximumKey][7] && localStorageConverted[i][7] >= lastWeek) {
+              gamesFromPreviousWeek.push(localStorageConverted[i]);
+            }
+          }
+          // convert previous week dates to days
+          for (var i = 0; i < gamesFromPreviousWeek.length ; i++) {
+            gamesFromPreviousWeek[i][7] = new Date(gamesFromPreviousWeek[i][7]);
+            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].toString();
+            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
+            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
+          }
+          console.log(gamesFromPreviousWeek);
+
+          // Get average game time
+          var averageGameTime = 0;
+          for (var i = 0; i < gamesFromPreviousWeek.length; i++) {
+            averageGameTime += gamesFromPreviousWeek[i][5];
+          }
+          averageGameTime /= gamesFromPreviousWeek.length;
+
+          // Arrays for each day of the week
+          var sundayGames = [];
+          var mondayGames = [];
+          var tuesdayGames = [];
+          var wednesdayGames = [];
+          var thursdayGames = [];
+          var fridayGames = [];
+          var saturdayGames = [];
+          for (i = 0; i < gamesFromPreviousWeek.length; i++) {
+            switch (gamesFromPreviousWeek[i][7]) {
+              case "Sun":
+                sundayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Mon":
+                mondayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Tue":
+                tuesdayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Wed":
+                wednesdayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Thu":
+                thursdayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Fri":
+                fridayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              case "Sat":
+                saturdayGames.push(gamesFromPreviousWeek[i]);
+                break;
+              default:
+                break;
+            }
+          }
+          console.log(sundayGames);
+          console.log(mondayGames);
+          console.log(tuesdayGames);
+          console.log(wednesdayGames);
+          console.log(thursdayGames);
+          console.log(fridayGames);
+          console.log(saturdayGames);
+          console.log(averageGameTime);
+          // recommend time slots for each day
+          var mondayGamesWeight = [];
+          for (var i = 0; i < mondayGames.length; i++) {
+            var monKills = mondayGames[i][1];
+            var monDeaths = mondayGames[i][2];
+            var monAssists = mondayGames[i][3];
+            if (monDeaths != 0) {
+              var monKDA = (monKills + monAssists) / monDeaths;
+            }
+            else {
+              var monKDA = monKills + monAssists;
+            }
+            var gameWeight = monKDA;
+            console.log(gameWeight);
+            if (mondayGames[i][4] == "win") {
+              gameWeight += 5;
+              if (mondayGames[i][5] <= averageGameTime) {
+                var tmpMonGameTime = mondayGames[i][5];
+                while (tmpMonGameTime <= averageGameTime) {
+                  tmpMonGameTime += 120000;
+                  if (tmpMonGameTime <= averageGameTime) {
+                    gameWeight++;
+                  }
+                } 
+              }
+              else {
+                var tmpMonGameTime = mondayGames[i][5];
+                while (tmpMonGameTime > averageGameTime) {
+                  tmpMonGameTime -= 120000;
+                  if (tmpMonGameTime > averageGameTime) {
+                    gameWeight--;
+                  }
+                }
+              }
+            } else {
+              gameWeight -= 5;
+            }
+            console.log(gameWeight);
+            gameWeight = Math.round(gameWeight);
+            if (gameWeight < 0) {
+              gameWeight = 0;
+            }
+            mondayGamesWeight.push(gameWeight);
+          }
+          console.log(mondayGamesWeight);
+          
+          var competingTimeSlots = []
+          for (var i = 0; i < mondayGames.length; i++) {
+            competingTimeSlots[i] = mondayGames[i][6] / 3600000;
+          }
+          console.log(competingTimeSlots);
+
+          var totalCompetingTimeSlots = 0;
+          var avgCompetingTimeSlots;
+          var totalGameWeight = 0;
+          for (var i = 0; i < competingTimeSlots.length; i++) {
+            totalCompetingTimeSlots += competingTimeSlots[i] * mondayGamesWeight[i];
+            totalGameWeight += mondayGamesWeight[i];
+          }
+          console.log(totalCompetingTimeSlots / totalGameWeight);
+
+          // var avgTimeSlots = [];
+          // var totalGameTimeSlots = 0;
+          // var totalGameWeight = 0;
+          // for (var i = 0; mondayGames.length; i++) {
+          //   for (i = 0; i <= mondayGamesWeight[i]; i++) {
+
+          //   }
+
+          //   totalGameTimeSlots += mondayGames[i] * mondayGamesWeight[i];
+          //   totalGameWeight += mondayGamesWeight[i];
+          // }
+          // console.log("Middle of Time Slot: " + (totalGameTimeSlots / totalGameWeight));
+
+          // Check gameID
           // League of Legends
           console.log("League of Legends");
           var leagueGames = [];
-          for (var i = 0; i < localStorage.length; i++) {
-            var getGameID = localStorage.getItem(i.toString());
-            getGameID = getGameID.split(" ");
-            getGameID = parseInt(getGameID[0]);
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var getGameID = localStorageConverted[i][0];
             if (getGameID == 5426) {
-              leagueGames.push(localStorage.getItem(i.toString()));
+              leagueGames.push(localStorageConverted[i]);
             }
           }
           console.log(leagueGames);
 
+          // get previous week
+          console.log(leagueGames[currentMaximumKey]);
+          // calculate league kda
+          
+
           // Valorant
           console.log("Valorant");
           var valorantGames = [];
-          for (var i = 0; i < localStorage.length; i++) {
-            var getGameID = localStorage.getItem(i.toString());
-            getGameID = getGameID.split(" ");
-            getGameID = parseInt(getGameID[0]);
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var getGameID = localStorageConverted[i][0];
             if (getGameID == 21640) {
-              valorantGames.push(localStorage.getItem(i.toString()));
+              valorantGames.push(localStorageConverted[i]);
             }
           }
           console.log(valorantGames);
@@ -296,12 +496,10 @@ class OWHotkeys {
           // Rainbow 6 Seige
           console.log("Rainbow 6 Seige");
           var seigeGames = [];
-          for (var i = 0; i < localStorage.length; i++) {
-            var getGameID = localStorage.getItem(i.toString());
-            getGameID = getGameID.split(" ");
-            getGameID = parseInt(getGameID[0]);
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var getGameID = localStorageConverted[i][0];
             if (getGameID == 10826) {
-              seigeGames.push(localStorage.getItem(i.toString()));
+              seigeGames.push(localStorageConverted[i]);
             }
           }
           console.log(seigeGames);
