@@ -258,7 +258,19 @@ class OWHotkeys {
         overwolf.settings.hotkeys.onPressed.addListener((result) => {
           if (result && result.name === hotkeyId) action(result);
           //localStorage.clear();
+          console.log("LocalStorage");
           console.log(localStorage);
+          
+          // League of Legends
+          console.log("League of Legends Games");
+          var leagueGames = [];
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var getGameID = localStorageConverted[i][0];
+            if (getGameID == 5426) {
+              leagueGames.push(localStorageConverted[i]);
+            }
+          }
+          console.log(leagueGames);
           
           // Get minimum key to loop through localStorage properly since it's an associative array
           var currentMinimumKey;
@@ -315,6 +327,7 @@ class OWHotkeys {
             var convertDay = Date.parse(localStorageDataEntry[7]);
             localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
           }
+          console.log("LocalStorageConverted");
           console.log(localStorageConverted);
 
           // get previous week
@@ -339,6 +352,7 @@ class OWHotkeys {
             gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
             gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
           }
+          console.log("All games from previous week");
           console.log(gamesFromPreviousWeek);
 
           // Get average game time
@@ -466,16 +480,7 @@ class OWHotkeys {
           // console.log("Middle of Time Slot: " + (totalGameTimeSlots / totalGameWeight));
 
           // Check gameID
-          // League of Legends
-          console.log("League of Legends");
-          var leagueGames = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var getGameID = localStorageConverted[i][0];
-            if (getGameID == 5426) {
-              leagueGames.push(localStorageConverted[i]);
-            }
-          }
-          console.log(leagueGames);
+          
 
           // get previous week
           console.log(leagueGames[currentMaximumKey]);
