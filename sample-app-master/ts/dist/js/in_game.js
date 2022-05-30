@@ -233,6 +233,201 @@ exports.OWGames = OWGames;
   \*******************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
+  function getAverageTimeSlotforDay(array, gameAverageGameTime)
+  {
+    var dayGamesWeight = [];
+          for (var i = 0; i < array.length; i++) {
+            var dayKills = array[i][1];
+            var dayDeaths = array[i][2];
+            var dayAssists = array[i][3];
+            if (dayDeaths != 0) {
+              var dayKDA = (dayKills + dayAssists) / dayDeaths;
+            }
+            else {
+              var dayKDA = dayKills + dayAssists;
+            }
+            var gameWeight = dayKDA;
+            if (array[i][4] == "win") {
+              gameWeight += 5;
+              if (array[i][5] <= gameAverageGameTime) {
+                var tmpDayGameTime = array[i][5];
+                while (tmpDayGameTime <= gameAverageGameTime) {
+                  tmpDayGameTime += 120000;
+                  if (tmpDayGameTime <= gameAverageGameTime) {
+                    gameWeight++;
+                  }
+                } 
+              }
+              else {
+                var tmpDayGameTime = array[i][5];
+                while (tmpDayGameTime > gameAverageGameTime) {
+                  tmpDayGameTime -= 120000;
+                  if (tmpDayGameTime > gameAverageGameTime) {
+                    gameWeight--;
+                  }
+                }
+              }
+            } else {
+              gameWeight -= 5;
+            }
+            gameWeight = Math.round(gameWeight);
+            if (gameWeight < 0) {
+              gameWeight = 0;
+            }
+            dayGamesWeight.push(gameWeight);
+          }
+          
+          var competingTimeSlots = []
+          for (var i = 0; i < array.length; i++) {
+            competingTimeSlots[i] = array[i][6] / 3600000;
+          }
+
+          var totalCompetingTimeSlots = 0;
+          var avgCompetingTimeSlots;
+          var totalGameWeight = 0;
+          for (var i = 0; i < competingTimeSlots.length; i++) {
+            totalCompetingTimeSlots += competingTimeSlots[i] * dayGamesWeight[i];
+            totalGameWeight += dayGamesWeight[i];
+          }
+          avgCompetingTimeSlots = totalCompetingTimeSlots / totalGameWeight;
+          var startTime = 0;
+          var endTime = 0;
+          if (avgCompetingTimeSlots - 1 < 0)
+          {
+            startTime = 0;
+          }
+          else
+          {
+            startTime = avgCompetingTimeSlots - 1;
+          }
+          if (avgCompetingTimeSlots + 1 > 23.99)
+          {
+            endTime = 23.99;
+          }
+          else
+          {
+            endTime = avgCompetingTimeSlots + 1;
+          }
+
+          var startTimeConverted = convertNumToTime(startTime);
+          var endTimeConverted = convertNumToTime(endTime);
+
+          var startTimeConvertedArray = startTimeConverted.split(":");
+          var startTimeConvertedHours = startTimeConvertedArray[0];
+          startTimeConvertedHours = parseInt(startTimeConvertedHours);
+          var endTimeConvertedArray = endTimeConverted.split(":");
+          var endTimeConvertedHours = endTimeConvertedArray[0];
+          endTimeConvertedHours = parseInt(endTimeConvertedHours);
+
+          startTimeConvertedHours = ((startTimeConvertedHours + 11) % 12 + 1);
+          endTimeConvertedHours = ((endTimeConvertedHours + 11) % 12 + 1);
+
+          var startTimeString = startTimeConvertedHours + ":" + startTimeConvertedArray[1];
+          var endTimeString = endTimeConvertedHours + ":" + endTimeConvertedArray[1];
+
+          if (startTime < 12)
+          {
+            startTimeString = startTimeString + " AM";
+          }
+          else
+          {
+            startTimeString = startTimeString + " PM";
+          }
+
+          if (endTime < 12)
+          {
+            endTimeString = endTimeString + " AM";
+          }
+          else
+          {
+            endTimeString = endTimeString + " PM";
+          }
+
+          return startTimeString + " - " + endTimeString;
+  }
+
+  function convertNumToTime(number) {
+    // Check sign of given number
+    var sign = (number >= 0) ? 1 : -1;
+
+    // Set positive value of number of sign negative
+    number = number * sign;
+
+    // Separate the int from the decimal part
+    var hour = Math.floor(number);
+    var decpart = number - hour;
+
+    var min = 1 / 60;
+    // Round to nearest minute
+    decpart = min * Math.round(decpart / min);
+
+    var minute = Math.floor(decpart * 60) + '';
+
+    // Add padding if need
+    if (minute.length < 2) {
+    minute = '0' + minute; 
+    }
+
+    // Add Sign in final result
+    sign = sign == 1 ? '' : '-';
+
+    // Concate hours and minutes
+    var time = sign + hour + ':' + minute;
+
+    return time;
+}
+
+  function getGamesFromPreviousWeek(array, weeks)
+  {
+    // Get maximum key to loop through array properly since it's an associative array
+    var currentMaximumKey;
+    for (var key in array){
+      var keyToInt = parseInt(key);
+      if (currentMaximumKey == undefined) {
+        currentMaximumKey = keyToInt;
+      }
+
+      if (keyToInt > currentMaximumKey) {
+        currentMaximumKey = keyToInt;
+      }
+    }
+
+    // Get minimum key to loop through array properly since it's an associative array
+    var currentMinimumKey;
+    for (var key in localStorage){
+      var keyToInt = parseInt(key);
+      if (currentMinimumKey == undefined) {
+        currentMinimumKey = keyToInt;
+      }
+
+      if (keyToInt < currentMinimumKey) {
+        currentMinimumKey = keyToInt;
+      }
+    }
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0");
+    var yyyy = today.getFullYear();
+    today = new Date(mm + "/" + dd + "/" + yyyy);
+    var yesterday = today - 86400000;
+    var lastWeek = yesterday - 604800000;
+    var gamesFromPreviousWeek = [];
+    for (var i = currentMinimumKey; i <= currentMaximumKey; i++)
+    {
+      if (array[i][7] <= array[currentMaximumKey][7] && array[i][7] >= lastWeek) {
+        gamesFromPreviousWeek.push(array[i]);
+      }
+    }
+    // convert previous week dates to days
+    for (var i = 0; i < gamesFromPreviousWeek.length ; i++) {
+      gamesFromPreviousWeek[i][7] = new Date(gamesFromPreviousWeek[i][7]);
+      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].toString();
+      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
+      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
+    }
+    return gamesFromPreviousWeek;
+  }
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OWHotkeys = void 0;
@@ -257,20 +452,81 @@ class OWHotkeys {
     static onHotkeyDown(hotkeyId, action) {
         overwolf.settings.hotkeys.onPressed.addListener((result) => {
           if (result && result.name === hotkeyId) action(result);
+          // Fake Data 3 from each game for each day
           //localStorage.clear();
+          //Sunday
+          localStorage.setItem("0", "5426 5 13 15 loss 00:32:45 19:06 05/22/2022");
+          localStorage.setItem("1", "5426 6 4 10 win 00:38:35 20:06 05/22/2022");
+          localStorage.setItem("2", "5426 8 3 6 win 00:40:25 23:20 05/22/2022");
+          localStorage.setItem("3", "21640 10 4 6 win 00:32:45 18:06 05/22/2022");
+          localStorage.setItem("4", "21640 10 4 6 win 00:32:45 18:06 05/22/2022");
+          localStorage.setItem("5", "21640 10 4 6 win 00:32:45 18:06 05/22/2022");
+          localStorage.setItem("6", "10826 10 4 6 win 00:32:45 18:06 05/22/2022");
+          localStorage.setItem("7", "10826 10 4 6 win 00:32:45 18:06 05/22/2022");
+          localStorage.setItem("8", "10826 10 4 6 win 00:32:45 18:06 05/22/2022");
+          // Monday
+          localStorage.setItem("9", "5426 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("10", "5426 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("11", "5426 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("12", "21640 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("13", "21640 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("14", "21640 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("15", "10826 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("16", "10826 10 4 6 win 00:32:45 18:06 05/23/2022");
+          localStorage.setItem("17", "10826 10 4 6 win 00:32:45 18:06 05/23/2022");
+          // Tuesday
+          localStorage.setItem("18", "5426 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("19", "5426 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("20", "5426 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("21", "21640 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("22", "21640 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("23", "21640 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("24", "10826 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("25", "10826 10 4 6 win 00:32:45 18:06 05/24/2022");
+          localStorage.setItem("26", "10826 10 4 6 win 00:32:45 18:06 05/24/2022");
+          // Wednesday
+          localStorage.setItem("27", "5426 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("28", "5426 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("29", "5426 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("30", "21640 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("31", "21640 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("32", "21640 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("33", "10826 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("34", "10826 10 4 6 win 00:32:45 18:06 05/25/2022");
+          localStorage.setItem("35", "10826 10 4 6 win 00:32:45 18:06 05/25/2022");
+          // Thursday
+          localStorage.setItem("36", "5426 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("37", "5426 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("38", "5426 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("39", "21640 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("40", "21640 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("41", "21640 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("42", "10826 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("43", "10826 10 4 6 win 00:32:45 18:06 05/26/2022");
+          localStorage.setItem("44", "10826 10 4 6 win 00:32:45 18:06 05/26/2022");
+          // Friday
+          localStorage.setItem("45", "5426 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("46", "5426 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("47", "5426 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("48", "21640 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("49", "21640 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("50", "21640 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("51", "10826 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("52", "10826 10 4 6 win 00:32:45 18:06 05/27/2022");
+          localStorage.setItem("53", "10826 10 4 6 win 00:32:45 18:06 05/27/2022");
+          // Saturday
+          localStorage.setItem("54", "5426 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("55", "5426 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("56", "5426 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("57", "21640 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("58", "21640 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("59", "21640 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("60", "10826 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("61", "10826 10 4 6 win 00:32:45 18:06 05/28/2022");
+          localStorage.setItem("62", "10826 10 4 6 win 00:32:45 18:06 05/28/2022");
+
           console.log("LocalStorage");
           console.log(localStorage);
-          
-          // League of Legends
-          console.log("League of Legends Games");
-          var leagueGames = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var getGameID = localStorageConverted[i][0];
-            if (getGameID == 5426) {
-              leagueGames.push(localStorageConverted[i]);
-            }
-          }
-          console.log(leagueGames);
           
           // Get minimum key to loop through localStorage properly since it's an associative array
           var currentMinimumKey;
@@ -330,165 +586,96 @@ class OWHotkeys {
           console.log("LocalStorageConverted");
           console.log(localStorageConverted);
 
-          // get previous week
-          var today = new Date();
-          var dd = String(today.getDate()).padStart(2, "0");
-          var mm = String(today.getMonth() + 1).padStart(2, "0");
-          var yyyy = today.getFullYear();
-          today = new Date(mm + "/" + dd + "/" + yyyy);
-          var yesterday = today - 86400000;
-          var lastWeek = yesterday - 604800000;
-          var gamesFromPreviousWeek = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++)
-          {
-            if (localStorageConverted[i][7] <= localStorageConverted[currentMaximumKey][7] && localStorageConverted[i][7] >= lastWeek) {
-              gamesFromPreviousWeek.push(localStorageConverted[i]);
+          // League of Legends
+          console.log("League of Legends Games from converted LocalStorage");
+          var leagueGames = [];
+          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+            var getGameID = localStorageConverted[i][0];
+            if (getGameID == 5426) {
+              leagueGames.push(localStorageConverted[i]);
             }
           }
-          // convert previous week dates to days
-          for (var i = 0; i < gamesFromPreviousWeek.length ; i++) {
-            gamesFromPreviousWeek[i][7] = new Date(gamesFromPreviousWeek[i][7]);
-            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].toString();
-            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
-            gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
-          }
-          console.log("All games from previous week");
-          console.log(gamesFromPreviousWeek);
+          console.log(leagueGames);
 
-          // Get average game time
-          var averageGameTime = 0;
-          for (var i = 0; i < gamesFromPreviousWeek.length; i++) {
-            averageGameTime += gamesFromPreviousWeek[i][5];
+          // Get League of Legends Games from previous week
+          var leagueGamesFromPreviousWeek = getGamesFromPreviousWeek(leagueGames, 1);
+          console.log("All League of Legends games from previous week");
+          console.log(leagueGamesFromPreviousWeek);
+
+          // Get league average game time
+          var leagueaverageGameTime = 0;
+          for (var i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
+            leagueaverageGameTime += leagueGamesFromPreviousWeek[i][5];
           }
-          averageGameTime /= gamesFromPreviousWeek.length;
+          leagueaverageGameTime /= leagueGamesFromPreviousWeek.length;
 
           // Arrays for each day of the week
-          var sundayGames = [];
-          var mondayGames = [];
-          var tuesdayGames = [];
-          var wednesdayGames = [];
-          var thursdayGames = [];
-          var fridayGames = [];
-          var saturdayGames = [];
-          for (i = 0; i < gamesFromPreviousWeek.length; i++) {
-            switch (gamesFromPreviousWeek[i][7]) {
+          var leaguesundayGames = [];
+          var leaguemondayGames = [];
+          var leaguetuesdayGames = [];
+          var leaguewednesdayGames = [];
+          var leaguethursdayGames = [];
+          var leaguefridayGames = [];
+          var leaguesaturdayGames = [];
+          for (i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
+            switch (leagueGamesFromPreviousWeek[i][7]) {
               case "Sun":
-                sundayGames.push(gamesFromPreviousWeek[i]);
+                leaguesundayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Mon":
-                mondayGames.push(gamesFromPreviousWeek[i]);
+                leaguemondayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Tue":
-                tuesdayGames.push(gamesFromPreviousWeek[i]);
+                leaguetuesdayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Wed":
-                wednesdayGames.push(gamesFromPreviousWeek[i]);
+                leaguewednesdayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Thu":
-                thursdayGames.push(gamesFromPreviousWeek[i]);
+                leaguethursdayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Fri":
-                fridayGames.push(gamesFromPreviousWeek[i]);
+                leaguefridayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               case "Sat":
-                saturdayGames.push(gamesFromPreviousWeek[i]);
+                leaguesaturdayGames.push(leagueGamesFromPreviousWeek[i]);
                 break;
               default:
                 break;
             }
           }
-          console.log(sundayGames);
-          console.log(mondayGames);
-          console.log(tuesdayGames);
-          console.log(wednesdayGames);
-          console.log(thursdayGames);
-          console.log(fridayGames);
-          console.log(saturdayGames);
-          console.log(averageGameTime);
-          // recommend time slots for each day
-          var mondayGamesWeight = [];
-          for (var i = 0; i < mondayGames.length; i++) {
-            var monKills = mondayGames[i][1];
-            var monDeaths = mondayGames[i][2];
-            var monAssists = mondayGames[i][3];
-            if (monDeaths != 0) {
-              var monKDA = (monKills + monAssists) / monDeaths;
-            }
-            else {
-              var monKDA = monKills + monAssists;
-            }
-            var gameWeight = monKDA;
-            console.log(gameWeight);
-            if (mondayGames[i][4] == "win") {
-              gameWeight += 5;
-              if (mondayGames[i][5] <= averageGameTime) {
-                var tmpMonGameTime = mondayGames[i][5];
-                while (tmpMonGameTime <= averageGameTime) {
-                  tmpMonGameTime += 120000;
-                  if (tmpMonGameTime <= averageGameTime) {
-                    gameWeight++;
-                  }
-                } 
-              }
-              else {
-                var tmpMonGameTime = mondayGames[i][5];
-                while (tmpMonGameTime > averageGameTime) {
-                  tmpMonGameTime -= 120000;
-                  if (tmpMonGameTime > averageGameTime) {
-                    gameWeight--;
-                  }
-                }
-              }
-            } else {
-              gameWeight -= 5;
-            }
-            console.log(gameWeight);
-            gameWeight = Math.round(gameWeight);
-            if (gameWeight < 0) {
-              gameWeight = 0;
-            }
-            mondayGamesWeight.push(gameWeight);
-          }
-          console.log(mondayGamesWeight);
-          
-          var competingTimeSlots = []
-          for (var i = 0; i < mondayGames.length; i++) {
-            competingTimeSlots[i] = mondayGames[i][6] / 3600000;
-          }
-          console.log(competingTimeSlots);
 
-          var totalCompetingTimeSlots = 0;
-          var avgCompetingTimeSlots;
-          var totalGameWeight = 0;
-          for (var i = 0; i < competingTimeSlots.length; i++) {
-            totalCompetingTimeSlots += competingTimeSlots[i] * mondayGamesWeight[i];
-            totalGameWeight += mondayGamesWeight[i];
-          }
-          console.log(totalCompetingTimeSlots / totalGameWeight);
+          console.log("League recommended time slots for each day!");
+          var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime);
+          localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+          console.log("League Sunday Slot");
+          console.log(leagueSundaySlot);
+          var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+          console.log("League Monday Slot");
+          console.log(leagueMondaySlot);
+          var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+          console.log("League Tuesday Slot");
+          console.log(leagueTuesdaySlot);
+          var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+          console.log("League Wednesday Slot");
+          console.log(leagueWednesdaySlot);
+          var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+          console.log("League Thursday Slot");
+          console.log(leagueThursdaySlot);
+          var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+          console.log("League Friday Slot");
+          console.log(leagueFridaySlot);
+          var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime);
+          localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+          console.log("League Saturday Slot");
+          console.log(leagueSaturdaySlot);
 
-          // var avgTimeSlots = [];
-          // var totalGameTimeSlots = 0;
-          // var totalGameWeight = 0;
-          // for (var i = 0; mondayGames.length; i++) {
-          //   for (i = 0; i <= mondayGamesWeight[i]; i++) {
-
-          //   }
-
-          //   totalGameTimeSlots += mondayGames[i] * mondayGamesWeight[i];
-          //   totalGameWeight += mondayGamesWeight[i];
-          // }
-          // console.log("Middle of Time Slot: " + (totalGameTimeSlots / totalGameWeight));
-
-          // Check gameID
-          
-
-          // get previous week
-          console.log(leagueGames[currentMaximumKey]);
-          // calculate league kda
-          
-
-          // Valorant
-          console.log("Valorant");
+          console.log("Valorant Games from converted LocalStorage");
           var valorantGames = [];
           for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
             var getGameID = localStorageConverted[i][0];
@@ -498,8 +685,86 @@ class OWHotkeys {
           }
           console.log(valorantGames);
 
+          // Get Valorant games from previous week
+          var valorantGamesFromPreviousWeek = getGamesFromPreviousWeek(valorantGames);
+          console.log("All Valorant games from previous week");
+          console.log(valorantGamesFromPreviousWeek);
+
+          // Get Valorant average game time
+          var valorantaverageGameTime = 0;
+          for (var i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
+            valorantaverageGameTime += valorantGamesFromPreviousWeek[i][5];
+          }
+          valorantaverageGameTime /= valorantGamesFromPreviousWeek.length;
+
+          // Arrays for each day of the week
+          var valorantsundayGames = [];
+          var valorantmondayGames = [];
+          var valoranttuesdayGames = [];
+          var valorantwednesdayGames = [];
+          var valorantthursdayGames = [];
+          var valorantfridayGames = [];
+          var valorantsaturdayGames = [];
+          for (i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
+            switch (valorantGamesFromPreviousWeek[i][7]) {
+              case "Sun":
+                valorantsundayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Mon":
+                valorantmondayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Tue":
+                valoranttuesdayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Wed":
+                valorantwednesdayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Thu":
+                valorantthursdayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Fri":
+                valorantfridayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              case "Sat":
+                valorantsaturdayGames.push(valorantGamesFromPreviousWeek[i]);
+                break;
+              default:
+                break;
+            }
+          }
+
+          console.log("Valorant recommended time slots for each day!");
+          var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+          console.log("Valorant Sunday Slot");
+          console.log(valorantSundaySlot);
+          var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+          console.log("Valorant Monday Slot");
+          console.log(valorantMondaySlot);
+          var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+          console.log("Valorant Tuesday Slot");
+          console.log(valorantTuesdaySlot);
+          var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+          console.log("Valorant Wednesday Slot");
+          console.log(valorantWednesdaySlot);
+          var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+          console.log("Valorant Thursday Slot");
+          console.log(valorantThursdaySlot);
+          var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+          console.log("Valorant Friday Slot");
+          console.log(valorantFridaySlot);
+          var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime);
+          localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+          console.log("Valorant Saturday Slot");
+          console.log(valorantSaturdaySlot);
+
           // Rainbow 6 Seige
-          console.log("Rainbow 6 Seige");
+          console.log("Rainbow 6 Seige Games from converted LocalStorage");
           var seigeGames = [];
           for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
             var getGameID = localStorageConverted[i][0];
@@ -508,6 +773,84 @@ class OWHotkeys {
             }
           }
           console.log(seigeGames);
+
+          // Get Rainbow 6 Seige games from previous week
+          var seigeGamesFromPreviousWeek = getGamesFromPreviousWeek(seigeGames);
+          console.log("All Rainbow 6 Seige games from previous week");
+          console.log(seigeGamesFromPreviousWeek);
+
+          // Get Rainbow 6 Seige average game time
+          var seigeaverageGameTime = 0;
+          for (var i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
+            seigeaverageGameTime += seigeGamesFromPreviousWeek[i][5];
+          }
+          seigeaverageGameTime /= seigeGamesFromPreviousWeek.length;
+
+          // Arrays for each day of the week
+          var seigesundayGames = [];
+          var seigemondayGames = [];
+          var seigetuesdayGames = [];
+          var seigewednesdayGames = [];
+          var seigethursdayGames = [];
+          var seigefridayGames = [];
+          var seigesaturdayGames = [];
+          for (i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
+            switch (seigeGamesFromPreviousWeek[i][7]) {
+              case "Sun":
+                seigesundayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Mon":
+                seigemondayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Tue":
+                seigetuesdayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Wed":
+                seigewednesdayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Thu":
+                seigethursdayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Fri":
+                seigefridayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              case "Sat":
+                seigesaturdayGames.push(seigeGamesFromPreviousWeek[i]);
+                break;
+              default:
+                break;
+            }
+          }
+
+          console.log("Rainbow 6 Seige recommended time slots for each day!");
+          var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+          console.log("Rainbow 6 Seige Sunday Slot");
+          console.log(seigeSundaySlot);
+          var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+          console.log("Rainbow 6 Seige Monday Slot");
+          console.log(seigeMondaySlot);
+          var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+          console.log("Rainbow 6 Seige Tuesday Slot");
+          console.log(seigeTuesdaySlot);
+          var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+          console.log("Rainbow 6 Seige Wednesday Slot");
+          console.log(seigeWednesdaySlot);
+          var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+          console.log("Rainbow 6 Seige Thursday Slot");
+          console.log(seigeThursdaySlot);
+          var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+          console.log("Rainbow 6 Seige Friday Slot");
+          console.log(seigeFridaySlot);
+          var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime);
+          localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
+          console.log("Rainbow 6 Seige Saturday Slot");
+          console.log(seigeSaturdaySlot);
         });
       }
 }
@@ -1503,6 +1846,33 @@ class InGame extends AppWindow_1.AppWindow {
             console.log(this.endLog);
           }
         }
+        
+        if (info.game_info !== undefined) {
+          if (info.game_info.phase !== undefined) {
+            if (info.game_info.phase == "round_results") {
+              // Use this to start time for tally
+              this.roundStart = new Date();
+
+              if (this.gameTime == undefined) {
+                // game time
+                var hours = new Date().getHours();
+                var minutes = new Date().getMinutes();
+                hours = String(hours).padStart(2, "0");
+                minutes = String(minutes).padStart(2, "0");
+                this.gameTime = hours + ":" + minutes;
+              }
+
+              if (this.date == undefined) {
+                // Define the date
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, "0");
+                var mm = String(today.getMonth() + 1).padStart(2, "0");
+                var yyyy = today.getFullYear();
+                this.date = mm + "/" + dd + "/" + yyyy;
+              }
+            }
+          }
+        }
 
         // Exclude player rosters
         if (info.players !== undefined) {
@@ -1753,26 +2123,26 @@ class InGame extends AppWindow_1.AppWindow {
             case "match_end":
               return true;
             case "roundStart":
-              // Use this to start time for tally
-              this.roundStart = new Date();
+              // // Use this to start time for tally
+              // this.roundStart = new Date();
 
-              if (this.gameTime == undefined) {
-                // game time
-                var hours = new Date().getHours();
-                var minutes = new Date().getMinutes();
-                hours = String(hours).padStart(2, "0");
-                minutes = String(minutes).padStart(2, "0");
-                this.gameTime = hours + ":" + minutes;
-              }
+              // if (this.gameTime == undefined) {
+              //   // game time
+              //   var hours = new Date().getHours();
+              //   var minutes = new Date().getMinutes();
+              //   hours = String(hours).padStart(2, "0");
+              //   minutes = String(minutes).padStart(2, "0");
+              //   this.gameTime = hours + ":" + minutes;
+              // }
 
-              if (this.date == undefined) {
-                // Define the date
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, "0");
-                var mm = String(today.getMonth() + 1).padStart(2, "0");
-                var yyyy = today.getFullYear();
-                this.date = mm + "/" + dd + "/" + yyyy;
-              }
+              // if (this.date == undefined) {
+              //   // Define the date
+              //   var today = new Date();
+              //   var dd = String(today.getDate()).padStart(2, "0");
+              //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+              //   var yyyy = today.getFullYear();
+              //   this.date = mm + "/" + dd + "/" + yyyy;
+              // }
               return true;
             case "roundEnd":
               // Use this to end time for tally
