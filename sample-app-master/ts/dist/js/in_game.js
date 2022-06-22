@@ -238,202 +238,202 @@ exports.OWGames = OWGames;
   \*******************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-  function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, sufficientSleep, dayofWeek)
-  {
-    var dayGamesWeight = [];
-          for (var i = 0; i < array.length; i++) {
-            var dayKills = array[i][1];
-            var dayDeaths = array[i][2];
-            var dayAssists = array[i][3];
-            if (dayDeaths != 0) {
-              var dayKDA = (dayKills + dayAssists) / dayDeaths;
-            }
-            else {
-              var dayKDA = dayKills + dayAssists;
-            }
-            var gameWeight = dayKDA;
-            if (array[i][4] == "win") {
-              gameWeight += 5;
-              if (array[i][5] <= gameAverageGameTime) {
-                var tmpDayGameTime = array[i][5];
-                while (tmpDayGameTime <= gameAverageGameTime) {
-                  tmpDayGameTime += 120000;
-                  if (tmpDayGameTime <= gameAverageGameTime) {
-                    gameWeight++;
-                  }
-                } 
-              }
-              else {
-                var tmpDayGameTime = array[i][5];
-                while (tmpDayGameTime > gameAverageGameTime) {
-                  tmpDayGameTime -= 120000;
-                  if (tmpDayGameTime > gameAverageGameTime) {
-                    gameWeight--;
-                  }
-                }
-              }
-            } else {
-              gameWeight -= 5;
-            }
-            gameWeight = Math.round(gameWeight);
-            if (gameWeight < 0) {
-              gameWeight = 0;
-            }
-            dayGamesWeight.push(gameWeight);
-          }
+//   function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, sufficientSleep, dayofWeek)
+//   {
+//     var dayGamesWeight = [];
+//           for (var i = 0; i < array.length; i++) {
+//             var dayKills = array[i][1];
+//             var dayDeaths = array[i][2];
+//             var dayAssists = array[i][3];
+//             if (dayDeaths != 0) {
+//               var dayKDA = (dayKills + dayAssists) / dayDeaths;
+//             }
+//             else {
+//               var dayKDA = dayKills + dayAssists;
+//             }
+//             var gameWeight = dayKDA;
+//             if (array[i][4] == "win") {
+//               gameWeight += 5;
+//               if (array[i][5] <= gameAverageGameTime) {
+//                 var tmpDayGameTime = array[i][5];
+//                 while (tmpDayGameTime <= gameAverageGameTime) {
+//                   tmpDayGameTime += 120000;
+//                   if (tmpDayGameTime <= gameAverageGameTime) {
+//                     gameWeight++;
+//                   }
+//                 } 
+//               }
+//               else {
+//                 var tmpDayGameTime = array[i][5];
+//                 while (tmpDayGameTime > gameAverageGameTime) {
+//                   tmpDayGameTime -= 120000;
+//                   if (tmpDayGameTime > gameAverageGameTime) {
+//                     gameWeight--;
+//                   }
+//                 }
+//               }
+//             } else {
+//               gameWeight -= 5;
+//             }
+//             gameWeight = Math.round(gameWeight);
+//             if (gameWeight < 0) {
+//               gameWeight = 0;
+//             }
+//             dayGamesWeight.push(gameWeight);
+//           }
           
-          var competingTimeSlots = []
-          for (var i = 0; i < array.length; i++) {
-            competingTimeSlots[i] = array[i][6] / 3600000;
-          }
+//           var competingTimeSlots = []
+//           for (var i = 0; i < array.length; i++) {
+//             competingTimeSlots[i] = array[i][6] / 3600000;
+//           }
 
-          var totalCompetingTimeSlots = 0;
-          var avgCompetingTimeSlots;
-          var totalGameWeight = 0;
-          for (var i = 0; i < competingTimeSlots.length; i++) {
-            totalCompetingTimeSlots += competingTimeSlots[i] * dayGamesWeight[i];
-            totalGameWeight += dayGamesWeight[i];
-          }
-          avgCompetingTimeSlots = totalCompetingTimeSlots / totalGameWeight;
-          var startTime = 0;
-          var endTime = 0;
-          if (avgCompetingTimeSlots - 1 < 0)
-          {
-            startTime = 0;
-          }
-          else
-          {
-            startTime = avgCompetingTimeSlots - 1;
-          }
+//           var totalCompetingTimeSlots = 0;
+//           var avgCompetingTimeSlots;
+//           var totalGameWeight = 0;
+//           for (var i = 0; i < competingTimeSlots.length; i++) {
+//             totalCompetingTimeSlots += competingTimeSlots[i] * dayGamesWeight[i];
+//             totalGameWeight += dayGamesWeight[i];
+//           }
+//           avgCompetingTimeSlots = totalCompetingTimeSlots / totalGameWeight;
+//           var startTime = 0;
+//           var endTime = 0;
+//           if (avgCompetingTimeSlots - 1 < 0)
+//           {
+//             startTime = 0;
+//           }
+//           else
+//           {
+//             startTime = avgCompetingTimeSlots - 1;
+//           }
 
-          if (avgCompetingTimeSlots + 1 > 23.99)
-          {
-            endTime = 23.99;
-          }
-          else
-          {
-            endTime = avgCompetingTimeSlots + 1;
-          }
+//           if (avgCompetingTimeSlots + 1 > 23.99)
+//           {
+//             endTime = 23.99;
+//           }
+//           else
+//           {
+//             endTime = avgCompetingTimeSlots + 1;
+//           }
 
-          if (array.length > 0)
-          {
-            if (array[0][7] == dayofWeek)
-            {
-              if (sufficientWater)
-              {
-                // Add 15 min to beginning
-                if (startTime - 0.25 < 0)
-                {
-                  startTime = 0;
-                }
-                else
-                {
-                  startTime -= 0.25;
-                }
+//           if (array.length > 0)
+//           {
+//             if (array[0][7] == dayofWeek)
+//             {
+//               if (sufficientWater)
+//               {
+//                 // Add 15 min to beginning
+//                 if (startTime - 0.25 < 0)
+//                 {
+//                   startTime = 0;
+//                 }
+//                 else
+//                 {
+//                   startTime -= 0.25;
+//                 }
 
-                // Add 15 min to end
-                if (endTime + 0.25 > 23.99)
-                {
-                  endTime = 23.99;
-                }
-                else
-                {
-                  endTime += 0.25;
-                }
-              }
+//                 // Add 15 min to end
+//                 if (endTime + 0.25 > 23.99)
+//                 {
+//                   endTime = 23.99;
+//                 }
+//                 else
+//                 {
+//                   endTime += 0.25;
+//                 }
+//               }
 
-              if (sufficientSleep)
-              {
-                // Add 15 min to beginning
-                if (startTime - 0.25 < 0)
-                {
-                  startTime = 0;
-                }
-                else
-                {
-                  startTime -= 0.25;
-                }
+//               if (sufficientSleep)
+//               {
+//                 // Add 15 min to beginning
+//                 if (startTime - 0.25 < 0)
+//                 {
+//                   startTime = 0;
+//                 }
+//                 else
+//                 {
+//                   startTime -= 0.25;
+//                 }
 
-                // Add 15 min to end
-                if (endTime + 0.25 > 23.99)
-                {
-                  endTime = 23.99;
-                }
-                else
-                {
-                  endTime += 0.25;
-                }
-              }
-            }
-          }
+//                 // Add 15 min to end
+//                 if (endTime + 0.25 > 23.99)
+//                 {
+//                   endTime = 23.99;
+//                 }
+//                 else
+//                 {
+//                   endTime += 0.25;
+//                 }
+//               }
+//             }
+//           }
 
-          var startTimeConverted = convertNumToTime(startTime);
-          var endTimeConverted = convertNumToTime(endTime);
+//           var startTimeConverted = convertNumToTime(startTime);
+//           var endTimeConverted = convertNumToTime(endTime);
 
-          var startTimeConvertedArray = startTimeConverted.split(":");
-          var startTimeConvertedHours = startTimeConvertedArray[0];
-          startTimeConvertedHours = parseInt(startTimeConvertedHours);
-          var endTimeConvertedArray = endTimeConverted.split(":");
-          var endTimeConvertedHours = endTimeConvertedArray[0];
-          endTimeConvertedHours = parseInt(endTimeConvertedHours);
+//           var startTimeConvertedArray = startTimeConverted.split(":");
+//           var startTimeConvertedHours = startTimeConvertedArray[0];
+//           startTimeConvertedHours = parseInt(startTimeConvertedHours);
+//           var endTimeConvertedArray = endTimeConverted.split(":");
+//           var endTimeConvertedHours = endTimeConvertedArray[0];
+//           endTimeConvertedHours = parseInt(endTimeConvertedHours);
 
-          startTimeConvertedHours = ((startTimeConvertedHours + 11) % 12 + 1);
-          endTimeConvertedHours = ((endTimeConvertedHours + 11) % 12 + 1);
+//           startTimeConvertedHours = ((startTimeConvertedHours + 11) % 12 + 1);
+//           endTimeConvertedHours = ((endTimeConvertedHours + 11) % 12 + 1);
 
-          var startTimeString = startTimeConvertedHours + ":" + startTimeConvertedArray[1];
-          var endTimeString = endTimeConvertedHours + ":" + endTimeConvertedArray[1];
+//           var startTimeString = startTimeConvertedHours + ":" + startTimeConvertedArray[1];
+//           var endTimeString = endTimeConvertedHours + ":" + endTimeConvertedArray[1];
 
-          if (startTime < 12)
-          {
-            startTimeString = startTimeString + " AM";
-          }
-          else
-          {
-            startTimeString = startTimeString + " PM";
-          }
+//           if (startTime < 12)
+//           {
+//             startTimeString = startTimeString + " AM";
+//           }
+//           else
+//           {
+//             startTimeString = startTimeString + " PM";
+//           }
 
-          if (endTime < 12)
-          {
-            endTimeString = endTimeString + " AM";
-          }
-          else
-          {
-            endTimeString = endTimeString + " PM";
-          }
+//           if (endTime < 12)
+//           {
+//             endTimeString = endTimeString + " AM";
+//           }
+//           else
+//           {
+//             endTimeString = endTimeString + " PM";
+//           }
 
-          return startTimeString + " - " + endTimeString;
-  }
+//           return startTimeString + " - " + endTimeString;
+//   }
 
-  function convertNumToTime(number) {
-    // Check sign of given number
-    var sign = (number >= 0) ? 1 : -1;
+//   function convertNumToTime(number) {
+//     // Check sign of given number
+//     var sign = (number >= 0) ? 1 : -1;
 
-    // Set positive value of number of sign negative
-    number = number * sign;
+//     // Set positive value of number of sign negative
+//     number = number * sign;
 
-    // Separate the int from the decimal part
-    var hour = Math.floor(number);
-    var decpart = number - hour;
+//     // Separate the int from the decimal part
+//     var hour = Math.floor(number);
+//     var decpart = number - hour;
 
-    var min = 1 / 60;
-    // Round to nearest minute
-    decpart = min * Math.round(decpart / min);
+//     var min = 1 / 60;
+//     // Round to nearest minute
+//     decpart = min * Math.round(decpart / min);
 
-    var minute = Math.floor(decpart * 60) + '';
+//     var minute = Math.floor(decpart * 60) + '';
 
-    // Add padding if need
-    if (minute.length < 2) {
-    minute = '0' + minute; 
-    }
+//     // Add padding if need
+//     if (minute.length < 2) {
+//     minute = '0' + minute; 
+//     }
 
-    // Add Sign in final result
-    sign = sign == 1 ? '' : '-';
+//     // Add Sign in final result
+//     sign = sign == 1 ? '' : '-';
 
-    // Concate hours and minutes
-    var time = sign + hour + ':' + minute;
+//     // Concate hours and minutes
+//     var time = sign + hour + ':' + minute;
 
-    return time;
-}
+//     return time;
+// }
 
   // function getGamesFromPreviousWeek(array, weeks)
   // {
@@ -511,309 +511,309 @@ class OWHotkeys {
         overwolf.settings.hotkeys.onPressed.addListener((result) => {
           if (result && result.name === hotkeyId) action(result);
 
-          localStorage.clear();
+          //localStorage.clear();
 
-          // All day active gamer data set
-          // Day 30
-          localStorage.setItem("0", "5426 3 2 6 win 00:19:32 10:00 05/21/2022");
-          localStorage.setItem("1", "21640 25 9 2 win 00:31:12 11:30 05/21/2022");
-          localStorage.setItem("2", "10826 4 4 0 loss 00:14:28 13:00 05/21/2022");
-          localStorage.setItem("3", "5426 3 4 11 loss 00:35:11 14:30 05/21/2022");
-          localStorage.setItem("4", "21640 11 14 3 loss 00:35:14 16:00 05/21/2022");
-          localStorage.setItem("5", "10826 8 4 3 win 00:14:46 17:30 05/21/2022");
-          localStorage.setItem("6", "5426 1 5 3 loss 00:29:13 19:00 05/21/2022");
-          localStorage.setItem("7", "21640 4 7 1 loss 00:10:37 20:30 05/21/2022");
-          localStorage.setItem("8", "10826 3 4 0 loss 00:12:39 22:00 05/21/2022");
-          // Day 29
-          localStorage.setItem("9", "5426 5 8 21 loss 00:47:01 10:00 05/22/2022");
-          localStorage.setItem("10", "21640 5 8 1 loss 00:15:06 11:30 05/22/2022");
-          localStorage.setItem("11", "10826 12 5 2 win 00:23:06 13:00 05/22/2022");
-          localStorage.setItem("12", "5426 7 7 16 loss 00:37:42 14:30 05/22/2022");
-          localStorage.setItem("13", "21640 26 16 4 loss 00:39:37 16:00 05/22/2022");
-          localStorage.setItem("14", "10826 3 4 1 loss 00:15:21 17:30 05/22/2022");
-          localStorage.setItem("15", "5426 2 7 12 win 00:30:32 19:00 05/22/2022");
-          localStorage.setItem("16", "21640 17 10 4 win 00:30:32 20:30 05/22/2022");
-          localStorage.setItem("17", "10826 7 5 1 loss 00:11:00 22:00 05/22/2022");
-          // Day 28
-          localStorage.setItem("18", "5426 4 2 18 win 00:22:32 10:00 05/23/2022");
-          localStorage.setItem("19", "21640 15 19 5 loss 00:28:27 11:30 05/23/2022");
-          localStorage.setItem("20", "10826 7 0 0 loss 00:17:37 13:00 05/23/2022");
-          localStorage.setItem("21", "5426 1 10 14 win 00:38:35 14:30 05/23/2022");
-          localStorage.setItem("22", "21640 21 14 6 win 00:31:33 16:00 05/23/2022");
-          localStorage.setItem("23", "10826 11 6 3 win 00:12:09 17:30 05/23/2022");
-          localStorage.setItem("24", "5426 3 4 13 win 00:27:20 19:00 05/23/2022");
-          localStorage.setItem("25", "21640 15 16 2 loss 00:27:43 20:30 05/23/2022");
-          localStorage.setItem("26", "10826 6 1 2 win 00:26:15 22:00 05/23/2022");
-          // Day 27
-          localStorage.setItem("27", "5426 12 13 18 loss 00:35:33 10:00 05/24/2022");
-          localStorage.setItem("28", "21640 17 20 8 win 00:35:11 11:30 05/24/2022");
-          localStorage.setItem("29", "10826 9 2 2 win 00:07:45 13:00 05/24/2022");
-          localStorage.setItem("30", "5426 5 4 5 loss 00:23:42 14:30 05/24/2022");
-          localStorage.setItem("31", "21640 11 12 4 win 00:31:12 16:00 05/24/2022");
-          localStorage.setItem("32", "10826 3 4 1 win 00:08:48 17:30 05/24/2022");
-          localStorage.setItem("33", "5426 4 13 12 loss 00:31:59 19:00 05/24/2022");
-          localStorage.setItem("34", "21640 10 19 5 loss 00:35:14 20:30 05/24/2022");
-          localStorage.setItem("35", "10826 7 3 1 loss 00:14:28 22:00 05/24/2022");
-          // Day 26
-          localStorage.setItem("36", "5426 15 7 25 win 00:46:27 10:00 05/25/2022");
-          localStorage.setItem("37", "21640 2 7 1 loss 00:10:37 11:30 05/25/2022");
-          localStorage.setItem("38", "10826 2 4 0 win 00:14:46 13:00 05/25/2022");
-          localStorage.setItem("39", "5426 2 8 21 loss 00:35:21 14:30 05/25/2022");
-          localStorage.setItem("40", "21640 4 9 3 loss 00:15:06 16:00 05/25/2022");
-          localStorage.setItem("41", "10826 6 4 4 loss 00:12:39 17:30 05/25/2022");
-          localStorage.setItem("42", "5426 5 8 2 loss 00:27:20 19:00 05/25/2022");
-          localStorage.setItem("43", "21640 10 17 2 loss 00:39:37 20:30 05/25/2022");
-          localStorage.setItem("44", "10826 2 5 1 win 00:23:06 22:00 05/25/2022");
-          // Day 25
-          localStorage.setItem("45", "5426 5 2 1 win 00:20:04 10:00 05/26/2022");
-          localStorage.setItem("46", "21640 16 13 4 win 00:30:32 11:30 05/26/2022");
-          localStorage.setItem("47", "10826 3 4 0 loss 00:15:21 13:00 05/26/2022");
-          localStorage.setItem("48", "5426 6 10 1 loss 00:27:41 14:30 05/26/2022");
-          localStorage.setItem("49", "21640 3 17 4 loss 00:28:27 16:00 05/26/2022");
-          localStorage.setItem("50", "10826 7 5 0 loss 00:11:00 17:30 05/26/2022");
-          localStorage.setItem("51", "5426 11 0 2 win 00:23:41 19:00 05/26/2022");
-          localStorage.setItem("52", "21640 12 13 3 win 00:31:33 20:30 05/26/2022");
-          localStorage.setItem("53", "10826 4 1 0 loss 00:17:37 22:00 05/26/2022");
-          // Day 24
-          localStorage.setItem("54", "5426 11 0 2 win 00:23:41 10:00 05/27/2022");
-          localStorage.setItem("55", "21640 6 17 4 loss 00:27:43 11:30 05/27/2022");
-          localStorage.setItem("56", "10826 7 6 1 win 00:12:09 13:00 05/27/2022");
-          localStorage.setItem("57", "5426 8 5 14 win 00:46:13 14:30 05/27/2022");
-          localStorage.setItem("58", "21640 14 19 5 win 00:35:11 16:00 05/27/2022");
-          localStorage.setItem("59", "10826 5 1 1 win 00:26:15 17:30 05/27/2022");
-          localStorage.setItem("60", "5426 9 4 9 loss 00:25:54 19:00 05/27/2022");
-          localStorage.setItem("61", "21640 2 7 3 loss 00:15:06 20:30 05/27/2022");
-          localStorage.setItem("62", "10826 6 1 2 win 00:07:45 22:00 05/27/2022");
-          // Day 23
-          localStorage.setItem("63", "5426 14 4 2 win 00:30:53 10:00 05/28/2022");
-          localStorage.setItem("64", "21640 22 17 5 loss 00:39:37 11:30 05/28/2022");
-          localStorage.setItem("65", "10826 2 5 1 win 00:08:48 13:00 05/28/2022");
-          localStorage.setItem("66", "5426 8 5 6 loss 00:34:35 14:30 05/28/2022");
-          localStorage.setItem("67", "21640 23 12 2 win 00:30:32 16:00 05/28/2022");
-          localStorage.setItem("68", "10826 5 3 1 loss 00:14:28 17:30 05/28/2022");
-          localStorage.setItem("69", "5426 2 6 7 loss 00:32:34 19:00 05/28/2022");
-          localStorage.setItem("70", "21640 23 16 5 loss 00:28:27 20:30 05/28/2022");
-          localStorage.setItem("71", "10826 2 4 0 win 00:14:46 22:00 05/28/2022");
-          // Day 22
-          localStorage.setItem("72", "5426 4 0 3 win 00:16:27 10:00 05/29/2022");
-          localStorage.setItem("73", "21640 23 14 6 win 00:31:33 11:30 05/29/2022");
-          localStorage.setItem("74", "10826 6 5 4 loss 00:12:39 13:00 05/29/2022");
-          localStorage.setItem("75", "5426 7 4 20 loss 00:34:51 14:30 05/29/2022");
-          localStorage.setItem("76", "21640 9 16 1 loss 00:27:43 16:00 05/29/2022");
-          localStorage.setItem("77", "10826 3 5 0 win 00:23:06 17:30 05/29/2022");
-          localStorage.setItem("78", "5426 3 5 19 loss 00:32:16 19:00 05/29/2022");
-          localStorage.setItem("79", "21640 19 18 4 win 00:35:11 20:30 05/29/2022");
-          localStorage.setItem("80", "10826 1 4 1 loss 00:15:21 22:00 05/29/2022");
-          // Day 21
-          localStorage.setItem("81", "5426 3 4 9 win 00:29:01 10:00 05/30/2022");
-          localStorage.setItem("82", "21640 21 15 2 loss 00:31:12 11:30 05/30/2022");
-          localStorage.setItem("83", "10826 2 4 0 loss 00:11:00 13:00 05/30/2022");
-          localStorage.setItem("84", "5426 3 0 15 win 00:25:14 14:30 05/30/2022");
-          localStorage.setItem("85", "21640 21 15 1 loss 00:35:14 16:00 05/30/2022");
-          localStorage.setItem("86", "10826 0 1 2 loss 00:17:37 17:30 05/30/2022");
-          localStorage.setItem("87", "5426 5 3 5 loss 00:28:39 19:00 05/30/2022");
-          localStorage.setItem("88", "21640 4 6 1 loss 00:10:37 20:30 05/30/2022");
-          localStorage.setItem("89", "10826 4 7 0 win 00:12:09 22:00 05/30/2022");
-          // Day 20
-          localStorage.setItem("90", "5426 10 0 16 win 00:28:23 10:00 05/31/2022");
-          localStorage.setItem("91", "21640 12 6 1 win 00:15:06 11:30 05/31/2022");
-          localStorage.setItem("92", "10826 4 2 1 win 00:26:15 13:00 05/31/2022");
-          localStorage.setItem("93", "5426 1 8 5 loss 00:22:50 14:30 05/31/2022");
-          localStorage.setItem("94", "21640 24 14 9 win 00:28:27 16:00 05/31/2022");
-          localStorage.setItem("95", "10826 2 3 0 win 00:07:45 17:30 05/31/2022");
-          localStorage.setItem("96", "5426 6 6 9 loss 00:27:45 19:00 05/31/2022");
-          localStorage.setItem("97", "21640 18 16 3 loss 00:31:33 20:30 05/31/2022");
-          localStorage.setItem("98", "10826 2 3 0 win 00:08:48 22:00 05/31/2022");
-          // Day 19
-          localStorage.setItem("99", "5426 8 1 12 win 00:24:06 10:00 06/01/2022");
-          localStorage.setItem("100", "21640 16 18 2 loss 00:27:43 11:30 06/01/2022");
-          localStorage.setItem("101", "10826 1 5 0 loss 00:14:28 13:00 06/01/2022");
-          localStorage.setItem("102", "5426 1 5 7 loss 00:29:02 14:30 06/01/2022");
-          localStorage.setItem("103", "21640 32 15 7 loss 00:35:11 16:00 06/01/2022");
-          localStorage.setItem("104", "10826 2 6 1 win 00:14:46 17:30 06/01/2022");
-          localStorage.setItem("105", "5426 1 6 6 loss 00:25:37 19:00 06/01/2022");
-          localStorage.setItem("106", "21640 12 17 1 loss 00:31:12 20:30 06/01/2022");
-          localStorage.setItem("107", "10826 1 4 1 loss 00:12:39 22:00 06/01/2022");
-          // Day 18
-          localStorage.setItem("108", "5426 8 8 14 loss 00:30:22 10:00 06/02/2022");
-          localStorage.setItem("109", "21640 20 16 3 loss 00:35:14 11:30 06/02/2022");
-          localStorage.setItem("110", "10826 7 5 1 win 00:23:06 13:00 06/02/2022");
-          localStorage.setItem("111", "5426 4 2 20 win 00:32:44 14:30 06/02/2022");
-          localStorage.setItem("112", "21640 3 7 2 loss 00:10:37 16:00 06/02/2022");
-          localStorage.setItem("113", "10826 2 4 0 loss 00:15:21 17:30 06/02/2022");
-          localStorage.setItem("114", "5426 9 4 19 win 00:33:42 19:00 06/02/2022");
-          localStorage.setItem("115", "21640 8 4 0 win 00:15:06 20:30 06/02/2022");
-          localStorage.setItem("116", "10826 1 4 1 loss 00:11:00 22:00 06/02/2022");
-          // Day 17
-          localStorage.setItem("117", "5426 5 1 10 win 00:19:47 10:00 06/03/2022");
-          localStorage.setItem("118", "21640 21 9 12 win 00:28:27 11:30 06/03/2022");
-          localStorage.setItem("119", "10826 2 1 1 win 00:12:09 13:00 06/03/2022");
-          localStorage.setItem("120", "5426 8 8 24 loss 00:43:36 14:30 06/03/2022");
-          localStorage.setItem("121", "21640 16 17 2 loss 00:31:33 16:00 06/03/2022");
-          localStorage.setItem("122", "10826 5 7 0 win 00:26:15 17:30 06/03/2022");
-          localStorage.setItem("123", "5426 8 0 12 win 00:33:40 19:00 06/03/2022");
-          localStorage.setItem("124", "21640 18 21 7 loss 00:35:11 20:30 06/03/2022");
-          localStorage.setItem("125", "10826 1 1 1 win 00:07:45 22:00 06/03/2022");
-          // Day 16
-          localStorage.setItem("126", "5426 1 0 11 win 00:20:08 10:00 06/04/2022");
-          localStorage.setItem("127", "21640 10 18 4 loss 00:31:12 11:30 06/04/2022");
-          localStorage.setItem("128", "10826 2 2 0 win 00:08:48 13:00 06/04/2022");
-          localStorage.setItem("129", "5426 7 0 12 win 00:34:32 14:30 06/04/2022");
-          localStorage.setItem("130", "21640 7 6 2 win 00:15:06 16:00 06/04/2022");
-          localStorage.setItem("131", "10826 0 4 0 loss 00:14:28 17:30 06/04/2022");
-          localStorage.setItem("132", "5426 4 6 8 loss 00:28:58 19:00 06/04/2022");
-          localStorage.setItem("133", "21640 12 20 9 loss 00:39:37 20:30 06/04/2022");
-          localStorage.setItem("134", "10826 3 3 0 win 00:14:46 22:00 06/04/2022");
-          // Day 15
-          localStorage.setItem("135", "5426 7 7 8 loss 00:27:08 10:00 06/05/2022");
-          localStorage.setItem("136", "21640 20 13 3 win 00:28:27 11:30 06/05/2022");
-          localStorage.setItem("137", "10826 2 0 1 win 00:23:06 13:00 06/05/2022");
-          localStorage.setItem("138", "5426 7 17 7 loss 00:35:55 14:30 06/05/2022");
-          localStorage.setItem("139", "21640 18 16 3 loss 00:31:33 16:00 06/05/2022");
-          localStorage.setItem("140", "10826 0 5 1 loss 00:15:21 17:30 06/05/2022");
-          localStorage.setItem("141", "5426 2 3 10 win 00:27:08 19:00 06/05/2022");
-          localStorage.setItem("142", "21640 17 19 4 loss 00:35:11 20:30 06/05/2022");
-          localStorage.setItem("143", "10826 0 4 2 loss 00:11:00 22:00 06/05/2022");
-          // Day 14
-          localStorage.setItem("144", "5426 10 23 22 win 00:37:03 10:00 06/06/2022");
-          localStorage.setItem("145", "21640 3 2 6 win 00:19:32 11:30 06/06/2022");
-          localStorage.setItem("146", "10826 1 2 0 win 00:12:09 13:00 06/06/2022");
-          localStorage.setItem("147", "5426 1 8 19 loss 00:26:13 14:30 06/06/2022");
-          localStorage.setItem("148", "21640 3 2 6 win 00:19:32 16:00 06/06/2022");
-          localStorage.setItem("149", "10826 2 6 1 win 00:26:15 17:30 06/06/2022");
-          localStorage.setItem("150", "5426 7 6 9 loss 00:29:23 19:00 06/06/2022");
-          localStorage.setItem("151", "21640 3 2 6 win 00:19:32 20:30 06/06/2022");
-          localStorage.setItem("152", "10826 1 2 0 win 00:07:45 22:00 06/06/2022");
-          // Day 13
-          localStorage.setItem("153", "5426 5 2 18 win 00:29:22 10:00 06/07/2022");
-          localStorage.setItem("154", "21640 3 2 6 win 00:19:32 11:30 06/07/2022");
-          localStorage.setItem("155", "10826 0 2 2 win 00:08:48 13:00 06/07/2022");
-          localStorage.setItem("156", "5426 9 2 20 win 00:32:18 14:30 06/07/2022");
-          localStorage.setItem("157", "21640 3 2 6 win 00:19:32 16:00 06/07/2022");
-          localStorage.setItem("158", "10826 7 1 2 win 00:14:28 17:30 06/07/2022");
-          localStorage.setItem("159", "5426 15 9 24 loss 00:36:20 19:00 06/07/2022");
-          localStorage.setItem("160", "21640 3 2 6 win 00:19:32 20:30 06/07/2022");
-          localStorage.setItem("161", "10826 7 4 1 win 00:14:46 22:00 06/07/2022");
-          // Day 12
-          localStorage.setItem("162", "5426 2 5 12 loss 00:27:31 10:00 06/08/2022");
-          localStorage.setItem("163", "21640 6 17 7 loss 00:31:12 11:30 06/08/2022");
-          localStorage.setItem("164", "10826 7 2 0 win 00:12:39 13:00 06/08/2022");
-          localStorage.setItem("165", "5426 3 5 24 win 00:33:43 14:30 06/08/2022");
-          localStorage.setItem("166", "21640 3 7 2 loss 00:10:37 16:00 06/08/2022");
-          localStorage.setItem("167", "10826 9 5 1 loss 00:23:06 17:30 06/08/2022");
-          localStorage.setItem("168", "5426 3 2 6 win 00:19:32 19:00 06/08/2022");
-          localStorage.setItem("169", "21640 5 6 4 win 00:15:06 20:30 06/08/2022");
-          localStorage.setItem("170", "10826 5 3 3 win 00:15:21 22:00 06/08/2022");
-          // Day 11
-          localStorage.setItem("171", "5426 4 6 21 win 00:35:09 10:00 06/09/2022");
-          localStorage.setItem("172", "21640 12 15 7 win 00:30:32 11:30 06/09/2022");
-          localStorage.setItem("173", "10826 6 1 3 win 00:11:00 13:00 06/09/2022");
-          localStorage.setItem("174", "5426 3 7 8 loss 00:31:34 14:30 06/09/2022");
-          localStorage.setItem("175", "21640 12 14 7 win 00:28:27 16:00 06/09/2022");
-          localStorage.setItem("176", "10826 7 3 3 win 00:17:37 17:30 06/09/2022");
-          localStorage.setItem("177", "5426 4 2 11 win 00:27:29 19:00 06/09/2022");
-          localStorage.setItem("178", "21640 9 18 5 loss 00:31:33 20:30 06/09/2022");
-          localStorage.setItem("179", "10826 2 4 0 loss 00:12:09 22:00 06/09/2022");
-          // Day 10
-          localStorage.setItem("180", "5426 7 2 12 win 00:30:34 10:00 06/10/2022");
-          localStorage.setItem("181", "21640 14 22 5 loss 00:35:11 11:30 06/10/2022");
-          localStorage.setItem("182", "10826 13 7 1 loss 00:26:15 13:00 06/10/2022");
-          localStorage.setItem("183", "5426 4 6 15 loss 00:28:08 14:30 06/10/2022");
-          localStorage.setItem("184", "21640 5 4 0 loss 00:31:12 16:00 06/10/2022");
-          localStorage.setItem("185", "10826 2 4 0 loss 00:07:45 17:30 06/10/2022");
-          localStorage.setItem("186", "5426 6 1 14 win 00:24:14 19:00 06/10/2022");
-          localStorage.setItem("187", "21640 7 14 4 loss 00:35:14 20:30 06/10/2022");
-          localStorage.setItem("188", "10826 4 4 1 loss 00:08:48 22:00 06/10/2022");
-          // Day 9
-          localStorage.setItem("189", "5426 14 2 18 win 00:33:09 10:00 06/11/2022");
-          localStorage.setItem("190", "21640 3 5 5 win 00:15:06 11:30 06/11/2022");
-          localStorage.setItem("191", "10826 4 3 2 win 00:14:28 13:00 06/11/2022");
-          localStorage.setItem("192", "5426 4 1 17 win 00:26:17 14:30 06/11/2022");
-          localStorage.setItem("193", "21640 10 17 0 loss 00:39:17 16:00 06/11/2022");
-          localStorage.setItem("194", "10826 6 5 0 loss 00:14:46 17:30 06/11/2022");
-          localStorage.setItem("195", "5426 4 1 17 win 00:27:08 19:00 06/11/2022");
-          localStorage.setItem("196", "21640 9 14 7 win 00:30:32 20:30 06/11/2022");
-          localStorage.setItem("197", "10826 5 0 0 win 00:12:39 22:00 06/11/2022");
-          // Day 8
-          localStorage.setItem("198", "5426 4 7 9 loss 00:29:06 10:00 06/12/2022");
-          localStorage.setItem("199", "21640 11 15 3 win 00:28:27 11:30 06/12/2022");
-          localStorage.setItem("200", "10826 3 7 2 loss 00:23:06 13:00 06/12/2022");
-          localStorage.setItem("201", "5426 16 4 20 win 00:41:43 14:30 06/12/2022");
-          localStorage.setItem("202", "21640 6 19 4 loss 00:31:33 16:00 06/12/2022");
-          localStorage.setItem("203", "10826 6 1 2 loss 00:15:21 17:30 06/12/2022");
-          localStorage.setItem("204", "5426 9 12 31 loss 00:39:42 19:00 06/12/2022");
-          localStorage.setItem("205", "21640 8 14 4 loss 00:27:43 20:30 06/12/2022");
-          localStorage.setItem("206", "10826 7 0 0 win 00:11:00 22:00 06/12/2022");
-          // Day 7
-          localStorage.setItem("207", "5426 4 0 14 win 00:21:25 10:00 06/13/2022");
-          localStorage.setItem("208", "21640 13 19 10 loss 00:35:11 11:30 06/13/2022");
-          localStorage.setItem("209", "10826 3 3 1 win 00:17:37 13:00 06/13/2022");
-          localStorage.setItem("210", "5426 5 5 30 win 00:35:35 14:30 06/13/2022");
-          localStorage.setItem("211", "21640 24 13 4 win 00:35:14 16:00 06/13/2022");
-          localStorage.setItem("212", "10826 1 4 1 loss 00:12:09 17:30 06/13/2022");
-          localStorage.setItem("213", "5426 2 7 5 loss 00:29:01 19:00 06/13/2022");
-          localStorage.setItem("214", "21640 10 5 1 loss 00:15:06 20:30 06/13/2022");
-          localStorage.setItem("215", "10826 5 8 2 loss 00:26:15 22:00 06/13/2022");
-          // Day 6
-          localStorage.setItem("216", "5426 2 1 8 win 00:29:14 10:00 06/14/2022");
-          localStorage.setItem("217", "21640 23 17 3 win 00:39:37 11:30 06/14/2022");
-          localStorage.setItem("218", "10826 1 4 0 loss 00:07:45 13:00 06/14/2022");
-          localStorage.setItem("219", "5426 0 1 12 win 00:30:39 14:30 06/14/2022");
-          localStorage.setItem("220", "21640 22 13 4 loss 00:30:32 16:00 06/14/2022");
-          localStorage.setItem("221", "10826 3 4 0 loss 00:08:48 17:30 06/14/2022");
-          localStorage.setItem("222", "5426 1 0 4 loss 00:20:50 19:00 06/14/2022");
-          localStorage.setItem("223", "21640 10 5 5 win 00:10:37 20:30 06/14/2022");
-          localStorage.setItem("224", "10826 5 2 1 win 00:14:28 22:00 06/14/2022");
-          // Day 5
-          localStorage.setItem("225", "5426 9 1 3 win 00:26:05 10:00 06/15/2022");
-          localStorage.setItem("226", "21640 25 11 5 win 00:27:43 11:30 06/15/2022");
-          localStorage.setItem("227", "10826 5 5 0 loss 00:14:46 13:00 06/15/2022");
-          localStorage.setItem("228", "5426 19 4 13 loss 00:46:19 14:30 06/15/2022");
-          localStorage.setItem("229", "21640 33 20 3 win 00:35:11 16:00 06/15/2022");
-          localStorage.setItem("230", "10826 3 4 1 win 00:12:39 17:30 06/15/2022");
-          localStorage.setItem("231", "5426 9 4 7 loss 00:33:03 19:00 06/15/2022");
-          localStorage.setItem("232", "21640 12 10 10 win 00:31:12 20:30 06/15/2022");
-          localStorage.setItem("233", "10826 5 8 1 loss 00:23:06 22:00 06/15/2022");
-          // Day 4
-          localStorage.setItem("234", "5426 8 5 18 loss 00:50:14 10:00 06/16/2022");
-          localStorage.setItem("235", "21640 21 15 3 win 00:35:14 11:30 06/16/2022");
-          localStorage.setItem("236", "10826 5 2 2 win 00:15:21 13:00 06/16/2022");
-          localStorage.setItem("237", "5426 4 8 9 loss 00:27:58 14:30 06/16/2022");
-          localStorage.setItem("238", "21640 9 2 1 win 00:10:37 16:00 06/16/2022");
-          localStorage.setItem("239", "10826 4 1 3 win 00:11:00 17:30 06/16/2022");
-          localStorage.setItem("240", "5426 2 3 27 win 00:35:14 19:00 06/16/2022");
-          localStorage.setItem("241", "21640 21 15 4 win 00:39:37 20:30 06/16/2022");
-          localStorage.setItem("242", "10826 3 2 1 loss 00:17:37 22:00 06/16/2022");
-          // Day 3
-          localStorage.setItem("243", "5426 3 9 11 loss 00:35:25 10:00 06/17/2022");
-          localStorage.setItem("244", "21640 12 15 7 loss 00:30:32 11:30 06/17/2022");
-          localStorage.setItem("245", "10826 2 4 0 loss 00:12:09 13:00 06/17/2022");
-          localStorage.setItem("246", "5426 1 4 7 win 00:20:08 14:30 06/17/2022");
-          localStorage.setItem("247", "21640 19 8 1 win 00:27:43 16:00 06/17/2022");
-          localStorage.setItem("248", "10826 6 7 2 loss 00:26:15 17:30 06/17/2022");
-          localStorage.setItem("249", "5426 4 6 10 loss 00:37:25 19:00 06/17/2022");
-          localStorage.setItem("250", "21640 13 10 5 win 00:31:12 20:30 06/17/2022");
-          localStorage.setItem("251", "10826 0 4 1 loss 00:08:48 22:00 06/17/2022");
-          // Day 2
-          localStorage.setItem("252", "5426 3 1 13 win 00:23:26 10:00 06/18/2022");
-          localStorage.setItem("253", "21640 18 14 3 loss 00:35:14 11:30 06/18/2022");
-          localStorage.setItem("254", "10826 5 2 1 win 00:14:28 13:00 06/18/2022");
-          localStorage.setItem("255", "5426 4 3 6 win 00:24:16 14:30 06/18/2022");
-          localStorage.setItem("256", "21640 7 3 2 win 00:10:37 16:00 06/18/2022");
-          localStorage.setItem("257", "10826 1 5 0 loss 00:14:46 17:30 06/18/2022");
-          localStorage.setItem("258", "5426 1 3 9 loss 00:21:21 19:00 06/18/2022");
-          localStorage.setItem("259", "21640 6 6 3 loss 00:15:06 20:30 06/18/2022");
-          localStorage.setItem("260", "10826 2 2 0 win 00:12:39 22:00 06/18/2022");
-          // Day 1
-          localStorage.setItem("261", "5426 10 4 23 win 00:39:51 10:00 06/19/2022");
-          localStorage.setItem("262", "21640 18 18 5 win 00:39:37 11:30 06/19/2022");
-          localStorage.setItem("263", "10826 2 7 0 loss 00:23:06 13:00 06/19/2022");
-          localStorage.setItem("264", "5426 6 2 7 win 00:19:43 14:30 06/19/2022");
-          localStorage.setItem("265", "21640 9 16 3 loss 00:30:32 16:00 06/19/2022");
-          localStorage.setItem("266", "10826 4 1 0 win 00:15:21 17:30 06/19/2022");
-          localStorage.setItem("267", "5426 10 4 14 win 00:30:30 19:00 06/19/2022");
-          localStorage.setItem("268", "21640 13 17 2 loss 00:28:27 20:30 06/19/2022");
-          localStorage.setItem("269", "10826 3 3 2 win 00:11:00 22:00 06/19/2022");
+          // // All day active gamer data set
+          // // Day 30
+          // localStorage.setItem("0", "5426 3 2 6 win 00:19:32 10:00 05/21/2022");
+          // localStorage.setItem("1", "21640 25 9 2 win 00:31:12 11:30 05/21/2022");
+          // localStorage.setItem("2", "10826 4 4 0 loss 00:14:28 13:00 05/21/2022");
+          // localStorage.setItem("3", "5426 3 4 11 loss 00:35:11 14:30 05/21/2022");
+          // localStorage.setItem("4", "21640 11 14 3 loss 00:35:14 16:00 05/21/2022");
+          // localStorage.setItem("5", "10826 8 4 3 win 00:14:46 17:30 05/21/2022");
+          // localStorage.setItem("6", "5426 1 5 3 loss 00:29:13 19:00 05/21/2022");
+          // localStorage.setItem("7", "21640 4 7 1 loss 00:10:37 20:30 05/21/2022");
+          // localStorage.setItem("8", "10826 3 4 0 loss 00:12:39 22:00 05/21/2022");
+          // // Day 29
+          // localStorage.setItem("9", "5426 5 8 21 loss 00:47:01 10:00 05/22/2022");
+          // localStorage.setItem("10", "21640 5 8 1 loss 00:15:06 11:30 05/22/2022");
+          // localStorage.setItem("11", "10826 12 5 2 win 00:23:06 13:00 05/22/2022");
+          // localStorage.setItem("12", "5426 7 7 16 loss 00:37:42 14:30 05/22/2022");
+          // localStorage.setItem("13", "21640 26 16 4 loss 00:39:37 16:00 05/22/2022");
+          // localStorage.setItem("14", "10826 3 4 1 loss 00:15:21 17:30 05/22/2022");
+          // localStorage.setItem("15", "5426 2 7 12 win 00:30:32 19:00 05/22/2022");
+          // localStorage.setItem("16", "21640 17 10 4 win 00:30:32 20:30 05/22/2022");
+          // localStorage.setItem("17", "10826 7 5 1 loss 00:11:00 22:00 05/22/2022");
+          // // Day 28
+          // localStorage.setItem("18", "5426 4 2 18 win 00:22:32 10:00 05/23/2022");
+          // localStorage.setItem("19", "21640 15 19 5 loss 00:28:27 11:30 05/23/2022");
+          // localStorage.setItem("20", "10826 7 0 0 loss 00:17:37 13:00 05/23/2022");
+          // localStorage.setItem("21", "5426 1 10 14 win 00:38:35 14:30 05/23/2022");
+          // localStorage.setItem("22", "21640 21 14 6 win 00:31:33 16:00 05/23/2022");
+          // localStorage.setItem("23", "10826 11 6 3 win 00:12:09 17:30 05/23/2022");
+          // localStorage.setItem("24", "5426 3 4 13 win 00:27:20 19:00 05/23/2022");
+          // localStorage.setItem("25", "21640 15 16 2 loss 00:27:43 20:30 05/23/2022");
+          // localStorage.setItem("26", "10826 6 1 2 win 00:26:15 22:00 05/23/2022");
+          // // Day 27
+          // localStorage.setItem("27", "5426 12 13 18 loss 00:35:33 10:00 05/24/2022");
+          // localStorage.setItem("28", "21640 17 20 8 win 00:35:11 11:30 05/24/2022");
+          // localStorage.setItem("29", "10826 9 2 2 win 00:07:45 13:00 05/24/2022");
+          // localStorage.setItem("30", "5426 5 4 5 loss 00:23:42 14:30 05/24/2022");
+          // localStorage.setItem("31", "21640 11 12 4 win 00:31:12 16:00 05/24/2022");
+          // localStorage.setItem("32", "10826 3 4 1 win 00:08:48 17:30 05/24/2022");
+          // localStorage.setItem("33", "5426 4 13 12 loss 00:31:59 19:00 05/24/2022");
+          // localStorage.setItem("34", "21640 10 19 5 loss 00:35:14 20:30 05/24/2022");
+          // localStorage.setItem("35", "10826 7 3 1 loss 00:14:28 22:00 05/24/2022");
+          // // Day 26
+          // localStorage.setItem("36", "5426 15 7 25 win 00:46:27 10:00 05/25/2022");
+          // localStorage.setItem("37", "21640 2 7 1 loss 00:10:37 11:30 05/25/2022");
+          // localStorage.setItem("38", "10826 2 4 0 win 00:14:46 13:00 05/25/2022");
+          // localStorage.setItem("39", "5426 2 8 21 loss 00:35:21 14:30 05/25/2022");
+          // localStorage.setItem("40", "21640 4 9 3 loss 00:15:06 16:00 05/25/2022");
+          // localStorage.setItem("41", "10826 6 4 4 loss 00:12:39 17:30 05/25/2022");
+          // localStorage.setItem("42", "5426 5 8 2 loss 00:27:20 19:00 05/25/2022");
+          // localStorage.setItem("43", "21640 10 17 2 loss 00:39:37 20:30 05/25/2022");
+          // localStorage.setItem("44", "10826 2 5 1 win 00:23:06 22:00 05/25/2022");
+          // // Day 25
+          // localStorage.setItem("45", "5426 5 2 1 win 00:20:04 10:00 05/26/2022");
+          // localStorage.setItem("46", "21640 16 13 4 win 00:30:32 11:30 05/26/2022");
+          // localStorage.setItem("47", "10826 3 4 0 loss 00:15:21 13:00 05/26/2022");
+          // localStorage.setItem("48", "5426 6 10 1 loss 00:27:41 14:30 05/26/2022");
+          // localStorage.setItem("49", "21640 3 17 4 loss 00:28:27 16:00 05/26/2022");
+          // localStorage.setItem("50", "10826 7 5 0 loss 00:11:00 17:30 05/26/2022");
+          // localStorage.setItem("51", "5426 11 0 2 win 00:23:41 19:00 05/26/2022");
+          // localStorage.setItem("52", "21640 12 13 3 win 00:31:33 20:30 05/26/2022");
+          // localStorage.setItem("53", "10826 4 1 0 loss 00:17:37 22:00 05/26/2022");
+          // // Day 24
+          // localStorage.setItem("54", "5426 11 0 2 win 00:23:41 10:00 05/27/2022");
+          // localStorage.setItem("55", "21640 6 17 4 loss 00:27:43 11:30 05/27/2022");
+          // localStorage.setItem("56", "10826 7 6 1 win 00:12:09 13:00 05/27/2022");
+          // localStorage.setItem("57", "5426 8 5 14 win 00:46:13 14:30 05/27/2022");
+          // localStorage.setItem("58", "21640 14 19 5 win 00:35:11 16:00 05/27/2022");
+          // localStorage.setItem("59", "10826 5 1 1 win 00:26:15 17:30 05/27/2022");
+          // localStorage.setItem("60", "5426 9 4 9 loss 00:25:54 19:00 05/27/2022");
+          // localStorage.setItem("61", "21640 2 7 3 loss 00:15:06 20:30 05/27/2022");
+          // localStorage.setItem("62", "10826 6 1 2 win 00:07:45 22:00 05/27/2022");
+          // // Day 23
+          // localStorage.setItem("63", "5426 14 4 2 win 00:30:53 10:00 05/28/2022");
+          // localStorage.setItem("64", "21640 22 17 5 loss 00:39:37 11:30 05/28/2022");
+          // localStorage.setItem("65", "10826 2 5 1 win 00:08:48 13:00 05/28/2022");
+          // localStorage.setItem("66", "5426 8 5 6 loss 00:34:35 14:30 05/28/2022");
+          // localStorage.setItem("67", "21640 23 12 2 win 00:30:32 16:00 05/28/2022");
+          // localStorage.setItem("68", "10826 5 3 1 loss 00:14:28 17:30 05/28/2022");
+          // localStorage.setItem("69", "5426 2 6 7 loss 00:32:34 19:00 05/28/2022");
+          // localStorage.setItem("70", "21640 23 16 5 loss 00:28:27 20:30 05/28/2022");
+          // localStorage.setItem("71", "10826 2 4 0 win 00:14:46 22:00 05/28/2022");
+          // // Day 22
+          // localStorage.setItem("72", "5426 4 0 3 win 00:16:27 10:00 05/29/2022");
+          // localStorage.setItem("73", "21640 23 14 6 win 00:31:33 11:30 05/29/2022");
+          // localStorage.setItem("74", "10826 6 5 4 loss 00:12:39 13:00 05/29/2022");
+          // localStorage.setItem("75", "5426 7 4 20 loss 00:34:51 14:30 05/29/2022");
+          // localStorage.setItem("76", "21640 9 16 1 loss 00:27:43 16:00 05/29/2022");
+          // localStorage.setItem("77", "10826 3 5 0 win 00:23:06 17:30 05/29/2022");
+          // localStorage.setItem("78", "5426 3 5 19 loss 00:32:16 19:00 05/29/2022");
+          // localStorage.setItem("79", "21640 19 18 4 win 00:35:11 20:30 05/29/2022");
+          // localStorage.setItem("80", "10826 1 4 1 loss 00:15:21 22:00 05/29/2022");
+          // // Day 21
+          // localStorage.setItem("81", "5426 3 4 9 win 00:29:01 10:00 05/30/2022");
+          // localStorage.setItem("82", "21640 21 15 2 loss 00:31:12 11:30 05/30/2022");
+          // localStorage.setItem("83", "10826 2 4 0 loss 00:11:00 13:00 05/30/2022");
+          // localStorage.setItem("84", "5426 3 0 15 win 00:25:14 14:30 05/30/2022");
+          // localStorage.setItem("85", "21640 21 15 1 loss 00:35:14 16:00 05/30/2022");
+          // localStorage.setItem("86", "10826 0 1 2 loss 00:17:37 17:30 05/30/2022");
+          // localStorage.setItem("87", "5426 5 3 5 loss 00:28:39 19:00 05/30/2022");
+          // localStorage.setItem("88", "21640 4 6 1 loss 00:10:37 20:30 05/30/2022");
+          // localStorage.setItem("89", "10826 4 7 0 win 00:12:09 22:00 05/30/2022");
+          // // Day 20
+          // localStorage.setItem("90", "5426 10 0 16 win 00:28:23 10:00 05/31/2022");
+          // localStorage.setItem("91", "21640 12 6 1 win 00:15:06 11:30 05/31/2022");
+          // localStorage.setItem("92", "10826 4 2 1 win 00:26:15 13:00 05/31/2022");
+          // localStorage.setItem("93", "5426 1 8 5 loss 00:22:50 14:30 05/31/2022");
+          // localStorage.setItem("94", "21640 24 14 9 win 00:28:27 16:00 05/31/2022");
+          // localStorage.setItem("95", "10826 2 3 0 win 00:07:45 17:30 05/31/2022");
+          // localStorage.setItem("96", "5426 6 6 9 loss 00:27:45 19:00 05/31/2022");
+          // localStorage.setItem("97", "21640 18 16 3 loss 00:31:33 20:30 05/31/2022");
+          // localStorage.setItem("98", "10826 2 3 0 win 00:08:48 22:00 05/31/2022");
+          // // Day 19
+          // localStorage.setItem("99", "5426 8 1 12 win 00:24:06 10:00 06/01/2022");
+          // localStorage.setItem("100", "21640 16 18 2 loss 00:27:43 11:30 06/01/2022");
+          // localStorage.setItem("101", "10826 1 5 0 loss 00:14:28 13:00 06/01/2022");
+          // localStorage.setItem("102", "5426 1 5 7 loss 00:29:02 14:30 06/01/2022");
+          // localStorage.setItem("103", "21640 32 15 7 loss 00:35:11 16:00 06/01/2022");
+          // localStorage.setItem("104", "10826 2 6 1 win 00:14:46 17:30 06/01/2022");
+          // localStorage.setItem("105", "5426 1 6 6 loss 00:25:37 19:00 06/01/2022");
+          // localStorage.setItem("106", "21640 12 17 1 loss 00:31:12 20:30 06/01/2022");
+          // localStorage.setItem("107", "10826 1 4 1 loss 00:12:39 22:00 06/01/2022");
+          // // Day 18
+          // localStorage.setItem("108", "5426 8 8 14 loss 00:30:22 10:00 06/02/2022");
+          // localStorage.setItem("109", "21640 20 16 3 loss 00:35:14 11:30 06/02/2022");
+          // localStorage.setItem("110", "10826 7 5 1 win 00:23:06 13:00 06/02/2022");
+          // localStorage.setItem("111", "5426 4 2 20 win 00:32:44 14:30 06/02/2022");
+          // localStorage.setItem("112", "21640 3 7 2 loss 00:10:37 16:00 06/02/2022");
+          // localStorage.setItem("113", "10826 2 4 0 loss 00:15:21 17:30 06/02/2022");
+          // localStorage.setItem("114", "5426 9 4 19 win 00:33:42 19:00 06/02/2022");
+          // localStorage.setItem("115", "21640 8 4 0 win 00:15:06 20:30 06/02/2022");
+          // localStorage.setItem("116", "10826 1 4 1 loss 00:11:00 22:00 06/02/2022");
+          // // Day 17
+          // localStorage.setItem("117", "5426 5 1 10 win 00:19:47 10:00 06/03/2022");
+          // localStorage.setItem("118", "21640 21 9 12 win 00:28:27 11:30 06/03/2022");
+          // localStorage.setItem("119", "10826 2 1 1 win 00:12:09 13:00 06/03/2022");
+          // localStorage.setItem("120", "5426 8 8 24 loss 00:43:36 14:30 06/03/2022");
+          // localStorage.setItem("121", "21640 16 17 2 loss 00:31:33 16:00 06/03/2022");
+          // localStorage.setItem("122", "10826 5 7 0 win 00:26:15 17:30 06/03/2022");
+          // localStorage.setItem("123", "5426 8 0 12 win 00:33:40 19:00 06/03/2022");
+          // localStorage.setItem("124", "21640 18 21 7 loss 00:35:11 20:30 06/03/2022");
+          // localStorage.setItem("125", "10826 1 1 1 win 00:07:45 22:00 06/03/2022");
+          // // Day 16
+          // localStorage.setItem("126", "5426 1 0 11 win 00:20:08 10:00 06/04/2022");
+          // localStorage.setItem("127", "21640 10 18 4 loss 00:31:12 11:30 06/04/2022");
+          // localStorage.setItem("128", "10826 2 2 0 win 00:08:48 13:00 06/04/2022");
+          // localStorage.setItem("129", "5426 7 0 12 win 00:34:32 14:30 06/04/2022");
+          // localStorage.setItem("130", "21640 7 6 2 win 00:15:06 16:00 06/04/2022");
+          // localStorage.setItem("131", "10826 0 4 0 loss 00:14:28 17:30 06/04/2022");
+          // localStorage.setItem("132", "5426 4 6 8 loss 00:28:58 19:00 06/04/2022");
+          // localStorage.setItem("133", "21640 12 20 9 loss 00:39:37 20:30 06/04/2022");
+          // localStorage.setItem("134", "10826 3 3 0 win 00:14:46 22:00 06/04/2022");
+          // // Day 15
+          // localStorage.setItem("135", "5426 7 7 8 loss 00:27:08 10:00 06/05/2022");
+          // localStorage.setItem("136", "21640 20 13 3 win 00:28:27 11:30 06/05/2022");
+          // localStorage.setItem("137", "10826 2 0 1 win 00:23:06 13:00 06/05/2022");
+          // localStorage.setItem("138", "5426 7 17 7 loss 00:35:55 14:30 06/05/2022");
+          // localStorage.setItem("139", "21640 18 16 3 loss 00:31:33 16:00 06/05/2022");
+          // localStorage.setItem("140", "10826 0 5 1 loss 00:15:21 17:30 06/05/2022");
+          // localStorage.setItem("141", "5426 2 3 10 win 00:27:08 19:00 06/05/2022");
+          // localStorage.setItem("142", "21640 17 19 4 loss 00:35:11 20:30 06/05/2022");
+          // localStorage.setItem("143", "10826 0 4 2 loss 00:11:00 22:00 06/05/2022");
+          // // Day 14
+          // localStorage.setItem("144", "5426 10 23 22 win 00:37:03 10:00 06/06/2022");
+          // localStorage.setItem("145", "21640 3 2 6 win 00:19:32 11:30 06/06/2022");
+          // localStorage.setItem("146", "10826 1 2 0 win 00:12:09 13:00 06/06/2022");
+          // localStorage.setItem("147", "5426 1 8 19 loss 00:26:13 14:30 06/06/2022");
+          // localStorage.setItem("148", "21640 3 2 6 win 00:19:32 16:00 06/06/2022");
+          // localStorage.setItem("149", "10826 2 6 1 win 00:26:15 17:30 06/06/2022");
+          // localStorage.setItem("150", "5426 7 6 9 loss 00:29:23 19:00 06/06/2022");
+          // localStorage.setItem("151", "21640 3 2 6 win 00:19:32 20:30 06/06/2022");
+          // localStorage.setItem("152", "10826 1 2 0 win 00:07:45 22:00 06/06/2022");
+          // // Day 13
+          // localStorage.setItem("153", "5426 5 2 18 win 00:29:22 10:00 06/07/2022");
+          // localStorage.setItem("154", "21640 3 2 6 win 00:19:32 11:30 06/07/2022");
+          // localStorage.setItem("155", "10826 0 2 2 win 00:08:48 13:00 06/07/2022");
+          // localStorage.setItem("156", "5426 9 2 20 win 00:32:18 14:30 06/07/2022");
+          // localStorage.setItem("157", "21640 3 2 6 win 00:19:32 16:00 06/07/2022");
+          // localStorage.setItem("158", "10826 7 1 2 win 00:14:28 17:30 06/07/2022");
+          // localStorage.setItem("159", "5426 15 9 24 loss 00:36:20 19:00 06/07/2022");
+          // localStorage.setItem("160", "21640 3 2 6 win 00:19:32 20:30 06/07/2022");
+          // localStorage.setItem("161", "10826 7 4 1 win 00:14:46 22:00 06/07/2022");
+          // // Day 12
+          // localStorage.setItem("162", "5426 2 5 12 loss 00:27:31 10:00 06/08/2022");
+          // localStorage.setItem("163", "21640 6 17 7 loss 00:31:12 11:30 06/08/2022");
+          // localStorage.setItem("164", "10826 7 2 0 win 00:12:39 13:00 06/08/2022");
+          // localStorage.setItem("165", "5426 3 5 24 win 00:33:43 14:30 06/08/2022");
+          // localStorage.setItem("166", "21640 3 7 2 loss 00:10:37 16:00 06/08/2022");
+          // localStorage.setItem("167", "10826 9 5 1 loss 00:23:06 17:30 06/08/2022");
+          // localStorage.setItem("168", "5426 3 2 6 win 00:19:32 19:00 06/08/2022");
+          // localStorage.setItem("169", "21640 5 6 4 win 00:15:06 20:30 06/08/2022");
+          // localStorage.setItem("170", "10826 5 3 3 win 00:15:21 22:00 06/08/2022");
+          // // Day 11
+          // localStorage.setItem("171", "5426 4 6 21 win 00:35:09 10:00 06/09/2022");
+          // localStorage.setItem("172", "21640 12 15 7 win 00:30:32 11:30 06/09/2022");
+          // localStorage.setItem("173", "10826 6 1 3 win 00:11:00 13:00 06/09/2022");
+          // localStorage.setItem("174", "5426 3 7 8 loss 00:31:34 14:30 06/09/2022");
+          // localStorage.setItem("175", "21640 12 14 7 win 00:28:27 16:00 06/09/2022");
+          // localStorage.setItem("176", "10826 7 3 3 win 00:17:37 17:30 06/09/2022");
+          // localStorage.setItem("177", "5426 4 2 11 win 00:27:29 19:00 06/09/2022");
+          // localStorage.setItem("178", "21640 9 18 5 loss 00:31:33 20:30 06/09/2022");
+          // localStorage.setItem("179", "10826 2 4 0 loss 00:12:09 22:00 06/09/2022");
+          // // Day 10
+          // localStorage.setItem("180", "5426 7 2 12 win 00:30:34 10:00 06/10/2022");
+          // localStorage.setItem("181", "21640 14 22 5 loss 00:35:11 11:30 06/10/2022");
+          // localStorage.setItem("182", "10826 13 7 1 loss 00:26:15 13:00 06/10/2022");
+          // localStorage.setItem("183", "5426 4 6 15 loss 00:28:08 14:30 06/10/2022");
+          // localStorage.setItem("184", "21640 5 4 0 loss 00:31:12 16:00 06/10/2022");
+          // localStorage.setItem("185", "10826 2 4 0 loss 00:07:45 17:30 06/10/2022");
+          // localStorage.setItem("186", "5426 6 1 14 win 00:24:14 19:00 06/10/2022");
+          // localStorage.setItem("187", "21640 7 14 4 loss 00:35:14 20:30 06/10/2022");
+          // localStorage.setItem("188", "10826 4 4 1 loss 00:08:48 22:00 06/10/2022");
+          // // Day 9
+          // localStorage.setItem("189", "5426 14 2 18 win 00:33:09 10:00 06/11/2022");
+          // localStorage.setItem("190", "21640 3 5 5 win 00:15:06 11:30 06/11/2022");
+          // localStorage.setItem("191", "10826 4 3 2 win 00:14:28 13:00 06/11/2022");
+          // localStorage.setItem("192", "5426 4 1 17 win 00:26:17 14:30 06/11/2022");
+          // localStorage.setItem("193", "21640 10 17 0 loss 00:39:17 16:00 06/11/2022");
+          // localStorage.setItem("194", "10826 6 5 0 loss 00:14:46 17:30 06/11/2022");
+          // localStorage.setItem("195", "5426 4 1 17 win 00:27:08 19:00 06/11/2022");
+          // localStorage.setItem("196", "21640 9 14 7 win 00:30:32 20:30 06/11/2022");
+          // localStorage.setItem("197", "10826 5 0 0 win 00:12:39 22:00 06/11/2022");
+          // // Day 8
+          // localStorage.setItem("198", "5426 4 7 9 loss 00:29:06 10:00 06/12/2022");
+          // localStorage.setItem("199", "21640 11 15 3 win 00:28:27 11:30 06/12/2022");
+          // localStorage.setItem("200", "10826 3 7 2 loss 00:23:06 13:00 06/12/2022");
+          // localStorage.setItem("201", "5426 16 4 20 win 00:41:43 14:30 06/12/2022");
+          // localStorage.setItem("202", "21640 6 19 4 loss 00:31:33 16:00 06/12/2022");
+          // localStorage.setItem("203", "10826 6 1 2 loss 00:15:21 17:30 06/12/2022");
+          // localStorage.setItem("204", "5426 9 12 31 loss 00:39:42 19:00 06/12/2022");
+          // localStorage.setItem("205", "21640 8 14 4 loss 00:27:43 20:30 06/12/2022");
+          // localStorage.setItem("206", "10826 7 0 0 win 00:11:00 22:00 06/12/2022");
+          // // Day 7
+          // localStorage.setItem("207", "5426 4 0 14 win 00:21:25 10:00 06/13/2022");
+          // localStorage.setItem("208", "21640 13 19 10 loss 00:35:11 11:30 06/13/2022");
+          // localStorage.setItem("209", "10826 3 3 1 win 00:17:37 13:00 06/13/2022");
+          // localStorage.setItem("210", "5426 5 5 30 win 00:35:35 14:30 06/13/2022");
+          // localStorage.setItem("211", "21640 24 13 4 win 00:35:14 16:00 06/13/2022");
+          // localStorage.setItem("212", "10826 1 4 1 loss 00:12:09 17:30 06/13/2022");
+          // localStorage.setItem("213", "5426 2 7 5 loss 00:29:01 19:00 06/13/2022");
+          // localStorage.setItem("214", "21640 10 5 1 loss 00:15:06 20:30 06/13/2022");
+          // localStorage.setItem("215", "10826 5 8 2 loss 00:26:15 22:00 06/13/2022");
+          // // Day 6
+          // localStorage.setItem("216", "5426 2 1 8 win 00:29:14 10:00 06/14/2022");
+          // localStorage.setItem("217", "21640 23 17 3 win 00:39:37 11:30 06/14/2022");
+          // localStorage.setItem("218", "10826 1 4 0 loss 00:07:45 13:00 06/14/2022");
+          // localStorage.setItem("219", "5426 0 1 12 win 00:30:39 14:30 06/14/2022");
+          // localStorage.setItem("220", "21640 22 13 4 loss 00:30:32 16:00 06/14/2022");
+          // localStorage.setItem("221", "10826 3 4 0 loss 00:08:48 17:30 06/14/2022");
+          // localStorage.setItem("222", "5426 1 0 4 loss 00:20:50 19:00 06/14/2022");
+          // localStorage.setItem("223", "21640 10 5 5 win 00:10:37 20:30 06/14/2022");
+          // localStorage.setItem("224", "10826 5 2 1 win 00:14:28 22:00 06/14/2022");
+          // // Day 5
+          // localStorage.setItem("225", "5426 9 1 3 win 00:26:05 10:00 06/15/2022");
+          // localStorage.setItem("226", "21640 25 11 5 win 00:27:43 11:30 06/15/2022");
+          // localStorage.setItem("227", "10826 5 5 0 loss 00:14:46 13:00 06/15/2022");
+          // localStorage.setItem("228", "5426 19 4 13 loss 00:46:19 14:30 06/15/2022");
+          // localStorage.setItem("229", "21640 33 20 3 win 00:35:11 16:00 06/15/2022");
+          // localStorage.setItem("230", "10826 3 4 1 win 00:12:39 17:30 06/15/2022");
+          // localStorage.setItem("231", "5426 9 4 7 loss 00:33:03 19:00 06/15/2022");
+          // localStorage.setItem("232", "21640 12 10 10 win 00:31:12 20:30 06/15/2022");
+          // localStorage.setItem("233", "10826 5 8 1 loss 00:23:06 22:00 06/15/2022");
+          // // Day 4
+          // localStorage.setItem("234", "5426 8 5 18 loss 00:50:14 10:00 06/16/2022");
+          // localStorage.setItem("235", "21640 21 15 3 win 00:35:14 11:30 06/16/2022");
+          // localStorage.setItem("236", "10826 5 2 2 win 00:15:21 13:00 06/16/2022");
+          // localStorage.setItem("237", "5426 4 8 9 loss 00:27:58 14:30 06/16/2022");
+          // localStorage.setItem("238", "21640 9 2 1 win 00:10:37 16:00 06/16/2022");
+          // localStorage.setItem("239", "10826 4 1 3 win 00:11:00 17:30 06/16/2022");
+          // localStorage.setItem("240", "5426 2 3 27 win 00:35:14 19:00 06/16/2022");
+          // localStorage.setItem("241", "21640 21 15 4 win 00:39:37 20:30 06/16/2022");
+          // localStorage.setItem("242", "10826 3 2 1 loss 00:17:37 22:00 06/16/2022");
+          // // Day 3
+          // localStorage.setItem("243", "5426 3 9 11 loss 00:35:25 10:00 06/17/2022");
+          // localStorage.setItem("244", "21640 12 15 7 loss 00:30:32 11:30 06/17/2022");
+          // localStorage.setItem("245", "10826 2 4 0 loss 00:12:09 13:00 06/17/2022");
+          // localStorage.setItem("246", "5426 1 4 7 win 00:20:08 14:30 06/17/2022");
+          // localStorage.setItem("247", "21640 19 8 1 win 00:27:43 16:00 06/17/2022");
+          // localStorage.setItem("248", "10826 6 7 2 loss 00:26:15 17:30 06/17/2022");
+          // localStorage.setItem("249", "5426 4 6 10 loss 00:37:25 19:00 06/17/2022");
+          // localStorage.setItem("250", "21640 13 10 5 win 00:31:12 20:30 06/17/2022");
+          // localStorage.setItem("251", "10826 0 4 1 loss 00:08:48 22:00 06/17/2022");
+          // // Day 2
+          // localStorage.setItem("252", "5426 3 1 13 win 00:23:26 10:00 06/18/2022");
+          // localStorage.setItem("253", "21640 18 14 3 loss 00:35:14 11:30 06/18/2022");
+          // localStorage.setItem("254", "10826 5 2 1 win 00:14:28 13:00 06/18/2022");
+          // localStorage.setItem("255", "5426 4 3 6 win 00:24:16 14:30 06/18/2022");
+          // localStorage.setItem("256", "21640 7 3 2 win 00:10:37 16:00 06/18/2022");
+          // localStorage.setItem("257", "10826 1 5 0 loss 00:14:46 17:30 06/18/2022");
+          // localStorage.setItem("258", "5426 1 3 9 loss 00:21:21 19:00 06/18/2022");
+          // localStorage.setItem("259", "21640 6 6 3 loss 00:15:06 20:30 06/18/2022");
+          // localStorage.setItem("260", "10826 2 2 0 win 00:12:39 22:00 06/18/2022");
+          // // Day 1
+          // localStorage.setItem("261", "5426 10 4 23 win 00:39:51 10:00 06/19/2022");
+          // localStorage.setItem("262", "21640 18 18 5 win 00:39:37 11:30 06/19/2022");
+          // localStorage.setItem("263", "10826 2 7 0 loss 00:23:06 13:00 06/19/2022");
+          // localStorage.setItem("264", "5426 6 2 7 win 00:19:43 14:30 06/19/2022");
+          // localStorage.setItem("265", "21640 9 16 3 loss 00:30:32 16:00 06/19/2022");
+          // localStorage.setItem("266", "10826 4 1 0 win 00:15:21 17:30 06/19/2022");
+          // localStorage.setItem("267", "5426 10 4 14 win 00:30:30 19:00 06/19/2022");
+          // localStorage.setItem("268", "21640 13 17 2 loss 00:28:27 20:30 06/19/2022");
+          // localStorage.setItem("269", "10826 3 3 2 win 00:11:00 22:00 06/19/2022");
 
           // Data for testing biometrics
           //localStorage.setItem("261", "5426 10 4 23 win 00:39:51 01:20 06/19/2022");
@@ -823,352 +823,352 @@ class OWHotkeys {
           console.log("LocalStorage");
           console.log(localStorage);
           
-          // Get minimum key to loop through localStorage properly since it's an associative array
-          var currentMinimumKey;
-          for (var key in localStorage){
-            var keyToInt = parseInt(key);
-            if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
-              currentMinimumKey = keyToInt;
-            }
+          // // Get minimum key to loop through localStorage properly since it's an associative array
+          // var currentMinimumKey;
+          // for (var key in localStorage){
+          //   var keyToInt = parseInt(key);
+          //   if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+          //     currentMinimumKey = keyToInt;
+          //   }
 
-            if (keyToInt < currentMinimumKey) {
-              currentMinimumKey = keyToInt;
-            }
-          }
+          //   if (keyToInt < currentMinimumKey) {
+          //     currentMinimumKey = keyToInt;
+          //   }
+          // }
 
-          // Get maximum key to loop through localStorage properly since it's an associative array
-          var currentMaximumKey;
-          for (var key in localStorage){
-            var keyToInt = parseInt(key);
-            if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
-              currentMaximumKey = keyToInt;
-            }
+          // // Get maximum key to loop through localStorage properly since it's an associative array
+          // var currentMaximumKey;
+          // for (var key in localStorage){
+          //   var keyToInt = parseInt(key);
+          //   if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+          //     currentMaximumKey = keyToInt;
+          //   }
 
-            if (keyToInt > currentMaximumKey) {
-              currentMaximumKey = keyToInt;
-            }
-          }
+          //   if (keyToInt > currentMaximumKey) {
+          //     currentMaximumKey = keyToInt;
+          //   }
+          // }
 
-          // Convert localStorage to array of correct values
-          var localStorageConverted = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var localStorageDataEntry = localStorage.getItem(i.toString());
-            localStorageDataEntry = localStorageDataEntry.split(" ");
-            var convertGameID = parseInt(localStorageDataEntry[0]);
-            var convertKills = parseInt(localStorageDataEntry[1]);
-            var convertDeaths = parseInt(localStorageDataEntry[2]);
-            var convertAssists = parseInt(localStorageDataEntry[3]);
-            var convertOutcome = localStorageDataEntry[4];
-            // Convert match time to miliseconds
-            var convertMatchLength = localStorageDataEntry[5].split(":");
-            // convert hours to miliseconds
-            var hours = parseInt(convertMatchLength[0]) * 360000;
-            // convert minutes to miliseconds
-            var minutes = parseInt(convertMatchLength[1]) * 60000;
-            // convert seconds to miliseconds
-            var seconds = parseInt(convertMatchLength[2]) * 1000;
-            convertMatchLength = hours + minutes + seconds;
-            // convert time of day to miliseconds
-            var convertTimeofDay = localStorageDataEntry[6].split(":");
-            // convert hours to miliseconds
-            hours = parseInt(convertTimeofDay[0]) * 3600000;
-            minutes = parseInt(convertTimeofDay[1]) * 60000;
-            // convert minutes to miliseconds
-            convertTimeofDay = hours + minutes;
-            // Convert dates to day of week
-            var convertDay = Date.parse(localStorageDataEntry[7]);
-            convertDay = new Date(convertDay);
-            convertDay = convertDay.toString();
-            convertDay = convertDay.split(" ");
-            convertDay = convertDay[0];
-            // Add converted entry
-            localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
-          }
+          // // Convert localStorage to array of correct values
+          // var localStorageConverted = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var localStorageDataEntry = localStorage.getItem(i.toString());
+          //   localStorageDataEntry = localStorageDataEntry.split(" ");
+          //   var convertGameID = parseInt(localStorageDataEntry[0]);
+          //   var convertKills = parseInt(localStorageDataEntry[1]);
+          //   var convertDeaths = parseInt(localStorageDataEntry[2]);
+          //   var convertAssists = parseInt(localStorageDataEntry[3]);
+          //   var convertOutcome = localStorageDataEntry[4];
+          //   // Convert match time to miliseconds
+          //   var convertMatchLength = localStorageDataEntry[5].split(":");
+          //   // convert hours to miliseconds
+          //   var hours = parseInt(convertMatchLength[0]) * 360000;
+          //   // convert minutes to miliseconds
+          //   var minutes = parseInt(convertMatchLength[1]) * 60000;
+          //   // convert seconds to miliseconds
+          //   var seconds = parseInt(convertMatchLength[2]) * 1000;
+          //   convertMatchLength = hours + minutes + seconds;
+          //   // convert time of day to miliseconds
+          //   var convertTimeofDay = localStorageDataEntry[6].split(":");
+          //   // convert hours to miliseconds
+          //   hours = parseInt(convertTimeofDay[0]) * 3600000;
+          //   minutes = parseInt(convertTimeofDay[1]) * 60000;
+          //   // convert minutes to miliseconds
+          //   convertTimeofDay = hours + minutes;
+          //   // Convert dates to day of week
+          //   var convertDay = Date.parse(localStorageDataEntry[7]);
+          //   convertDay = new Date(convertDay);
+          //   convertDay = convertDay.toString();
+          //   convertDay = convertDay.split(" ");
+          //   convertDay = convertDay[0];
+          //   // Add converted entry
+          //   localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+          // }
 
-          console.log("LocalStorageConverted");
-          console.log(localStorageConverted);
+          // console.log("LocalStorageConverted");
+          // console.log(localStorageConverted);
 
-          sufficientSleep = true;
-          sufficientWater = true;
+          // sufficientSleep = true;
+          // sufficientWater = true;
 
-          if (sufficientSleep || sufficientWater)
-          {
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, "0");
-            var mm = String(today.getMonth() + 1).padStart(2, "0");
-            var yyyy = today.getFullYear();
-            localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
-          }
+          // if (sufficientSleep || sufficientWater)
+          // {
+          //   var today = new Date();
+          //   var dd = String(today.getDate()).padStart(2, "0");
+          //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+          //   var yyyy = today.getFullYear();
+          //   localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+          // }
 
-          var today = new Date();
-          var dd = String(today.getDate()).padStart(2, "0");
-          var mm = String(today.getMonth() + 1).padStart(2, "0");
-          var yyyy = today.getFullYear();
-          var today = mm + "/" + dd + "/" + yyyy
+          // var today = new Date();
+          // var dd = String(today.getDate()).padStart(2, "0");
+          // var mm = String(today.getMonth() + 1).padStart(2, "0");
+          // var yyyy = today.getFullYear();
+          // var today = mm + "/" + dd + "/" + yyyy
 
-          if (today != localStorage.getItem("biometricsDate"))
-          {
-            sufficientSleep = false;
-            sufficientWater = false;
-          }
+          // if (today != localStorage.getItem("biometricsDate"))
+          // {
+          //   sufficientSleep = false;
+          //   sufficientWater = false;
+          // }
 
-          // Convert dates to day of week
-          var today = Date.parse(today);
-          today = new Date(today);
-          today = today.toString();
-          today = today.split(" ");
-          today = today[0];
+          // // Convert dates to day of week
+          // var today = Date.parse(today);
+          // today = new Date(today);
+          // today = today.toString();
+          // today = today.split(" ");
+          // today = today[0];
 
-          // League of Legends
-          console.log("League of Legends Games from converted LocalStorage");
-          var leagueGames = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var getGameID = localStorageConverted[i][0];
-            if (getGameID == 5426) {
-              leagueGames.push(localStorageConverted[i]);
-            }
-          }
-          console.log(leagueGames);
+          // // League of Legends
+          // console.log("League of Legends Games from converted LocalStorage");
+          // var leagueGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 5426) {
+          //     leagueGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(leagueGames);
 
-          // Get league average game time
-          var leagueaverageGameTime = 0;
-          for (var i = 0; i < leagueGames.length; i++) {
-            leagueaverageGameTime += leagueGames[i][5];
-          }
-          leagueaverageGameTime /= leagueGames.length;
+          // // Get league average game time
+          // var leagueaverageGameTime = 0;
+          // for (var i = 0; i < leagueGames.length; i++) {
+          //   leagueaverageGameTime += leagueGames[i][5];
+          // }
+          // leagueaverageGameTime /= leagueGames.length;
 
-          // Arrays for each day of the week
-          var leaguesundayGames = [];
-          var leaguemondayGames = [];
-          var leaguetuesdayGames = [];
-          var leaguewednesdayGames = [];
-          var leaguethursdayGames = [];
-          var leaguefridayGames = [];
-          var leaguesaturdayGames = [];
-          for (i = 0; i < leagueGames.length; i++) {
-            switch (leagueGames[i][7]) {
-              case "Sun":
-                leaguesundayGames.push(leagueGames[i]);
-                break;
-              case "Mon":
-                leaguemondayGames.push(leagueGames[i]);
-                break;
-              case "Tue":
-                leaguetuesdayGames.push(leagueGames[i]);
-                break;
-              case "Wed":
-                leaguewednesdayGames.push(leagueGames[i]);
-                break;
-              case "Thu":
-                leaguethursdayGames.push(leagueGames[i]);
-                break;
-              case "Fri":
-                leaguefridayGames.push(leagueGames[i]);
-                break;
-              case "Sat":
-                leaguesaturdayGames.push(leagueGames[i]);
-                break;
-              default:
-                break;
-            }
-          }
+          // // Arrays for each day of the week
+          // var leaguesundayGames = [];
+          // var leaguemondayGames = [];
+          // var leaguetuesdayGames = [];
+          // var leaguewednesdayGames = [];
+          // var leaguethursdayGames = [];
+          // var leaguefridayGames = [];
+          // var leaguesaturdayGames = [];
+          // for (i = 0; i < leagueGames.length; i++) {
+          //   switch (leagueGames[i][7]) {
+          //     case "Sun":
+          //       leaguesundayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Mon":
+          //       leaguemondayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Tue":
+          //       leaguetuesdayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Wed":
+          //       leaguewednesdayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Thu":
+          //       leaguethursdayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Fri":
+          //       leaguefridayGames.push(leagueGames[i]);
+          //       break;
+          //     case "Sat":
+          //       leaguesaturdayGames.push(leagueGames[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
 
-          console.log("League recommended time slots for each day!");
-          var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-          console.log("League Sunday Slot");
-          console.log(leagueSundaySlot);
-          var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-          console.log("League Monday Slot");
-          console.log(leagueMondaySlot);
-          var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-          console.log("League Tuesday Slot");
-          console.log(leagueTuesdaySlot);
-          var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-          console.log("League Wednesday Slot");
-          console.log(leagueWednesdaySlot);
-          var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-          console.log("League Thursday Slot");
-          console.log(leagueThursdaySlot);
-          var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-          console.log("League Friday Slot");
-          console.log(leagueFridaySlot);
-          var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
-          console.log("League Saturday Slot");
-          console.log(leagueSaturdaySlot);
+          // console.log("League recommended time slots for each day!");
+          // var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+          // console.log("League Sunday Slot");
+          // console.log(leagueSundaySlot);
+          // var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+          // console.log("League Monday Slot");
+          // console.log(leagueMondaySlot);
+          // var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+          // console.log("League Tuesday Slot");
+          // console.log(leagueTuesdaySlot);
+          // var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+          // console.log("League Wednesday Slot");
+          // console.log(leagueWednesdaySlot);
+          // var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+          // console.log("League Thursday Slot");
+          // console.log(leagueThursdaySlot);
+          // var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+          // console.log("League Friday Slot");
+          // console.log(leagueFridaySlot);
+          // var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+          // console.log("League Saturday Slot");
+          // console.log(leagueSaturdaySlot);
 
-          console.log("Valorant Games from converted LocalStorage");
-          var valorantGames = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var getGameID = localStorageConverted[i][0];
-            if (getGameID == 21640) {
-              valorantGames.push(localStorageConverted[i]);
-            }
-          }
-          console.log(valorantGames);
+          // console.log("Valorant Games from converted LocalStorage");
+          // var valorantGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 21640) {
+          //     valorantGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(valorantGames);
 
-          // Get Valorant average game time
-          var valorantaverageGameTime = 0;
-          for (var i = 0; i < valorantGames.length; i++) {
-            valorantaverageGameTime += valorantGames[i][5];
-          }
-          valorantaverageGameTime /= valorantGames.length;
+          // // Get Valorant average game time
+          // var valorantaverageGameTime = 0;
+          // for (var i = 0; i < valorantGames.length; i++) {
+          //   valorantaverageGameTime += valorantGames[i][5];
+          // }
+          // valorantaverageGameTime /= valorantGames.length;
 
-          // Arrays for each day of the week
-          var valorantsundayGames = [];
-          var valorantmondayGames = [];
-          var valoranttuesdayGames = [];
-          var valorantwednesdayGames = [];
-          var valorantthursdayGames = [];
-          var valorantfridayGames = [];
-          var valorantsaturdayGames = [];
-          for (i = 0; i < valorantGames.length; i++) {
-            switch (valorantGames[i][7]) {
-              case "Sun":
-                valorantsundayGames.push(valorantGames[i]);
-                break;
-              case "Mon":
-                valorantmondayGames.push(valorantGames[i]);
-                break;
-              case "Tue":
-                valoranttuesdayGames.push(valorantGames[i]);
-                break;
-              case "Wed":
-                valorantwednesdayGames.push(valorantGames[i]);
-                break;
-              case "Thu":
-                valorantthursdayGames.push(valorantGames[i]);
-                break;
-              case "Fri":
-                valorantfridayGames.push(valorantGames[i]);
-                break;
-              case "Sat":
-                valorantsaturdayGames.push(valorantGames[i]);
-                break;
-              default:
-                break;
-            }
-          }
+          // // Arrays for each day of the week
+          // var valorantsundayGames = [];
+          // var valorantmondayGames = [];
+          // var valoranttuesdayGames = [];
+          // var valorantwednesdayGames = [];
+          // var valorantthursdayGames = [];
+          // var valorantfridayGames = [];
+          // var valorantsaturdayGames = [];
+          // for (i = 0; i < valorantGames.length; i++) {
+          //   switch (valorantGames[i][7]) {
+          //     case "Sun":
+          //       valorantsundayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Mon":
+          //       valorantmondayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Tue":
+          //       valoranttuesdayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Wed":
+          //       valorantwednesdayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Thu":
+          //       valorantthursdayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Fri":
+          //       valorantfridayGames.push(valorantGames[i]);
+          //       break;
+          //     case "Sat":
+          //       valorantsaturdayGames.push(valorantGames[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
 
-          console.log("Valorant recommended time slots for each day!");
-          var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-          console.log("Valorant Sunday Slot");
-          console.log(valorantSundaySlot);
-          var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-          console.log("Valorant Monday Slot");
-          console.log(valorantMondaySlot);
-          var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-          console.log("Valorant Tuesday Slot");
-          console.log(valorantTuesdaySlot);
-          var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-          console.log("Valorant Wednesday Slot");
-          console.log(valorantWednesdaySlot);
-          var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-          console.log("Valorant Thursday Slot");
-          console.log(valorantThursdaySlot);
-          var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-          console.log("Valorant Friday Slot");
-          console.log(valorantFridaySlot);
-          var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
-          console.log("Valorant Saturday Slot");
-          console.log(valorantSaturdaySlot);
+          // console.log("Valorant recommended time slots for each day!");
+          // var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+          // console.log("Valorant Sunday Slot");
+          // console.log(valorantSundaySlot);
+          // var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+          // console.log("Valorant Monday Slot");
+          // console.log(valorantMondaySlot);
+          // var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+          // console.log("Valorant Tuesday Slot");
+          // console.log(valorantTuesdaySlot);
+          // var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+          // console.log("Valorant Wednesday Slot");
+          // console.log(valorantWednesdaySlot);
+          // var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+          // console.log("Valorant Thursday Slot");
+          // console.log(valorantThursdaySlot);
+          // var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+          // console.log("Valorant Friday Slot");
+          // console.log(valorantFridaySlot);
+          // var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+          // console.log("Valorant Saturday Slot");
+          // console.log(valorantSaturdaySlot);
 
-          // Rainbow 6 Seige
-          console.log("Rainbow 6 Seige Games from converted LocalStorage");
-          var seigeGames = [];
-          for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-            var getGameID = localStorageConverted[i][0];
-            if (getGameID == 10826) {
-              seigeGames.push(localStorageConverted[i]);
-            }
-          }
-          console.log(seigeGames);
+          // // Rainbow 6 Seige
+          // console.log("Rainbow 6 Seige Games from converted LocalStorage");
+          // var seigeGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 10826) {
+          //     seigeGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(seigeGames);
 
-          // Get Rainbow 6 Seige average game time
-          var seigeaverageGameTime = 0;
-          for (var i = 0; i < seigeGames.length; i++) {
-            seigeaverageGameTime += seigeGames[i][5];
-          }
-          seigeaverageGameTime /= seigeGames.length;
+          // // Get Rainbow 6 Seige average game time
+          // var seigeaverageGameTime = 0;
+          // for (var i = 0; i < seigeGames.length; i++) {
+          //   seigeaverageGameTime += seigeGames[i][5];
+          // }
+          // seigeaverageGameTime /= seigeGames.length;
 
-          // Arrays for each day of the week
-          var seigesundayGames = [];
-          var seigemondayGames = [];
-          var seigetuesdayGames = [];
-          var seigewednesdayGames = [];
-          var seigethursdayGames = [];
-          var seigefridayGames = [];
-          var seigesaturdayGames = [];
-          for (i = 0; i < seigeGames.length; i++) {
-            switch (seigeGames[i][7]) {
-              case "Sun":
-                seigesundayGames.push(seigeGames[i]);
-                break;
-              case "Mon":
-                seigemondayGames.push(seigeGames[i]);
-                break;
-              case "Tue":
-                seigetuesdayGames.push(seigeGames[i]);
-                break;
-              case "Wed":
-                seigewednesdayGames.push(seigeGames[i]);
-                break;
-              case "Thu":
-                seigethursdayGames.push(seigeGames[i]);
-                break;
-              case "Fri":
-                seigefridayGames.push(seigeGames[i]);
-                break;
-              case "Sat":
-                seigesaturdayGames.push(seigeGames[i]);
-                break;
-              default:
-                break;
-            }
-          }
+          // // Arrays for each day of the week
+          // var seigesundayGames = [];
+          // var seigemondayGames = [];
+          // var seigetuesdayGames = [];
+          // var seigewednesdayGames = [];
+          // var seigethursdayGames = [];
+          // var seigefridayGames = [];
+          // var seigesaturdayGames = [];
+          // for (i = 0; i < seigeGames.length; i++) {
+          //   switch (seigeGames[i][7]) {
+          //     case "Sun":
+          //       seigesundayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Mon":
+          //       seigemondayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Tue":
+          //       seigetuesdayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Wed":
+          //       seigewednesdayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Thu":
+          //       seigethursdayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Fri":
+          //       seigefridayGames.push(seigeGames[i]);
+          //       break;
+          //     case "Sat":
+          //       seigesaturdayGames.push(seigeGames[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
 
-          console.log("Rainbow 6 Seige recommended time slots for each day!");
-          var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-          console.log("Rainbow 6 Seige Sunday Slot");
-          console.log(seigeSundaySlot);
-          var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-          console.log("Rainbow 6 Seige Monday Slot");
-          console.log(seigeMondaySlot);
-          var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-          console.log("Rainbow 6 Seige Tuesday Slot");
-          console.log(seigeTuesdaySlot);
-          var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-          console.log("Rainbow 6 Seige Wednesday Slot");
-          console.log(seigeWednesdaySlot);
-          var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-          console.log("Rainbow 6 Seige Thursday Slot");
-          console.log(seigeThursdaySlot);
-          var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-          console.log("Rainbow 6 Seige Friday Slot");
-          console.log(seigeFridaySlot);
-          var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-          localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
-          console.log("Rainbow 6 Seige Saturday Slot");
-          console.log(seigeSaturdaySlot);
+          // console.log("Rainbow 6 Seige recommended time slots for each day!");
+          // var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+          // console.log("Rainbow 6 Seige Sunday Slot");
+          // console.log(seigeSundaySlot);
+          // var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+          // console.log("Rainbow 6 Seige Monday Slot");
+          // console.log(seigeMondaySlot);
+          // var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+          // console.log("Rainbow 6 Seige Tuesday Slot");
+          // console.log(seigeTuesdaySlot);
+          // var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+          // console.log("Rainbow 6 Seige Wednesday Slot");
+          // console.log(seigeWednesdaySlot);
+          // var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+          // console.log("Rainbow 6 Seige Thursday Slot");
+          // console.log(seigeThursdaySlot);
+          // var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+          // console.log("Rainbow 6 Seige Friday Slot");
+          // console.log(seigeFridaySlot);
+          // var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+          // localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
+          // console.log("Rainbow 6 Seige Saturday Slot");
+          // console.log(seigeSaturdaySlot);
 
           // // League of Legends
           // console.log("League of Legends Games from converted LocalStorage");
@@ -1968,6 +1968,203 @@ var exports = __webpack_exports__;
   !*** ./src/in_game/in_game.ts ***!
   \********************************/
 
+  function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, sufficientSleep, dayofWeek)
+  {
+    var dayGamesWeight = [];
+          for (var i = 0; i < array.length; i++) {
+            var dayKills = array[i][1];
+            var dayDeaths = array[i][2];
+            var dayAssists = array[i][3];
+            if (dayDeaths != 0) {
+              var dayKDA = (dayKills + dayAssists) / dayDeaths;
+            }
+            else {
+              var dayKDA = dayKills + dayAssists;
+            }
+            var gameWeight = dayKDA;
+            if (array[i][4] == "win") {
+              gameWeight += 5;
+              if (array[i][5] <= gameAverageGameTime) {
+                var tmpDayGameTime = array[i][5];
+                while (tmpDayGameTime <= gameAverageGameTime) {
+                  tmpDayGameTime += 120000;
+                  if (tmpDayGameTime <= gameAverageGameTime) {
+                    gameWeight++;
+                  }
+                } 
+              }
+              else {
+                var tmpDayGameTime = array[i][5];
+                while (tmpDayGameTime > gameAverageGameTime) {
+                  tmpDayGameTime -= 120000;
+                  if (tmpDayGameTime > gameAverageGameTime) {
+                    gameWeight--;
+                  }
+                }
+              }
+            } else {
+              gameWeight -= 5;
+            }
+            gameWeight = Math.round(gameWeight);
+            if (gameWeight < 0) {
+              gameWeight = 0;
+            }
+            dayGamesWeight.push(gameWeight);
+          }
+          
+          var competingTimeSlots = []
+          for (var i = 0; i < array.length; i++) {
+            competingTimeSlots[i] = array[i][6] / 3600000;
+          }
+
+          var totalCompetingTimeSlots = 0;
+          var avgCompetingTimeSlots;
+          var totalGameWeight = 0;
+          for (var i = 0; i < competingTimeSlots.length; i++) {
+            totalCompetingTimeSlots += competingTimeSlots[i] * dayGamesWeight[i];
+            totalGameWeight += dayGamesWeight[i];
+          }
+          avgCompetingTimeSlots = totalCompetingTimeSlots / totalGameWeight;
+          var startTime = 0;
+          var endTime = 0;
+          if (avgCompetingTimeSlots - 1 < 0)
+          {
+            startTime = 0;
+          }
+          else
+          {
+            startTime = avgCompetingTimeSlots - 1;
+          }
+
+          if (avgCompetingTimeSlots + 1 > 23.99)
+          {
+            endTime = 23.99;
+          }
+          else
+          {
+            endTime = avgCompetingTimeSlots + 1;
+          }
+
+          if (array.length > 0)
+          {
+            if (array[0][7] == dayofWeek)
+            {
+              if (sufficientWater)
+              {
+                // Add 15 min to beginning
+                if (startTime - 0.25 < 0)
+                {
+                  startTime = 0;
+                }
+                else
+                {
+                  startTime -= 0.25;
+                }
+
+                // Add 15 min to end
+                if (endTime + 0.25 > 23.99)
+                {
+                  endTime = 23.99;
+                }
+                else
+                {
+                  endTime += 0.25;
+                }
+              }
+
+              if (sufficientSleep)
+              {
+                // Add 15 min to beginning
+                if (startTime - 0.25 < 0)
+                {
+                  startTime = 0;
+                }
+                else
+                {
+                  startTime -= 0.25;
+                }
+
+                // Add 15 min to end
+                if (endTime + 0.25 > 23.99)
+                {
+                  endTime = 23.99;
+                }
+                else
+                {
+                  endTime += 0.25;
+                }
+              }
+            }
+          }
+
+          var startTimeConverted = convertNumToTime(startTime);
+          var endTimeConverted = convertNumToTime(endTime);
+
+          var startTimeConvertedArray = startTimeConverted.split(":");
+          var startTimeConvertedHours = startTimeConvertedArray[0];
+          startTimeConvertedHours = parseInt(startTimeConvertedHours);
+          var endTimeConvertedArray = endTimeConverted.split(":");
+          var endTimeConvertedHours = endTimeConvertedArray[0];
+          endTimeConvertedHours = parseInt(endTimeConvertedHours);
+
+          startTimeConvertedHours = ((startTimeConvertedHours + 11) % 12 + 1);
+          endTimeConvertedHours = ((endTimeConvertedHours + 11) % 12 + 1);
+
+          var startTimeString = startTimeConvertedHours + ":" + startTimeConvertedArray[1];
+          var endTimeString = endTimeConvertedHours + ":" + endTimeConvertedArray[1];
+
+          if (startTime < 12)
+          {
+            startTimeString = startTimeString + " AM";
+          }
+          else
+          {
+            startTimeString = startTimeString + " PM";
+          }
+
+          if (endTime < 12)
+          {
+            endTimeString = endTimeString + " AM";
+          }
+          else
+          {
+            endTimeString = endTimeString + " PM";
+          }
+
+          return startTimeString + " - " + endTimeString;
+  }
+
+  function convertNumToTime(number) {
+    // Check sign of given number
+    var sign = (number >= 0) ? 1 : -1;
+
+    // Set positive value of number of sign negative
+    number = number * sign;
+
+    // Separate the int from the decimal part
+    var hour = Math.floor(number);
+    var decpart = number - hour;
+
+    var min = 1 / 60;
+    // Round to nearest minute
+    decpart = min * Math.round(decpart / min);
+
+    var minute = Math.floor(decpart * 60) + '';
+
+    // Add padding if need
+    if (minute.length < 2) {
+    minute = '0' + minute; 
+    }
+
+    // Add Sign in final result
+    sign = sign == 1 ? '' : '-';
+
+    // Concate hours and minutes
+    var time = sign + hour + ':' + minute;
+
+    return time;
+}
+
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const overwolf_api_ts_1 = __webpack_require__(/*! @overwolf/overwolf-api-ts */ "./node_modules/@overwolf/overwolf-api-ts/dist/index.js");
 const AppWindow_1 = __webpack_require__(/*! ../AppWindow */ "./src/AppWindow.ts");
@@ -1997,6 +2194,7 @@ class InGame extends AppWindow_1.AppWindow {
             this._gameEventsListener.start();
         }
     }
+    
     onInfoUpdates(info) {
         // Check if Valorant ranked or Unranked
         if (info.match_info !== undefined) {
@@ -2112,6 +2310,20 @@ class InGame extends AppWindow_1.AppWindow {
               this.assists = 0;
             }
 
+            // Console Log all info I need
+            console.log(this.enterData);
+            console.log(this.roundsCompleted);
+            console.log("Game Results:");
+            console.log("Game ID: " + this.gameID);
+            console.log("Game Mode: " + this.gameMode);
+            console.log("kills: " + this.kills);
+            console.log("deaths: " + this.deaths);
+            console.log("assists: " + this.assists);
+            console.log("Match Outcome: " + this.matchResult);
+            console.log("Match Length: " + this.mLength);
+            console.log("Game TIme: " + this.gameTime);
+            console.log("Date: " + this.date);
+
             // Only add entry if this.enterData == true and rounds completed does not equal 1 (this means remake)
             if (this.enterData == true && !(this.roundsCompleted <= 4)) {
               // Only add entry if all values are defined
@@ -2144,6 +2356,298 @@ class InGame extends AppWindow_1.AppWindow {
             // End Normal Game Add:
 
             // George: Analyze Database
+            // Get minimum key to loop through localStorage properly since it's an associative array
+            var currentMinimumKey;
+            for (var key in localStorage){
+              var keyToInt = parseInt(key);
+              if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+                currentMinimumKey = keyToInt;
+              }
+
+              if (keyToInt < currentMinimumKey) {
+                currentMinimumKey = keyToInt;
+              }
+            }
+
+            // Get maximum key to loop through localStorage properly since it's an associative array
+            var currentMaximumKey;
+            for (var key in localStorage){
+              var keyToInt = parseInt(key);
+              if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+                currentMaximumKey = keyToInt;
+              }
+
+              if (keyToInt > currentMaximumKey) {
+                currentMaximumKey = keyToInt;
+              }
+            }
+
+            // Convert localStorage to array of correct values
+            var localStorageConverted = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var localStorageDataEntry = localStorage.getItem(i.toString());
+              localStorageDataEntry = localStorageDataEntry.split(" ");
+              var convertGameID = parseInt(localStorageDataEntry[0]);
+              var convertKills = parseInt(localStorageDataEntry[1]);
+              var convertDeaths = parseInt(localStorageDataEntry[2]);
+              var convertAssists = parseInt(localStorageDataEntry[3]);
+              var convertOutcome = localStorageDataEntry[4];
+              // Convert match time to miliseconds
+              var convertMatchLength = localStorageDataEntry[5].split(":");
+              // convert hours to miliseconds
+              var hours = parseInt(convertMatchLength[0]) * 360000;
+              // convert minutes to miliseconds
+              var minutes = parseInt(convertMatchLength[1]) * 60000;
+              // convert seconds to miliseconds
+              var seconds = parseInt(convertMatchLength[2]) * 1000;
+              convertMatchLength = hours + minutes + seconds;
+              // convert time of day to miliseconds
+              var convertTimeofDay = localStorageDataEntry[6].split(":");
+              // convert hours to miliseconds
+              hours = parseInt(convertTimeofDay[0]) * 3600000;
+              minutes = parseInt(convertTimeofDay[1]) * 60000;
+              // convert minutes to miliseconds
+              convertTimeofDay = hours + minutes;
+              // Convert dates to day of week
+              var convertDay = Date.parse(localStorageDataEntry[7]);
+              convertDay = new Date(convertDay);
+              convertDay = convertDay.toString();
+              convertDay = convertDay.split(" ");
+              convertDay = convertDay[0];
+              // Add converted entry
+              localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+            }
+
+            sufficientSleep = true;
+            sufficientWater = true;
+
+            if (sufficientSleep || sufficientWater)
+            {
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, "0");
+              var mm = String(today.getMonth() + 1).padStart(2, "0");
+              var yyyy = today.getFullYear();
+              localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+            }
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, "0");
+            var mm = String(today.getMonth() + 1).padStart(2, "0");
+            var yyyy = today.getFullYear();
+            var today = mm + "/" + dd + "/" + yyyy
+
+            if (today != localStorage.getItem("biometricsDate"))
+            {
+              sufficientSleep = false;
+              sufficientWater = false;
+            }
+
+            // Convert dates to day of week
+            var today = Date.parse(today);
+            today = new Date(today);
+            today = today.toString();
+            today = today.split(" ");
+            today = today[0];
+
+            // League of Legends
+            var leagueGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 5426) {
+                leagueGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get league average game time
+            var leagueaverageGameTime = 0;
+            for (var i = 0; i < leagueGames.length; i++) {
+              leagueaverageGameTime += leagueGames[i][5];
+            }
+            leagueaverageGameTime /= leagueGames.length;
+
+            // Arrays for each day of the week
+            var leaguesundayGames = [];
+            var leaguemondayGames = [];
+            var leaguetuesdayGames = [];
+            var leaguewednesdayGames = [];
+            var leaguethursdayGames = [];
+            var leaguefridayGames = [];
+            var leaguesaturdayGames = [];
+            for (i = 0; i < leagueGames.length; i++) {
+              switch (leagueGames[i][7]) {
+                case "Sun":
+                  leaguesundayGames.push(leagueGames[i]);
+                  break;
+                case "Mon":
+                  leaguemondayGames.push(leagueGames[i]);
+                  break;
+                case "Tue":
+                  leaguetuesdayGames.push(leagueGames[i]);
+                  break;
+                case "Wed":
+                  leaguewednesdayGames.push(leagueGames[i]);
+                  break;
+                case "Thu":
+                  leaguethursdayGames.push(leagueGames[i]);
+                  break;
+                case "Fri":
+                  leaguefridayGames.push(leagueGames[i]);
+                  break;
+                case "Sat":
+                  leaguesaturdayGames.push(leagueGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+
+            var valorantGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 21640) {
+                valorantGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get Valorant average game time
+            var valorantaverageGameTime = 0;
+            for (var i = 0; i < valorantGames.length; i++) {
+              valorantaverageGameTime += valorantGames[i][5];
+            }
+            valorantaverageGameTime /= valorantGames.length;
+
+            // Arrays for each day of the week
+            var valorantsundayGames = [];
+            var valorantmondayGames = [];
+            var valoranttuesdayGames = [];
+            var valorantwednesdayGames = [];
+            var valorantthursdayGames = [];
+            var valorantfridayGames = [];
+            var valorantsaturdayGames = [];
+            for (i = 0; i < valorantGames.length; i++) {
+              switch (valorantGames[i][7]) {
+                case "Sun":
+                  valorantsundayGames.push(valorantGames[i]);
+                  break;
+                case "Mon":
+                  valorantmondayGames.push(valorantGames[i]);
+                  break;
+                case "Tue":
+                  valoranttuesdayGames.push(valorantGames[i]);
+                  break;
+                case "Wed":
+                  valorantwednesdayGames.push(valorantGames[i]);
+                  break;
+                case "Thu":
+                  valorantthursdayGames.push(valorantGames[i]);
+                  break;
+                case "Fri":
+                  valorantfridayGames.push(valorantGames[i]);
+                  break;
+                case "Sat":
+                  valorantsaturdayGames.push(valorantGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+
+            // Rainbow 6 Seige
+            var seigeGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 10826) {
+                seigeGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get Rainbow 6 Seige average game time
+            var seigeaverageGameTime = 0;
+            for (var i = 0; i < seigeGames.length; i++) {
+              seigeaverageGameTime += seigeGames[i][5];
+            }
+            seigeaverageGameTime /= seigeGames.length;
+
+            // Arrays for each day of the week
+            var seigesundayGames = [];
+            var seigemondayGames = [];
+            var seigetuesdayGames = [];
+            var seigewednesdayGames = [];
+            var seigethursdayGames = [];
+            var seigefridayGames = [];
+            var seigesaturdayGames = [];
+            for (i = 0; i < seigeGames.length; i++) {
+              switch (seigeGames[i][7]) {
+                case "Sun":
+                  seigesundayGames.push(seigeGames[i]);
+                  break;
+                case "Mon":
+                  seigemondayGames.push(seigeGames[i]);
+                  break;
+                case "Tue":
+                  seigetuesdayGames.push(seigeGames[i]);
+                  break;
+                case "Wed":
+                  seigewednesdayGames.push(seigeGames[i]);
+                  break;
+                case "Thu":
+                  seigethursdayGames.push(seigeGames[i]);
+                  break;
+                case "Fri":
+                  seigefridayGames.push(seigeGames[i]);
+                  break;
+                case "Sat":
+                  seigesaturdayGames.push(seigeGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
             // Reset global vars
             this.gameID = undefined;
@@ -2374,6 +2878,298 @@ class InGame extends AppWindow_1.AppWindow {
               }
 
               // George: Analyze Database
+              // Get minimum key to loop through localStorage properly since it's an associative array
+              var currentMinimumKey;
+              for (var key in localStorage){
+                var keyToInt = parseInt(key);
+                if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+                  currentMinimumKey = keyToInt;
+                }
+
+                if (keyToInt < currentMinimumKey) {
+                  currentMinimumKey = keyToInt;
+                }
+              }
+
+              // Get maximum key to loop through localStorage properly since it's an associative array
+              var currentMaximumKey;
+              for (var key in localStorage){
+                var keyToInt = parseInt(key);
+                if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+                  currentMaximumKey = keyToInt;
+                }
+
+                if (keyToInt > currentMaximumKey) {
+                  currentMaximumKey = keyToInt;
+                }
+              }
+
+              // Convert localStorage to array of correct values
+              var localStorageConverted = [];
+              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                var localStorageDataEntry = localStorage.getItem(i.toString());
+                localStorageDataEntry = localStorageDataEntry.split(" ");
+                var convertGameID = parseInt(localStorageDataEntry[0]);
+                var convertKills = parseInt(localStorageDataEntry[1]);
+                var convertDeaths = parseInt(localStorageDataEntry[2]);
+                var convertAssists = parseInt(localStorageDataEntry[3]);
+                var convertOutcome = localStorageDataEntry[4];
+                // Convert match time to miliseconds
+                var convertMatchLength = localStorageDataEntry[5].split(":");
+                // convert hours to miliseconds
+                var hours = parseInt(convertMatchLength[0]) * 360000;
+                // convert minutes to miliseconds
+                var minutes = parseInt(convertMatchLength[1]) * 60000;
+                // convert seconds to miliseconds
+                var seconds = parseInt(convertMatchLength[2]) * 1000;
+                convertMatchLength = hours + minutes + seconds;
+                // convert time of day to miliseconds
+                var convertTimeofDay = localStorageDataEntry[6].split(":");
+                // convert hours to miliseconds
+                hours = parseInt(convertTimeofDay[0]) * 3600000;
+                minutes = parseInt(convertTimeofDay[1]) * 60000;
+                // convert minutes to miliseconds
+                convertTimeofDay = hours + minutes;
+                // Convert dates to day of week
+                var convertDay = Date.parse(localStorageDataEntry[7]);
+                convertDay = new Date(convertDay);
+                convertDay = convertDay.toString();
+                convertDay = convertDay.split(" ");
+                convertDay = convertDay[0];
+                // Add converted entry
+                localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+              }
+
+              sufficientSleep = true;
+              sufficientWater = true;
+
+              if (sufficientSleep || sufficientWater)
+              {
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, "0");
+                var mm = String(today.getMonth() + 1).padStart(2, "0");
+                var yyyy = today.getFullYear();
+                localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+              }
+
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, "0");
+              var mm = String(today.getMonth() + 1).padStart(2, "0");
+              var yyyy = today.getFullYear();
+              var today = mm + "/" + dd + "/" + yyyy
+
+              if (today != localStorage.getItem("biometricsDate"))
+              {
+                sufficientSleep = false;
+                sufficientWater = false;
+              }
+
+              // Convert dates to day of week
+              var today = Date.parse(today);
+              today = new Date(today);
+              today = today.toString();
+              today = today.split(" ");
+              today = today[0];
+
+              // League of Legends
+              var leagueGames = [];
+              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                var getGameID = localStorageConverted[i][0];
+                if (getGameID == 5426) {
+                  leagueGames.push(localStorageConverted[i]);
+                }
+              }
+
+              // Get league average game time
+              var leagueaverageGameTime = 0;
+              for (var i = 0; i < leagueGames.length; i++) {
+                leagueaverageGameTime += leagueGames[i][5];
+              }
+              leagueaverageGameTime /= leagueGames.length;
+
+              // Arrays for each day of the week
+              var leaguesundayGames = [];
+              var leaguemondayGames = [];
+              var leaguetuesdayGames = [];
+              var leaguewednesdayGames = [];
+              var leaguethursdayGames = [];
+              var leaguefridayGames = [];
+              var leaguesaturdayGames = [];
+              for (i = 0; i < leagueGames.length; i++) {
+                switch (leagueGames[i][7]) {
+                  case "Sun":
+                    leaguesundayGames.push(leagueGames[i]);
+                    break;
+                  case "Mon":
+                    leaguemondayGames.push(leagueGames[i]);
+                    break;
+                  case "Tue":
+                    leaguetuesdayGames.push(leagueGames[i]);
+                    break;
+                  case "Wed":
+                    leaguewednesdayGames.push(leagueGames[i]);
+                    break;
+                  case "Thu":
+                    leaguethursdayGames.push(leagueGames[i]);
+                    break;
+                  case "Fri":
+                    leaguefridayGames.push(leagueGames[i]);
+                    break;
+                  case "Sat":
+                    leaguesaturdayGames.push(leagueGames[i]);
+                    break;
+                  default:
+                    break;
+                }
+              }
+
+              var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+              var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+              var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+              var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+              var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+              var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+              var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+
+              var valorantGames = [];
+              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                var getGameID = localStorageConverted[i][0];
+                if (getGameID == 21640) {
+                  valorantGames.push(localStorageConverted[i]);
+                }
+              }
+
+              // Get Valorant average game time
+              var valorantaverageGameTime = 0;
+              for (var i = 0; i < valorantGames.length; i++) {
+                valorantaverageGameTime += valorantGames[i][5];
+              }
+              valorantaverageGameTime /= valorantGames.length;
+
+              // Arrays for each day of the week
+              var valorantsundayGames = [];
+              var valorantmondayGames = [];
+              var valoranttuesdayGames = [];
+              var valorantwednesdayGames = [];
+              var valorantthursdayGames = [];
+              var valorantfridayGames = [];
+              var valorantsaturdayGames = [];
+              for (i = 0; i < valorantGames.length; i++) {
+                switch (valorantGames[i][7]) {
+                  case "Sun":
+                    valorantsundayGames.push(valorantGames[i]);
+                    break;
+                  case "Mon":
+                    valorantmondayGames.push(valorantGames[i]);
+                    break;
+                  case "Tue":
+                    valoranttuesdayGames.push(valorantGames[i]);
+                    break;
+                  case "Wed":
+                    valorantwednesdayGames.push(valorantGames[i]);
+                    break;
+                  case "Thu":
+                    valorantthursdayGames.push(valorantGames[i]);
+                    break;
+                  case "Fri":
+                    valorantfridayGames.push(valorantGames[i]);
+                    break;
+                  case "Sat":
+                    valorantsaturdayGames.push(valorantGames[i]);
+                    break;
+                  default:
+                    break;
+                }
+              }
+
+              var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+              var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+              var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+              var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+              var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+              var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+              var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+
+              // Rainbow 6 Seige
+              var seigeGames = [];
+              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                var getGameID = localStorageConverted[i][0];
+                if (getGameID == 10826) {
+                  seigeGames.push(localStorageConverted[i]);
+                }
+              }
+
+              // Get Rainbow 6 Seige average game time
+              var seigeaverageGameTime = 0;
+              for (var i = 0; i < seigeGames.length; i++) {
+                seigeaverageGameTime += seigeGames[i][5];
+              }
+              seigeaverageGameTime /= seigeGames.length;
+
+              // Arrays for each day of the week
+              var seigesundayGames = [];
+              var seigemondayGames = [];
+              var seigetuesdayGames = [];
+              var seigewednesdayGames = [];
+              var seigethursdayGames = [];
+              var seigefridayGames = [];
+              var seigesaturdayGames = [];
+              for (i = 0; i < seigeGames.length; i++) {
+                switch (seigeGames[i][7]) {
+                  case "Sun":
+                    seigesundayGames.push(seigeGames[i]);
+                    break;
+                  case "Mon":
+                    seigemondayGames.push(seigeGames[i]);
+                    break;
+                  case "Tue":
+                    seigetuesdayGames.push(seigeGames[i]);
+                    break;
+                  case "Wed":
+                    seigewednesdayGames.push(seigeGames[i]);
+                    break;
+                  case "Thu":
+                    seigethursdayGames.push(seigeGames[i]);
+                    break;
+                  case "Fri":
+                    seigefridayGames.push(seigeGames[i]);
+                    break;
+                  case "Sat":
+                    seigesaturdayGames.push(seigeGames[i]);
+                    break;
+                  default:
+                    break;
+                }
+              }
+
+              var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+              var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+              var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+              var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+              var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+              var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+              var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
               // Reset all info
               //this.gameID = undefined;
@@ -2648,6 +3444,298 @@ class InGame extends AppWindow_1.AppWindow {
                 }
 
                 // George: Analyze Database
+                // Get minimum key to loop through localStorage properly since it's an associative array
+                var currentMinimumKey;
+                for (var key in localStorage){
+                  var keyToInt = parseInt(key);
+                  if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+                    currentMinimumKey = keyToInt;
+                  }
+
+                  if (keyToInt < currentMinimumKey) {
+                    currentMinimumKey = keyToInt;
+                  }
+                }
+
+                // Get maximum key to loop through localStorage properly since it's an associative array
+                var currentMaximumKey;
+                for (var key in localStorage){
+                  var keyToInt = parseInt(key);
+                  if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+                    currentMaximumKey = keyToInt;
+                  }
+
+                  if (keyToInt > currentMaximumKey) {
+                    currentMaximumKey = keyToInt;
+                  }
+                }
+
+                // Convert localStorage to array of correct values
+                var localStorageConverted = [];
+                for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                  var localStorageDataEntry = localStorage.getItem(i.toString());
+                  localStorageDataEntry = localStorageDataEntry.split(" ");
+                  var convertGameID = parseInt(localStorageDataEntry[0]);
+                  var convertKills = parseInt(localStorageDataEntry[1]);
+                  var convertDeaths = parseInt(localStorageDataEntry[2]);
+                  var convertAssists = parseInt(localStorageDataEntry[3]);
+                  var convertOutcome = localStorageDataEntry[4];
+                  // Convert match time to miliseconds
+                  var convertMatchLength = localStorageDataEntry[5].split(":");
+                  // convert hours to miliseconds
+                  var hours = parseInt(convertMatchLength[0]) * 360000;
+                  // convert minutes to miliseconds
+                  var minutes = parseInt(convertMatchLength[1]) * 60000;
+                  // convert seconds to miliseconds
+                  var seconds = parseInt(convertMatchLength[2]) * 1000;
+                  convertMatchLength = hours + minutes + seconds;
+                  // convert time of day to miliseconds
+                  var convertTimeofDay = localStorageDataEntry[6].split(":");
+                  // convert hours to miliseconds
+                  hours = parseInt(convertTimeofDay[0]) * 3600000;
+                  minutes = parseInt(convertTimeofDay[1]) * 60000;
+                  // convert minutes to miliseconds
+                  convertTimeofDay = hours + minutes;
+                  // Convert dates to day of week
+                  var convertDay = Date.parse(localStorageDataEntry[7]);
+                  convertDay = new Date(convertDay);
+                  convertDay = convertDay.toString();
+                  convertDay = convertDay.split(" ");
+                  convertDay = convertDay[0];
+                  // Add converted entry
+                  localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+                }
+
+                sufficientSleep = true;
+                sufficientWater = true;
+
+                if (sufficientSleep || sufficientWater)
+                {
+                  var today = new Date();
+                  var dd = String(today.getDate()).padStart(2, "0");
+                  var mm = String(today.getMonth() + 1).padStart(2, "0");
+                  var yyyy = today.getFullYear();
+                  localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+                }
+
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, "0");
+                var mm = String(today.getMonth() + 1).padStart(2, "0");
+                var yyyy = today.getFullYear();
+                var today = mm + "/" + dd + "/" + yyyy
+
+                if (today != localStorage.getItem("biometricsDate"))
+                {
+                  sufficientSleep = false;
+                  sufficientWater = false;
+                }
+
+                // Convert dates to day of week
+                var today = Date.parse(today);
+                today = new Date(today);
+                today = today.toString();
+                today = today.split(" ");
+                today = today[0];
+
+                // League of Legends
+                var leagueGames = [];
+                for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                  var getGameID = localStorageConverted[i][0];
+                  if (getGameID == 5426) {
+                    leagueGames.push(localStorageConverted[i]);
+                  }
+                }
+
+                // Get league average game time
+                var leagueaverageGameTime = 0;
+                for (var i = 0; i < leagueGames.length; i++) {
+                  leagueaverageGameTime += leagueGames[i][5];
+                }
+                leagueaverageGameTime /= leagueGames.length;
+
+                // Arrays for each day of the week
+                var leaguesundayGames = [];
+                var leaguemondayGames = [];
+                var leaguetuesdayGames = [];
+                var leaguewednesdayGames = [];
+                var leaguethursdayGames = [];
+                var leaguefridayGames = [];
+                var leaguesaturdayGames = [];
+                for (i = 0; i < leagueGames.length; i++) {
+                  switch (leagueGames[i][7]) {
+                    case "Sun":
+                      leaguesundayGames.push(leagueGames[i]);
+                      break;
+                    case "Mon":
+                      leaguemondayGames.push(leagueGames[i]);
+                      break;
+                    case "Tue":
+                      leaguetuesdayGames.push(leagueGames[i]);
+                      break;
+                    case "Wed":
+                      leaguewednesdayGames.push(leagueGames[i]);
+                      break;
+                    case "Thu":
+                      leaguethursdayGames.push(leagueGames[i]);
+                      break;
+                    case "Fri":
+                      leaguefridayGames.push(leagueGames[i]);
+                      break;
+                    case "Sat":
+                      leaguesaturdayGames.push(leagueGames[i]);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+
+                var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+                var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+                var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+                var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+                var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+                var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+                var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+
+                var valorantGames = [];
+                for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                  var getGameID = localStorageConverted[i][0];
+                  if (getGameID == 21640) {
+                    valorantGames.push(localStorageConverted[i]);
+                  }
+                }
+
+                // Get Valorant average game time
+                var valorantaverageGameTime = 0;
+                for (var i = 0; i < valorantGames.length; i++) {
+                  valorantaverageGameTime += valorantGames[i][5];
+                }
+                valorantaverageGameTime /= valorantGames.length;
+
+                // Arrays for each day of the week
+                var valorantsundayGames = [];
+                var valorantmondayGames = [];
+                var valoranttuesdayGames = [];
+                var valorantwednesdayGames = [];
+                var valorantthursdayGames = [];
+                var valorantfridayGames = [];
+                var valorantsaturdayGames = [];
+                for (i = 0; i < valorantGames.length; i++) {
+                  switch (valorantGames[i][7]) {
+                    case "Sun":
+                      valorantsundayGames.push(valorantGames[i]);
+                      break;
+                    case "Mon":
+                      valorantmondayGames.push(valorantGames[i]);
+                      break;
+                    case "Tue":
+                      valoranttuesdayGames.push(valorantGames[i]);
+                      break;
+                    case "Wed":
+                      valorantwednesdayGames.push(valorantGames[i]);
+                      break;
+                    case "Thu":
+                      valorantthursdayGames.push(valorantGames[i]);
+                      break;
+                    case "Fri":
+                      valorantfridayGames.push(valorantGames[i]);
+                      break;
+                    case "Sat":
+                      valorantsaturdayGames.push(valorantGames[i]);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+
+                var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+                var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+                var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+                var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+                var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+                var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+                var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+
+                // Rainbow 6 Seige
+                var seigeGames = [];
+                for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+                  var getGameID = localStorageConverted[i][0];
+                  if (getGameID == 10826) {
+                    seigeGames.push(localStorageConverted[i]);
+                  }
+                }
+
+                // Get Rainbow 6 Seige average game time
+                var seigeaverageGameTime = 0;
+                for (var i = 0; i < seigeGames.length; i++) {
+                  seigeaverageGameTime += seigeGames[i][5];
+                }
+                seigeaverageGameTime /= seigeGames.length;
+
+                // Arrays for each day of the week
+                var seigesundayGames = [];
+                var seigemondayGames = [];
+                var seigetuesdayGames = [];
+                var seigewednesdayGames = [];
+                var seigethursdayGames = [];
+                var seigefridayGames = [];
+                var seigesaturdayGames = [];
+                for (i = 0; i < seigeGames.length; i++) {
+                  switch (seigeGames[i][7]) {
+                    case "Sun":
+                      seigesundayGames.push(seigeGames[i]);
+                      break;
+                    case "Mon":
+                      seigemondayGames.push(seigeGames[i]);
+                      break;
+                    case "Tue":
+                      seigetuesdayGames.push(seigeGames[i]);
+                      break;
+                    case "Wed":
+                      seigewednesdayGames.push(seigeGames[i]);
+                      break;
+                    case "Thu":
+                      seigethursdayGames.push(seigeGames[i]);
+                      break;
+                    case "Fri":
+                      seigefridayGames.push(seigeGames[i]);
+                      break;
+                    case "Sat":
+                      seigesaturdayGames.push(seigeGames[i]);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+
+                var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+                var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+                var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+                var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+                var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+                var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+                var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
                 // Reset global vars
                 this.gameID = undefined;
