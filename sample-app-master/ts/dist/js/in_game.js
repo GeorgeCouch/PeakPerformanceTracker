@@ -377,57 +377,57 @@ exports.OWGames = OWGames;
     return time;
 }
 
-  function getGamesFromPreviousWeek(array, weeks)
-  {
-    // Get maximum key to loop through array properly since it's an associative array
-    var currentMaximumKey;
-    for (var key in array){
-      var keyToInt = parseInt(key);
-      if (currentMaximumKey == undefined) {
-        currentMaximumKey = keyToInt;
-      }
+  // function getGamesFromPreviousWeek(array, weeks)
+  // {
+  //   // Get maximum key to loop through array properly since it's an associative array
+  //   var currentMaximumKey;
+  //   for (var key in array){
+  //     var keyToInt = parseInt(key);
+  //     if (currentMaximumKey == undefined) {
+  //       currentMaximumKey = keyToInt;
+  //     }
 
-      if (keyToInt > currentMaximumKey) {
-        currentMaximumKey = keyToInt;
-      }
-    }
+  //     if (keyToInt > currentMaximumKey) {
+  //       currentMaximumKey = keyToInt;
+  //     }
+  //   }
 
-    // Get minimum key to loop through array properly since it's an associative array
-    var currentMinimumKey;
-    for (var key in localStorage){
-      var keyToInt = parseInt(key);
-      if (currentMinimumKey == undefined) {
-        currentMinimumKey = keyToInt;
-      }
+  //   // Get minimum key to loop through array properly since it's an associative array
+  //   var currentMinimumKey;
+  //   for (var key in localStorage){
+  //     var keyToInt = parseInt(key);
+  //     if (currentMinimumKey == undefined) {
+  //       currentMinimumKey = keyToInt;
+  //     }
 
-      if (keyToInt < currentMinimumKey) {
-        currentMinimumKey = keyToInt;
-      }
-    }
+  //     if (keyToInt < currentMinimumKey) {
+  //       currentMinimumKey = keyToInt;
+  //     }
+  //   }
 
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, "0");
-    var mm = String(today.getMonth() + 1).padStart(2, "0");
-    var yyyy = today.getFullYear();
-    today = new Date(mm + "/" + dd + "/" + yyyy);
-    var yesterday = today - 86400000;
-    var lastWeek = yesterday - 604800000;
-    var gamesFromPreviousWeek = [];
-    for (var i = currentMinimumKey; i <= currentMaximumKey; i++)
-    {
-      if (array[i][7] <= array[currentMaximumKey][7] && array[i][7] >= lastWeek) {
-        gamesFromPreviousWeek.push(array[i]);
-      }
-    }
-    // convert previous week dates to days
-    for (var i = 0; i < gamesFromPreviousWeek.length ; i++) {
-      gamesFromPreviousWeek[i][7] = new Date(gamesFromPreviousWeek[i][7]);
-      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].toString();
-      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
-      gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
-    }
-    return gamesFromPreviousWeek;
-  }
+  //   var today = new Date();
+  //   var dd = String(today.getDate()).padStart(2, "0");
+  //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+  //   var yyyy = today.getFullYear();
+  //   today = new Date(mm + "/" + dd + "/" + yyyy);
+  //   var yesterday = today - 86400000;
+  //   var lastWeek = yesterday - 604800000;
+  //   var gamesFromPreviousWeek = [];
+  //   for (var i = currentMinimumKey; i <= currentMaximumKey; i++)
+  //   {
+  //     if (array[i][7] <= array[currentMaximumKey][7] && array[i][7] >= lastWeek) {
+  //       gamesFromPreviousWeek.push(array[i]);
+  //     }
+  //   }
+  //   // convert previous week dates to days
+  //   for (var i = 0; i < gamesFromPreviousWeek.length ; i++) {
+  //     gamesFromPreviousWeek[i][7] = new Date(gamesFromPreviousWeek[i][7]);
+  //     gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].toString();
+  //     gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7].split(" ");
+  //     gamesFromPreviousWeek[i][7] = gamesFromPreviousWeek[i][7][0];
+  //   }
+  //   return gamesFromPreviousWeek;
+  // }
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OWHotkeys = void 0;
@@ -812,9 +812,16 @@ class OWHotkeys {
             minutes = parseInt(convertTimeofDay[1]) * 60000;
             // convert minutes to miliseconds
             convertTimeofDay = hours + minutes;
+            // Convert dates to day of week
             var convertDay = Date.parse(localStorageDataEntry[7]);
+            convertDay = new Date(convertDay);
+            convertDay = convertDay.toString();
+            convertDay = convertDay.split(" ");
+            convertDay = convertDay[0];
+            // Add converted entry
             localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
           }
+
           console.log("LocalStorageConverted");
           console.log(localStorageConverted);
 
@@ -829,17 +836,12 @@ class OWHotkeys {
           }
           console.log(leagueGames);
 
-          // Get League of Legends Games from previous week
-          var leagueGamesFromPreviousWeek = getGamesFromPreviousWeek(leagueGames, 1);
-          console.log("All League of Legends games from previous week");
-          console.log(leagueGamesFromPreviousWeek);
-
           // Get league average game time
           var leagueaverageGameTime = 0;
-          for (var i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
-            leagueaverageGameTime += leagueGamesFromPreviousWeek[i][5];
+          for (var i = 0; i < leagueGames.length; i++) {
+            leagueaverageGameTime += leagueGames[i][5];
           }
-          leagueaverageGameTime /= leagueGamesFromPreviousWeek.length;
+          leagueaverageGameTime /= leagueGames.length;
 
           // Arrays for each day of the week
           var leaguesundayGames = [];
@@ -849,28 +851,28 @@ class OWHotkeys {
           var leaguethursdayGames = [];
           var leaguefridayGames = [];
           var leaguesaturdayGames = [];
-          for (i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
-            switch (leagueGamesFromPreviousWeek[i][7]) {
+          for (i = 0; i < leagueGames.length; i++) {
+            switch (leagueGames[i][7]) {
               case "Sun":
-                leaguesundayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguesundayGames.push(leagueGames[i]);
                 break;
               case "Mon":
-                leaguemondayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguemondayGames.push(leagueGames[i]);
                 break;
               case "Tue":
-                leaguetuesdayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguetuesdayGames.push(leagueGames[i]);
                 break;
               case "Wed":
-                leaguewednesdayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguewednesdayGames.push(leagueGames[i]);
                 break;
               case "Thu":
-                leaguethursdayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguethursdayGames.push(leagueGames[i]);
                 break;
               case "Fri":
-                leaguefridayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguefridayGames.push(leagueGames[i]);
                 break;
               case "Sat":
-                leaguesaturdayGames.push(leagueGamesFromPreviousWeek[i]);
+                leaguesaturdayGames.push(leagueGames[i]);
                 break;
               default:
                 break;
@@ -917,17 +919,12 @@ class OWHotkeys {
           }
           console.log(valorantGames);
 
-          // Get Valorant games from previous week
-          var valorantGamesFromPreviousWeek = getGamesFromPreviousWeek(valorantGames);
-          console.log("All Valorant games from previous week");
-          console.log(valorantGamesFromPreviousWeek);
-
           // Get Valorant average game time
           var valorantaverageGameTime = 0;
-          for (var i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
-            valorantaverageGameTime += valorantGamesFromPreviousWeek[i][5];
+          for (var i = 0; i < valorantGames.length; i++) {
+            valorantaverageGameTime += valorantGames[i][5];
           }
-          valorantaverageGameTime /= valorantGamesFromPreviousWeek.length;
+          valorantaverageGameTime /= valorantGames.length;
 
           // Arrays for each day of the week
           var valorantsundayGames = [];
@@ -937,28 +934,28 @@ class OWHotkeys {
           var valorantthursdayGames = [];
           var valorantfridayGames = [];
           var valorantsaturdayGames = [];
-          for (i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
-            switch (valorantGamesFromPreviousWeek[i][7]) {
+          for (i = 0; i < valorantGames.length; i++) {
+            switch (valorantGames[i][7]) {
               case "Sun":
-                valorantsundayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantsundayGames.push(valorantGames[i]);
                 break;
               case "Mon":
-                valorantmondayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantmondayGames.push(valorantGames[i]);
                 break;
               case "Tue":
-                valoranttuesdayGames.push(valorantGamesFromPreviousWeek[i]);
+                valoranttuesdayGames.push(valorantGames[i]);
                 break;
               case "Wed":
-                valorantwednesdayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantwednesdayGames.push(valorantGames[i]);
                 break;
               case "Thu":
-                valorantthursdayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantthursdayGames.push(valorantGames[i]);
                 break;
               case "Fri":
-                valorantfridayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantfridayGames.push(valorantGames[i]);
                 break;
               case "Sat":
-                valorantsaturdayGames.push(valorantGamesFromPreviousWeek[i]);
+                valorantsaturdayGames.push(valorantGames[i]);
                 break;
               default:
                 break;
@@ -1006,17 +1003,12 @@ class OWHotkeys {
           }
           console.log(seigeGames);
 
-          // Get Rainbow 6 Seige games from previous week
-          var seigeGamesFromPreviousWeek = getGamesFromPreviousWeek(seigeGames);
-          console.log("All Rainbow 6 Seige games from previous week");
-          console.log(seigeGamesFromPreviousWeek);
-
           // Get Rainbow 6 Seige average game time
           var seigeaverageGameTime = 0;
-          for (var i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
-            seigeaverageGameTime += seigeGamesFromPreviousWeek[i][5];
+          for (var i = 0; i < seigeGames.length; i++) {
+            seigeaverageGameTime += seigeGames[i][5];
           }
-          seigeaverageGameTime /= seigeGamesFromPreviousWeek.length;
+          seigeaverageGameTime /= seigeGames.length;
 
           // Arrays for each day of the week
           var seigesundayGames = [];
@@ -1026,28 +1018,28 @@ class OWHotkeys {
           var seigethursdayGames = [];
           var seigefridayGames = [];
           var seigesaturdayGames = [];
-          for (i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
-            switch (seigeGamesFromPreviousWeek[i][7]) {
+          for (i = 0; i < seigeGames.length; i++) {
+            switch (seigeGames[i][7]) {
               case "Sun":
-                seigesundayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigesundayGames.push(seigeGames[i]);
                 break;
               case "Mon":
-                seigemondayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigemondayGames.push(seigeGames[i]);
                 break;
               case "Tue":
-                seigetuesdayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigetuesdayGames.push(seigeGames[i]);
                 break;
               case "Wed":
-                seigewednesdayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigewednesdayGames.push(seigeGames[i]);
                 break;
               case "Thu":
-                seigethursdayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigethursdayGames.push(seigeGames[i]);
                 break;
               case "Fri":
-                seigefridayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigefridayGames.push(seigeGames[i]);
                 break;
               case "Sat":
-                seigesaturdayGames.push(seigeGamesFromPreviousWeek[i]);
+                seigesaturdayGames.push(seigeGames[i]);
                 break;
               default:
                 break;
@@ -1083,6 +1075,272 @@ class OWHotkeys {
           localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
           console.log("Rainbow 6 Seige Saturday Slot");
           console.log(seigeSaturdaySlot);
+
+          // // League of Legends
+          // console.log("League of Legends Games from converted LocalStorage");
+          // var leagueGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 5426) {
+          //     leagueGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(leagueGames);
+
+          // // Get League of Legends Games from previous week
+          // var leagueGamesFromPreviousWeek = getGamesFromPreviousWeek(leagueGames, 1);
+          // console.log("All League of Legends games from previous week");
+          // console.log(leagueGamesFromPreviousWeek);
+
+          // // Get league average game time
+          // var leagueaverageGameTime = 0;
+          // for (var i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
+          //   leagueaverageGameTime += leagueGamesFromPreviousWeek[i][5];
+          // }
+          // leagueaverageGameTime /= leagueGamesFromPreviousWeek.length;
+
+          // // Arrays for each day of the week
+          // var leaguesundayGames = [];
+          // var leaguemondayGames = [];
+          // var leaguetuesdayGames = [];
+          // var leaguewednesdayGames = [];
+          // var leaguethursdayGames = [];
+          // var leaguefridayGames = [];
+          // var leaguesaturdayGames = [];
+          // for (i = 0; i < leagueGamesFromPreviousWeek.length; i++) {
+          //   switch (leagueGamesFromPreviousWeek[i][7]) {
+          //     case "Sun":
+          //       leaguesundayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Mon":
+          //       leaguemondayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Tue":
+          //       leaguetuesdayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Wed":
+          //       leaguewednesdayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Thu":
+          //       leaguethursdayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Fri":
+          //       leaguefridayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Sat":
+          //       leaguesaturdayGames.push(leagueGamesFromPreviousWeek[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
+
+          // console.log("League recommended time slots for each day!");
+          // var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime);
+          // localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+          // console.log("League Sunday Slot");
+          // console.log(leagueSundaySlot);
+          // var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+          // console.log("League Monday Slot");
+          // console.log(leagueMondaySlot);
+          // var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+          // console.log("League Tuesday Slot");
+          // console.log(leagueTuesdaySlot);
+          // var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+          // console.log("League Wednesday Slot");
+          // console.log(leagueWednesdaySlot);
+          // var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+          // console.log("League Thursday Slot");
+          // console.log(leagueThursdaySlot);
+          // var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+          // console.log("League Friday Slot");
+          // console.log(leagueFridaySlot);
+          // var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime);
+          // localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+          // console.log("League Saturday Slot");
+          // console.log(leagueSaturdaySlot);
+
+          // console.log("Valorant Games from converted LocalStorage");
+          // var valorantGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 21640) {
+          //     valorantGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(valorantGames);
+
+          // // Get Valorant games from previous week
+          // var valorantGamesFromPreviousWeek = getGamesFromPreviousWeek(valorantGames);
+          // console.log("All Valorant games from previous week");
+          // console.log(valorantGamesFromPreviousWeek);
+
+          // // Get Valorant average game time
+          // var valorantaverageGameTime = 0;
+          // for (var i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
+          //   valorantaverageGameTime += valorantGamesFromPreviousWeek[i][5];
+          // }
+          // valorantaverageGameTime /= valorantGamesFromPreviousWeek.length;
+
+          // // Arrays for each day of the week
+          // var valorantsundayGames = [];
+          // var valorantmondayGames = [];
+          // var valoranttuesdayGames = [];
+          // var valorantwednesdayGames = [];
+          // var valorantthursdayGames = [];
+          // var valorantfridayGames = [];
+          // var valorantsaturdayGames = [];
+          // for (i = 0; i < valorantGamesFromPreviousWeek.length; i++) {
+          //   switch (valorantGamesFromPreviousWeek[i][7]) {
+          //     case "Sun":
+          //       valorantsundayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Mon":
+          //       valorantmondayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Tue":
+          //       valoranttuesdayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Wed":
+          //       valorantwednesdayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Thu":
+          //       valorantthursdayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Fri":
+          //       valorantfridayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Sat":
+          //       valorantsaturdayGames.push(valorantGamesFromPreviousWeek[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
+
+          // console.log("Valorant recommended time slots for each day!");
+          // var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+          // console.log("Valorant Sunday Slot");
+          // console.log(valorantSundaySlot);
+          // var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+          // console.log("Valorant Monday Slot");
+          // console.log(valorantMondaySlot);
+          // var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+          // console.log("Valorant Tuesday Slot");
+          // console.log(valorantTuesdaySlot);
+          // var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+          // console.log("Valorant Wednesday Slot");
+          // console.log(valorantWednesdaySlot);
+          // var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+          // console.log("Valorant Thursday Slot");
+          // console.log(valorantThursdaySlot);
+          // var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+          // console.log("Valorant Friday Slot");
+          // console.log(valorantFridaySlot);
+          // var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime);
+          // localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+          // console.log("Valorant Saturday Slot");
+          // console.log(valorantSaturdaySlot);
+
+          // // Rainbow 6 Seige
+          // console.log("Rainbow 6 Seige Games from converted LocalStorage");
+          // var seigeGames = [];
+          // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+          //   var getGameID = localStorageConverted[i][0];
+          //   if (getGameID == 10826) {
+          //     seigeGames.push(localStorageConverted[i]);
+          //   }
+          // }
+          // console.log(seigeGames);
+
+          // // Get Rainbow 6 Seige games from previous week
+          // var seigeGamesFromPreviousWeek = getGamesFromPreviousWeek(seigeGames);
+          // console.log("All Rainbow 6 Seige games from previous week");
+          // console.log(seigeGamesFromPreviousWeek);
+
+          // // Get Rainbow 6 Seige average game time
+          // var seigeaverageGameTime = 0;
+          // for (var i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
+          //   seigeaverageGameTime += seigeGamesFromPreviousWeek[i][5];
+          // }
+          // seigeaverageGameTime /= seigeGamesFromPreviousWeek.length;
+
+          // // Arrays for each day of the week
+          // var seigesundayGames = [];
+          // var seigemondayGames = [];
+          // var seigetuesdayGames = [];
+          // var seigewednesdayGames = [];
+          // var seigethursdayGames = [];
+          // var seigefridayGames = [];
+          // var seigesaturdayGames = [];
+          // for (i = 0; i < seigeGamesFromPreviousWeek.length; i++) {
+          //   switch (seigeGamesFromPreviousWeek[i][7]) {
+          //     case "Sun":
+          //       seigesundayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Mon":
+          //       seigemondayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Tue":
+          //       seigetuesdayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Wed":
+          //       seigewednesdayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Thu":
+          //       seigethursdayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Fri":
+          //       seigefridayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     case "Sat":
+          //       seigesaturdayGames.push(seigeGamesFromPreviousWeek[i]);
+          //       break;
+          //     default:
+          //       break;
+          //   }
+          // }
+
+          // console.log("Rainbow 6 Seige recommended time slots for each day!");
+          // var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+          // console.log("Rainbow 6 Seige Sunday Slot");
+          // console.log(seigeSundaySlot);
+          // var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+          // console.log("Rainbow 6 Seige Monday Slot");
+          // console.log(seigeMondaySlot);
+          // var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+          // console.log("Rainbow 6 Seige Tuesday Slot");
+          // console.log(seigeTuesdaySlot);
+          // var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+          // console.log("Rainbow 6 Seige Wednesday Slot");
+          // console.log(seigeWednesdaySlot);
+          // var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+          // console.log("Rainbow 6 Seige Thursday Slot");
+          // console.log(seigeThursdaySlot);
+          // var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+          // console.log("Rainbow 6 Seige Friday Slot");
+          // console.log(seigeFridaySlot);
+          // var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime);
+          // localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
+          // console.log("Rainbow 6 Seige Saturday Slot");
+          // console.log(seigeSaturdaySlot);
         });
       }
 }
