@@ -2760,428 +2760,428 @@ class InGame extends AppWindow_1.AppWindow {
         if (info.game_info !== undefined) {
           if (info.game_info.phase !== undefined) {
             if (info.game_info.phase == "lobby") {
-              // Format gameMode
-              if (this.gameMode !== undefined) {
-                if (this.gameMode.includes("MATCHMAKING_PVP_UNRANKED")) {
-                  this.gameMode = "MATCHMAKING_PVP_UNRANKED";
-                }
-                if (this.gameMode.includes("MATCHMAKING_PVP_RANKED")) {
-                  this.gameMode = "MATCHMAKING_PVP_RANKED";
-                }
-              }
+              // // Format gameMode
+              // if (this.gameMode !== undefined) {
+              //   if (this.gameMode.includes("MATCHMAKING_PVP_UNRANKED")) {
+              //     this.gameMode = "MATCHMAKING_PVP_UNRANKED";
+              //   }
+              //   if (this.gameMode.includes("MATCHMAKING_PVP_RANKED")) {
+              //     this.gameMode = "MATCHMAKING_PVP_RANKED";
+              //   }
+              // }
 
-              // Ensure k d a exists
-              if (this.rkills == undefined) {
-                this.rkills = 0;
-              }
-              if (this.rdeaths == undefined) {
-                this.rdeaths = 0;
-              }
-              if (this.rassists == undefined) {
-                this.rassists = 0;
-              }
+              // // Ensure k d a exists
+              // if (this.rkills == undefined) {
+              //   this.rkills = 0;
+              // }
+              // if (this.rdeaths == undefined) {
+              //   this.rdeaths = 0;
+              // }
+              // if (this.rassists == undefined) {
+              //   this.rassists = 0;
+              // }
 
-              // Get Game Time
-              // 1- Convert to seconds:
-              var timeseconds = this.roundTime / 1000;
-              // 2- Extract hours:
-              var timehours = parseInt(timeseconds / 3600); // 3,600 seconds in 1 hour
-              timeseconds = timeseconds % 3600; // seconds remaining after extracting hours
-              // 3- Extract minutes:
-              var timeminutes = parseInt(timeseconds / 60); // 60 seconds in 1 minute
-              // 4- Keep only seconds not extracted to minutes:
-              timeseconds = timeseconds % 60;
-              // 5- Ensure each num will have 2 digits
-              timeseconds = Math.round(timeseconds);
-              timeminutes = Math.round(timeminutes);
-              timehours = Math.round(timehours);
-              timeseconds = String(timeseconds).padStart(2, "0");
-              timeminutes = String(timeminutes).padStart(2, "0");
-              timehours = String(timehours).padStart(2, "0");
-              this.roundTime =
-                timehours + ":" + timeminutes + ":" + timeseconds;
+              // // Get Game Time
+              // // 1- Convert to seconds:
+              // var timeseconds = this.roundTime / 1000;
+              // // 2- Extract hours:
+              // var timehours = parseInt(timeseconds / 3600); // 3,600 seconds in 1 hour
+              // timeseconds = timeseconds % 3600; // seconds remaining after extracting hours
+              // // 3- Extract minutes:
+              // var timeminutes = parseInt(timeseconds / 60); // 60 seconds in 1 minute
+              // // 4- Keep only seconds not extracted to minutes:
+              // timeseconds = timeseconds % 60;
+              // // 5- Ensure each num will have 2 digits
+              // timeseconds = Math.round(timeseconds);
+              // timeminutes = Math.round(timeminutes);
+              // timehours = Math.round(timehours);
+              // timeseconds = String(timeseconds).padStart(2, "0");
+              // timeminutes = String(timeminutes).padStart(2, "0");
+              // timehours = String(timehours).padStart(2, "0");
+              // this.roundTime =
+              //   timehours + ":" + timeminutes + ":" + timeseconds;
 
-              // Console Log all info I need
-              console.log(info.game_info.phase);
-              console.log("Game Results:");
-              console.log("Game ID: " + this.gameID);
-              console.log("Game Mode: " + this.gameMode);
-              console.log("rkills: " + this.rkills);
-              console.log("rdeaths: " + this.rdeaths);
-              console.log("rassists: " + this.rassists);
-              console.log("Match Outcome: " + this.matchResult);
-              console.log("Round Time: " + this.roundTime);
-              console.log("Game TIme: " + this.gameTime);
-              console.log("Date: " + this.date);
+              // // Console Log all info I need
+              // console.log(info.game_info.phase);
+              // console.log("Game Results:");
+              // console.log("Game ID: " + this.gameID);
+              // console.log("Game Mode: " + this.gameMode);
+              // console.log("rkills: " + this.rkills);
+              // console.log("rdeaths: " + this.rdeaths);
+              // console.log("rassists: " + this.rassists);
+              // console.log("Match Outcome: " + this.matchResult);
+              // console.log("Round Time: " + this.roundTime);
+              // console.log("Game TIme: " + this.gameTime);
+              // console.log("Date: " + this.date);
 
-              // Normal Game Add:
-              var maxKey = 0;
-              for (var i = 0; i < localStorage.length; i++) {
-                if (maxKey <= Number(localStorage.key(i))) {
-                  maxKey = Number(localStorage.key(i)) + 1;
-                }
-              }
+              // // Normal Game Add:
+              // var maxKey = 0;
+              // for (var i = 0; i < localStorage.length; i++) {
+              //   if (maxKey <= Number(localStorage.key(i))) {
+              //     maxKey = Number(localStorage.key(i)) + 1;
+              //   }
+              // }
 
-              if (
-                this.gameID !== undefined &&
-                this.gameMode !== undefined &&
-                this.rkills !== undefined &&
-                this.rdeaths !== undefined &&
-                this.rassists !== undefined &&
-                this.roundTime !== "NaN:NaN:NaN" &&
-                this.matchResult !== undefined &&
-                this.gameTime !== undefined &&
-                this.date !== undefined
-              ) {
-                // Expire: Test code for expiring data
-                var keysToDelete = [];
-                for (var i = 0; i < localStorage.length; i++) {
-                  var key = localStorage.key(i);
-                  var gameArr = localStorage.getItem(key).split(" ");
-                  var gameDate = gameArr[7];
-                  var date1 = new Date(gameDate).getTime();
-                  var date2 = new Date(this.date).getTime();
-                  var timeDiff = date2 - date1;
-                  var daysDiff = timeDiff / (1000 * 3600 * 24);
-                  if (daysDiff >= 30) {
-                    keysToDelete.push(key);
-                  }
-                }
-                for (var i = 0; i < keysToDelete.length; i++) {
-                  localStorage.removeItem(keysToDelete[i]);
-                }
-                // End Expire:
-                if (
-                  this.gameMode == "MATCHMAKING_PVP_UNRANKED" ||
-                  this.gameMode == "MATCHMAKING_PVP_RANKED"
-                ) {
-                  if (!this.endLog.includes("NoEnemies")) {
-                    var dataString =
-                      String(this.gameID) +
-                      " " +
-                      String(this.rkills) +
-                      " " +
-                      String(this.rdeaths) +
-                      " " +
-                      String(this.rassists) +
-                      " " +
-                      String(this.matchResult) +
-                      " " +
-                      String(this.roundTime) +
-                      " " +
-                      String(this.gameTime) +
-                      " " +
-                      String(this.date);
-                    localStorage.setItem(String(maxKey), dataString);
-                  }
-                }
-              }
+              // if (
+              //   this.gameID !== undefined &&
+              //   this.gameMode !== undefined &&
+              //   this.rkills !== undefined &&
+              //   this.rdeaths !== undefined &&
+              //   this.rassists !== undefined &&
+              //   this.roundTime !== "NaN:NaN:NaN" &&
+              //   this.matchResult !== undefined &&
+              //   this.gameTime !== undefined &&
+              //   this.date !== undefined
+              // ) {
+              //   // Expire: Test code for expiring data
+              //   var keysToDelete = [];
+              //   for (var i = 0; i < localStorage.length; i++) {
+              //     var key = localStorage.key(i);
+              //     var gameArr = localStorage.getItem(key).split(" ");
+              //     var gameDate = gameArr[7];
+              //     var date1 = new Date(gameDate).getTime();
+              //     var date2 = new Date(this.date).getTime();
+              //     var timeDiff = date2 - date1;
+              //     var daysDiff = timeDiff / (1000 * 3600 * 24);
+              //     if (daysDiff >= 30) {
+              //       keysToDelete.push(key);
+              //     }
+              //   }
+              //   for (var i = 0; i < keysToDelete.length; i++) {
+              //     localStorage.removeItem(keysToDelete[i]);
+              //   }
+              //   // End Expire:
+              //   if (
+              //     this.gameMode == "MATCHMAKING_PVP_UNRANKED" ||
+              //     this.gameMode == "MATCHMAKING_PVP_RANKED"
+              //   ) {
+              //     if (!this.endLog.includes("NoEnemies")) {
+              //       var dataString =
+              //         String(this.gameID) +
+              //         " " +
+              //         String(this.rkills) +
+              //         " " +
+              //         String(this.rdeaths) +
+              //         " " +
+              //         String(this.rassists) +
+              //         " " +
+              //         String(this.matchResult) +
+              //         " " +
+              //         String(this.roundTime) +
+              //         " " +
+              //         String(this.gameTime) +
+              //         " " +
+              //         String(this.date);
+              //       localStorage.setItem(String(maxKey), dataString);
+              //     }
+              //   }
+              // }
 
-              // George: Analyze Database
-              // Get minimum key to loop through localStorage properly since it's an associative array
-              var currentMinimumKey;
-              for (var key in localStorage){
-                var keyToInt = parseInt(key);
-                if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
-                  currentMinimumKey = keyToInt;
-                }
+              // // George: Analyze Database
+              // // Get minimum key to loop through localStorage properly since it's an associative array
+              // var currentMinimumKey;
+              // for (var key in localStorage){
+              //   var keyToInt = parseInt(key);
+              //   if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+              //     currentMinimumKey = keyToInt;
+              //   }
 
-                if (keyToInt < currentMinimumKey) {
-                  currentMinimumKey = keyToInt;
-                }
-              }
+              //   if (keyToInt < currentMinimumKey) {
+              //     currentMinimumKey = keyToInt;
+              //   }
+              // }
 
-              // Get maximum key to loop through localStorage properly since it's an associative array
-              var currentMaximumKey;
-              for (var key in localStorage){
-                var keyToInt = parseInt(key);
-                if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
-                  currentMaximumKey = keyToInt;
-                }
+              // // Get maximum key to loop through localStorage properly since it's an associative array
+              // var currentMaximumKey;
+              // for (var key in localStorage){
+              //   var keyToInt = parseInt(key);
+              //   if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+              //     currentMaximumKey = keyToInt;
+              //   }
 
-                if (keyToInt > currentMaximumKey) {
-                  currentMaximumKey = keyToInt;
-                }
-              }
+              //   if (keyToInt > currentMaximumKey) {
+              //     currentMaximumKey = keyToInt;
+              //   }
+              // }
 
-              // Convert localStorage to array of correct values
-              var localStorageConverted = [];
-              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-                var localStorageDataEntry = localStorage.getItem(i.toString());
-                localStorageDataEntry = localStorageDataEntry.split(" ");
-                var convertGameID = parseInt(localStorageDataEntry[0]);
-                var convertKills = parseInt(localStorageDataEntry[1]);
-                var convertDeaths = parseInt(localStorageDataEntry[2]);
-                var convertAssists = parseInt(localStorageDataEntry[3]);
-                var convertOutcome = localStorageDataEntry[4];
-                // Convert match time to miliseconds
-                var convertMatchLength = localStorageDataEntry[5].split(":");
-                // convert hours to miliseconds
-                var hours = parseInt(convertMatchLength[0]) * 360000;
-                // convert minutes to miliseconds
-                var minutes = parseInt(convertMatchLength[1]) * 60000;
-                // convert seconds to miliseconds
-                var seconds = parseInt(convertMatchLength[2]) * 1000;
-                convertMatchLength = hours + minutes + seconds;
-                // convert time of day to miliseconds
-                var convertTimeofDay = localStorageDataEntry[6].split(":");
-                // convert hours to miliseconds
-                hours = parseInt(convertTimeofDay[0]) * 3600000;
-                minutes = parseInt(convertTimeofDay[1]) * 60000;
-                // convert minutes to miliseconds
-                convertTimeofDay = hours + minutes;
-                // Convert dates to day of week
-                var convertDay = Date.parse(localStorageDataEntry[7]);
-                convertDay = new Date(convertDay);
-                convertDay = convertDay.toString();
-                convertDay = convertDay.split(" ");
-                convertDay = convertDay[0];
-                // Add converted entry
-                localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
-              }
+              // // Convert localStorage to array of correct values
+              // var localStorageConverted = [];
+              // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              //   var localStorageDataEntry = localStorage.getItem(i.toString());
+              //   localStorageDataEntry = localStorageDataEntry.split(" ");
+              //   var convertGameID = parseInt(localStorageDataEntry[0]);
+              //   var convertKills = parseInt(localStorageDataEntry[1]);
+              //   var convertDeaths = parseInt(localStorageDataEntry[2]);
+              //   var convertAssists = parseInt(localStorageDataEntry[3]);
+              //   var convertOutcome = localStorageDataEntry[4];
+              //   // Convert match time to miliseconds
+              //   var convertMatchLength = localStorageDataEntry[5].split(":");
+              //   // convert hours to miliseconds
+              //   var hours = parseInt(convertMatchLength[0]) * 360000;
+              //   // convert minutes to miliseconds
+              //   var minutes = parseInt(convertMatchLength[1]) * 60000;
+              //   // convert seconds to miliseconds
+              //   var seconds = parseInt(convertMatchLength[2]) * 1000;
+              //   convertMatchLength = hours + minutes + seconds;
+              //   // convert time of day to miliseconds
+              //   var convertTimeofDay = localStorageDataEntry[6].split(":");
+              //   // convert hours to miliseconds
+              //   hours = parseInt(convertTimeofDay[0]) * 3600000;
+              //   minutes = parseInt(convertTimeofDay[1]) * 60000;
+              //   // convert minutes to miliseconds
+              //   convertTimeofDay = hours + minutes;
+              //   // Convert dates to day of week
+              //   var convertDay = Date.parse(localStorageDataEntry[7]);
+              //   convertDay = new Date(convertDay);
+              //   convertDay = convertDay.toString();
+              //   convertDay = convertDay.split(" ");
+              //   convertDay = convertDay[0];
+              //   // Add converted entry
+              //   localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+              // }
 
-              sufficientSleep = true;
-              sufficientWater = true;
+              // sufficientSleep = true;
+              // sufficientWater = true;
 
-              if (sufficientSleep || sufficientWater)
-              {
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, "0");
-                var mm = String(today.getMonth() + 1).padStart(2, "0");
-                var yyyy = today.getFullYear();
-                localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
-              }
+              // if (sufficientSleep || sufficientWater)
+              // {
+              //   var today = new Date();
+              //   var dd = String(today.getDate()).padStart(2, "0");
+              //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+              //   var yyyy = today.getFullYear();
+              //   localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+              // }
 
-              var today = new Date();
-              var dd = String(today.getDate()).padStart(2, "0");
-              var mm = String(today.getMonth() + 1).padStart(2, "0");
-              var yyyy = today.getFullYear();
-              var today = mm + "/" + dd + "/" + yyyy
+              // var today = new Date();
+              // var dd = String(today.getDate()).padStart(2, "0");
+              // var mm = String(today.getMonth() + 1).padStart(2, "0");
+              // var yyyy = today.getFullYear();
+              // var today = mm + "/" + dd + "/" + yyyy
 
-              if (today != localStorage.getItem("biometricsDate"))
-              {
-                sufficientSleep = false;
-                sufficientWater = false;
-              }
+              // if (today != localStorage.getItem("biometricsDate"))
+              // {
+              //   sufficientSleep = false;
+              //   sufficientWater = false;
+              // }
 
-              // Convert dates to day of week
-              var today = Date.parse(today);
-              today = new Date(today);
-              today = today.toString();
-              today = today.split(" ");
-              today = today[0];
+              // // Convert dates to day of week
+              // var today = Date.parse(today);
+              // today = new Date(today);
+              // today = today.toString();
+              // today = today.split(" ");
+              // today = today[0];
 
-              // League of Legends
-              var leagueGames = [];
-              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-                var getGameID = localStorageConverted[i][0];
-                if (getGameID == 5426) {
-                  leagueGames.push(localStorageConverted[i]);
-                }
-              }
+              // // League of Legends
+              // var leagueGames = [];
+              // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              //   var getGameID = localStorageConverted[i][0];
+              //   if (getGameID == 5426) {
+              //     leagueGames.push(localStorageConverted[i]);
+              //   }
+              // }
 
-              // Get league average game time
-              var leagueaverageGameTime = 0;
-              for (var i = 0; i < leagueGames.length; i++) {
-                leagueaverageGameTime += leagueGames[i][5];
-              }
-              leagueaverageGameTime /= leagueGames.length;
+              // // Get league average game time
+              // var leagueaverageGameTime = 0;
+              // for (var i = 0; i < leagueGames.length; i++) {
+              //   leagueaverageGameTime += leagueGames[i][5];
+              // }
+              // leagueaverageGameTime /= leagueGames.length;
 
-              // Arrays for each day of the week
-              var leaguesundayGames = [];
-              var leaguemondayGames = [];
-              var leaguetuesdayGames = [];
-              var leaguewednesdayGames = [];
-              var leaguethursdayGames = [];
-              var leaguefridayGames = [];
-              var leaguesaturdayGames = [];
-              for (i = 0; i < leagueGames.length; i++) {
-                switch (leagueGames[i][7]) {
-                  case "Sun":
-                    leaguesundayGames.push(leagueGames[i]);
-                    break;
-                  case "Mon":
-                    leaguemondayGames.push(leagueGames[i]);
-                    break;
-                  case "Tue":
-                    leaguetuesdayGames.push(leagueGames[i]);
-                    break;
-                  case "Wed":
-                    leaguewednesdayGames.push(leagueGames[i]);
-                    break;
-                  case "Thu":
-                    leaguethursdayGames.push(leagueGames[i]);
-                    break;
-                  case "Fri":
-                    leaguefridayGames.push(leagueGames[i]);
-                    break;
-                  case "Sat":
-                    leaguesaturdayGames.push(leagueGames[i]);
-                    break;
-                  default:
-                    break;
-                }
-              }
+              // // Arrays for each day of the week
+              // var leaguesundayGames = [];
+              // var leaguemondayGames = [];
+              // var leaguetuesdayGames = [];
+              // var leaguewednesdayGames = [];
+              // var leaguethursdayGames = [];
+              // var leaguefridayGames = [];
+              // var leaguesaturdayGames = [];
+              // for (i = 0; i < leagueGames.length; i++) {
+              //   switch (leagueGames[i][7]) {
+              //     case "Sun":
+              //       leaguesundayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Mon":
+              //       leaguemondayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Tue":
+              //       leaguetuesdayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Wed":
+              //       leaguewednesdayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Thu":
+              //       leaguethursdayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Fri":
+              //       leaguefridayGames.push(leagueGames[i]);
+              //       break;
+              //     case "Sat":
+              //       leaguesaturdayGames.push(leagueGames[i]);
+              //       break;
+              //     default:
+              //       break;
+              //   }
+              // }
 
-              var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-              var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-              var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-              var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-              var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-              var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-              var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+              // var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+              // var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+              // var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+              // var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+              // var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+              // var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+              // var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
-              var valorantGames = [];
-              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-                var getGameID = localStorageConverted[i][0];
-                if (getGameID == 21640) {
-                  valorantGames.push(localStorageConverted[i]);
-                }
-              }
+              // var valorantGames = [];
+              // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              //   var getGameID = localStorageConverted[i][0];
+              //   if (getGameID == 21640) {
+              //     valorantGames.push(localStorageConverted[i]);
+              //   }
+              // }
 
-              // Get Valorant average game time
-              var valorantaverageGameTime = 0;
-              for (var i = 0; i < valorantGames.length; i++) {
-                valorantaverageGameTime += valorantGames[i][5];
-              }
-              valorantaverageGameTime /= valorantGames.length;
+              // // Get Valorant average game time
+              // var valorantaverageGameTime = 0;
+              // for (var i = 0; i < valorantGames.length; i++) {
+              //   valorantaverageGameTime += valorantGames[i][5];
+              // }
+              // valorantaverageGameTime /= valorantGames.length;
 
-              // Arrays for each day of the week
-              var valorantsundayGames = [];
-              var valorantmondayGames = [];
-              var valoranttuesdayGames = [];
-              var valorantwednesdayGames = [];
-              var valorantthursdayGames = [];
-              var valorantfridayGames = [];
-              var valorantsaturdayGames = [];
-              for (i = 0; i < valorantGames.length; i++) {
-                switch (valorantGames[i][7]) {
-                  case "Sun":
-                    valorantsundayGames.push(valorantGames[i]);
-                    break;
-                  case "Mon":
-                    valorantmondayGames.push(valorantGames[i]);
-                    break;
-                  case "Tue":
-                    valoranttuesdayGames.push(valorantGames[i]);
-                    break;
-                  case "Wed":
-                    valorantwednesdayGames.push(valorantGames[i]);
-                    break;
-                  case "Thu":
-                    valorantthursdayGames.push(valorantGames[i]);
-                    break;
-                  case "Fri":
-                    valorantfridayGames.push(valorantGames[i]);
-                    break;
-                  case "Sat":
-                    valorantsaturdayGames.push(valorantGames[i]);
-                    break;
-                  default:
-                    break;
-                }
-              }
+              // // Arrays for each day of the week
+              // var valorantsundayGames = [];
+              // var valorantmondayGames = [];
+              // var valoranttuesdayGames = [];
+              // var valorantwednesdayGames = [];
+              // var valorantthursdayGames = [];
+              // var valorantfridayGames = [];
+              // var valorantsaturdayGames = [];
+              // for (i = 0; i < valorantGames.length; i++) {
+              //   switch (valorantGames[i][7]) {
+              //     case "Sun":
+              //       valorantsundayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Mon":
+              //       valorantmondayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Tue":
+              //       valoranttuesdayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Wed":
+              //       valorantwednesdayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Thu":
+              //       valorantthursdayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Fri":
+              //       valorantfridayGames.push(valorantGames[i]);
+              //       break;
+              //     case "Sat":
+              //       valorantsaturdayGames.push(valorantGames[i]);
+              //       break;
+              //     default:
+              //       break;
+              //   }
+              // }
 
-              var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-              var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-              var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-              var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-              var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-              var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-              var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+              // var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+              // var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+              // var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+              // var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+              // var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+              // var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+              // var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
-              // Rainbow 6 Seige
-              var seigeGames = [];
-              for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
-                var getGameID = localStorageConverted[i][0];
-                if (getGameID == 10826) {
-                  seigeGames.push(localStorageConverted[i]);
-                }
-              }
+              // // Rainbow 6 Seige
+              // var seigeGames = [];
+              // for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              //   var getGameID = localStorageConverted[i][0];
+              //   if (getGameID == 10826) {
+              //     seigeGames.push(localStorageConverted[i]);
+              //   }
+              // }
 
-              // Get Rainbow 6 Seige average game time
-              var seigeaverageGameTime = 0;
-              for (var i = 0; i < seigeGames.length; i++) {
-                seigeaverageGameTime += seigeGames[i][5];
-              }
-              seigeaverageGameTime /= seigeGames.length;
+              // // Get Rainbow 6 Seige average game time
+              // var seigeaverageGameTime = 0;
+              // for (var i = 0; i < seigeGames.length; i++) {
+              //   seigeaverageGameTime += seigeGames[i][5];
+              // }
+              // seigeaverageGameTime /= seigeGames.length;
 
-              // Arrays for each day of the week
-              var seigesundayGames = [];
-              var seigemondayGames = [];
-              var seigetuesdayGames = [];
-              var seigewednesdayGames = [];
-              var seigethursdayGames = [];
-              var seigefridayGames = [];
-              var seigesaturdayGames = [];
-              for (i = 0; i < seigeGames.length; i++) {
-                switch (seigeGames[i][7]) {
-                  case "Sun":
-                    seigesundayGames.push(seigeGames[i]);
-                    break;
-                  case "Mon":
-                    seigemondayGames.push(seigeGames[i]);
-                    break;
-                  case "Tue":
-                    seigetuesdayGames.push(seigeGames[i]);
-                    break;
-                  case "Wed":
-                    seigewednesdayGames.push(seigeGames[i]);
-                    break;
-                  case "Thu":
-                    seigethursdayGames.push(seigeGames[i]);
-                    break;
-                  case "Fri":
-                    seigefridayGames.push(seigeGames[i]);
-                    break;
-                  case "Sat":
-                    seigesaturdayGames.push(seigeGames[i]);
-                    break;
-                  default:
-                    break;
-                }
-              }
+              // // Arrays for each day of the week
+              // var seigesundayGames = [];
+              // var seigemondayGames = [];
+              // var seigetuesdayGames = [];
+              // var seigewednesdayGames = [];
+              // var seigethursdayGames = [];
+              // var seigefridayGames = [];
+              // var seigesaturdayGames = [];
+              // for (i = 0; i < seigeGames.length; i++) {
+              //   switch (seigeGames[i][7]) {
+              //     case "Sun":
+              //       seigesundayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Mon":
+              //       seigemondayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Tue":
+              //       seigetuesdayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Wed":
+              //       seigewednesdayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Thu":
+              //       seigethursdayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Fri":
+              //       seigefridayGames.push(seigeGames[i]);
+              //       break;
+              //     case "Sat":
+              //       seigesaturdayGames.push(seigeGames[i]);
+              //       break;
+              //     default:
+              //       break;
+              //   }
+              // }
 
-              var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-              var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-              var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-              var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-              var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-              var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-              var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
-              localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
+              // var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+              // var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+              // var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+              // var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+              // var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+              // var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+              // var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+              // localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
-              // Reset all info
-              //this.gameID = undefined;
-              //this.gameMode = undefined;
-              this.rkills = undefined;
-              this.rdeaths = undefined;
-              this.rassists = undefined;
-              this.matchResult = undefined;
-              this.roundTime = undefined;
-              this.gameTime = undefined;
-              this.date = undefined;
-              this.endLog = undefined;
+              // // Reset all info
+              // //this.gameID = undefined;
+              // //this.gameMode = undefined;
+              // this.rkills = undefined;
+              // this.rdeaths = undefined;
+              // this.rassists = undefined;
+              // this.matchResult = undefined;
+              // this.roundTime = undefined;
+              // this.gameTime = undefined;
+              // this.date = undefined;
+              // this.endLog = undefined;
             }
           }
         }
@@ -3228,6 +3228,428 @@ class InGame extends AppWindow_1.AppWindow {
             console.log(this.endLog);
             this.endLog = this.endLog[1];
             console.log(this.endLog);
+            // Format gameMode
+            if (this.gameMode !== undefined) {
+              if (this.gameMode.includes("MATCHMAKING_PVP_UNRANKED")) {
+                this.gameMode = "MATCHMAKING_PVP_UNRANKED";
+              }
+              if (this.gameMode.includes("MATCHMAKING_PVP_RANKED")) {
+                this.gameMode = "MATCHMAKING_PVP_RANKED";
+              }
+            }
+
+            // Ensure k d a exists
+            if (this.rkills == undefined) {
+              this.rkills = 0;
+            }
+            if (this.rdeaths == undefined) {
+              this.rdeaths = 0;
+            }
+            if (this.rassists == undefined) {
+              this.rassists = 0;
+            }
+
+            // Get Game Time
+            // 1- Convert to seconds:
+            var timeseconds = this.roundTime / 1000;
+            // 2- Extract hours:
+            var timehours = parseInt(timeseconds / 3600); // 3,600 seconds in 1 hour
+            timeseconds = timeseconds % 3600; // seconds remaining after extracting hours
+            // 3- Extract minutes:
+            var timeminutes = parseInt(timeseconds / 60); // 60 seconds in 1 minute
+            // 4- Keep only seconds not extracted to minutes:
+            timeseconds = timeseconds % 60;
+            // 5- Ensure each num will have 2 digits
+            timeseconds = Math.round(timeseconds);
+            timeminutes = Math.round(timeminutes);
+            timehours = Math.round(timehours);
+            timeseconds = String(timeseconds).padStart(2, "0");
+            timeminutes = String(timeminutes).padStart(2, "0");
+            timehours = String(timehours).padStart(2, "0");
+            this.roundTime =
+              timehours + ":" + timeminutes + ":" + timeseconds;
+
+            // Console Log all info I need
+            //console.log(info.game_info.phase);
+            console.log("Game Results:");
+            console.log("Game ID: " + this.gameID);
+            console.log("Game Mode: " + this.gameMode);
+            console.log("rkills: " + this.rkills);
+            console.log("rdeaths: " + this.rdeaths);
+            console.log("rassists: " + this.rassists);
+            console.log("Match Outcome: " + this.matchResult);
+            console.log("Round Time: " + this.roundTime);
+            console.log("Game TIme: " + this.gameTime);
+            console.log("Date: " + this.date);
+
+            // Normal Game Add:
+            var maxKey = 0;
+            for (var i = 0; i < localStorage.length; i++) {
+              if (maxKey <= Number(localStorage.key(i))) {
+                maxKey = Number(localStorage.key(i)) + 1;
+              }
+            }
+
+            if (
+              this.gameID !== undefined &&
+              this.gameMode !== undefined &&
+              this.rkills !== undefined &&
+              this.rdeaths !== undefined &&
+              this.rassists !== undefined &&
+              this.roundTime !== "NaN:NaN:NaN" &&
+              this.matchResult !== undefined &&
+              this.gameTime !== undefined &&
+              this.date !== undefined
+            ) {
+              // Expire: Test code for expiring data
+              var keysToDelete = [];
+              for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                var gameArr = localStorage.getItem(key).split(" ");
+                var gameDate = gameArr[7];
+                var date1 = new Date(gameDate).getTime();
+                var date2 = new Date(this.date).getTime();
+                var timeDiff = date2 - date1;
+                var daysDiff = timeDiff / (1000 * 3600 * 24);
+                if (daysDiff >= 30) {
+                  keysToDelete.push(key);
+                }
+              }
+              for (var i = 0; i < keysToDelete.length; i++) {
+                localStorage.removeItem(keysToDelete[i]);
+              }
+              // End Expire:
+              if (
+                this.gameMode == "MATCHMAKING_PVP_UNRANKED" ||
+                this.gameMode == "MATCHMAKING_PVP_RANKED"
+              ) {
+                if (!this.endLog.includes("NoEnemies")) {
+                  var dataString =
+                    String(this.gameID) +
+                    " " +
+                    String(this.rkills) +
+                    " " +
+                    String(this.rdeaths) +
+                    " " +
+                    String(this.rassists) +
+                    " " +
+                    String(this.matchResult) +
+                    " " +
+                    String(this.roundTime) +
+                    " " +
+                    String(this.gameTime) +
+                    " " +
+                    String(this.date);
+                  localStorage.setItem(String(maxKey), dataString);
+                }
+              }
+            }
+
+            // George: Analyze Database
+            // Get minimum key to loop through localStorage properly since it's an associative array
+            var currentMinimumKey;
+            for (var key in localStorage){
+              var keyToInt = parseInt(key);
+              if (currentMinimumKey == undefined && !isNaN(keyToInt)) {
+                currentMinimumKey = keyToInt;
+              }
+
+              if (keyToInt < currentMinimumKey) {
+                currentMinimumKey = keyToInt;
+              }
+            }
+
+            // Get maximum key to loop through localStorage properly since it's an associative array
+            var currentMaximumKey;
+            for (var key in localStorage){
+              var keyToInt = parseInt(key);
+              if (currentMaximumKey == undefined && !isNaN(keyToInt)) {
+                currentMaximumKey = keyToInt;
+              }
+
+              if (keyToInt > currentMaximumKey) {
+                currentMaximumKey = keyToInt;
+              }
+            }
+
+            // Convert localStorage to array of correct values
+            var localStorageConverted = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var localStorageDataEntry = localStorage.getItem(i.toString());
+              localStorageDataEntry = localStorageDataEntry.split(" ");
+              var convertGameID = parseInt(localStorageDataEntry[0]);
+              var convertKills = parseInt(localStorageDataEntry[1]);
+              var convertDeaths = parseInt(localStorageDataEntry[2]);
+              var convertAssists = parseInt(localStorageDataEntry[3]);
+              var convertOutcome = localStorageDataEntry[4];
+              // Convert match time to miliseconds
+              var convertMatchLength = localStorageDataEntry[5].split(":");
+              // convert hours to miliseconds
+              var hours = parseInt(convertMatchLength[0]) * 360000;
+              // convert minutes to miliseconds
+              var minutes = parseInt(convertMatchLength[1]) * 60000;
+              // convert seconds to miliseconds
+              var seconds = parseInt(convertMatchLength[2]) * 1000;
+              convertMatchLength = hours + minutes + seconds;
+              // convert time of day to miliseconds
+              var convertTimeofDay = localStorageDataEntry[6].split(":");
+              // convert hours to miliseconds
+              hours = parseInt(convertTimeofDay[0]) * 3600000;
+              minutes = parseInt(convertTimeofDay[1]) * 60000;
+              // convert minutes to miliseconds
+              convertTimeofDay = hours + minutes;
+              // Convert dates to day of week
+              var convertDay = Date.parse(localStorageDataEntry[7]);
+              convertDay = new Date(convertDay);
+              convertDay = convertDay.toString();
+              convertDay = convertDay.split(" ");
+              convertDay = convertDay[0];
+              // Add converted entry
+              localStorageConverted[i] = [convertGameID, convertKills, convertDeaths, convertAssists, convertOutcome, convertMatchLength, convertTimeofDay, convertDay];
+            }
+
+            sufficientSleep = true;
+            sufficientWater = true;
+
+            if (sufficientSleep || sufficientWater)
+            {
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, "0");
+              var mm = String(today.getMonth() + 1).padStart(2, "0");
+              var yyyy = today.getFullYear();
+              localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+            }
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, "0");
+            var mm = String(today.getMonth() + 1).padStart(2, "0");
+            var yyyy = today.getFullYear();
+            var today = mm + "/" + dd + "/" + yyyy
+
+            if (today != localStorage.getItem("biometricsDate"))
+            {
+              sufficientSleep = false;
+              sufficientWater = false;
+            }
+
+            // Convert dates to day of week
+            var today = Date.parse(today);
+            today = new Date(today);
+            today = today.toString();
+            today = today.split(" ");
+            today = today[0];
+
+            // League of Legends
+            var leagueGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 5426) {
+                leagueGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get league average game time
+            var leagueaverageGameTime = 0;
+            for (var i = 0; i < leagueGames.length; i++) {
+              leagueaverageGameTime += leagueGames[i][5];
+            }
+            leagueaverageGameTime /= leagueGames.length;
+
+            // Arrays for each day of the week
+            var leaguesundayGames = [];
+            var leaguemondayGames = [];
+            var leaguetuesdayGames = [];
+            var leaguewednesdayGames = [];
+            var leaguethursdayGames = [];
+            var leaguefridayGames = [];
+            var leaguesaturdayGames = [];
+            for (i = 0; i < leagueGames.length; i++) {
+              switch (leagueGames[i][7]) {
+                case "Sun":
+                  leaguesundayGames.push(leagueGames[i]);
+                  break;
+                case "Mon":
+                  leaguemondayGames.push(leagueGames[i]);
+                  break;
+                case "Tue":
+                  leaguetuesdayGames.push(leagueGames[i]);
+                  break;
+                case "Wed":
+                  leaguewednesdayGames.push(leagueGames[i]);
+                  break;
+                case "Thu":
+                  leaguethursdayGames.push(leagueGames[i]);
+                  break;
+                case "Fri":
+                  leaguefridayGames.push(leagueGames[i]);
+                  break;
+                case "Sat":
+                  leaguesaturdayGames.push(leagueGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
+            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
+            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
+            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
+            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
+            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
+            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
+
+            var valorantGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 21640) {
+                valorantGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get Valorant average game time
+            var valorantaverageGameTime = 0;
+            for (var i = 0; i < valorantGames.length; i++) {
+              valorantaverageGameTime += valorantGames[i][5];
+            }
+            valorantaverageGameTime /= valorantGames.length;
+
+            // Arrays for each day of the week
+            var valorantsundayGames = [];
+            var valorantmondayGames = [];
+            var valoranttuesdayGames = [];
+            var valorantwednesdayGames = [];
+            var valorantthursdayGames = [];
+            var valorantfridayGames = [];
+            var valorantsaturdayGames = [];
+            for (i = 0; i < valorantGames.length; i++) {
+              switch (valorantGames[i][7]) {
+                case "Sun":
+                  valorantsundayGames.push(valorantGames[i]);
+                  break;
+                case "Mon":
+                  valorantmondayGames.push(valorantGames[i]);
+                  break;
+                case "Tue":
+                  valoranttuesdayGames.push(valorantGames[i]);
+                  break;
+                case "Wed":
+                  valorantwednesdayGames.push(valorantGames[i]);
+                  break;
+                case "Thu":
+                  valorantthursdayGames.push(valorantGames[i]);
+                  break;
+                case "Fri":
+                  valorantfridayGames.push(valorantGames[i]);
+                  break;
+                case "Sat":
+                  valorantsaturdayGames.push(valorantGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
+            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
+            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
+            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
+            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
+            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
+            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
+
+            // Rainbow 6 Seige
+            var seigeGames = [];
+            for (var i = currentMinimumKey; i <= currentMaximumKey; i++) {
+              var getGameID = localStorageConverted[i][0];
+              if (getGameID == 10826) {
+                seigeGames.push(localStorageConverted[i]);
+              }
+            }
+
+            // Get Rainbow 6 Seige average game time
+            var seigeaverageGameTime = 0;
+            for (var i = 0; i < seigeGames.length; i++) {
+              seigeaverageGameTime += seigeGames[i][5];
+            }
+            seigeaverageGameTime /= seigeGames.length;
+
+            // Arrays for each day of the week
+            var seigesundayGames = [];
+            var seigemondayGames = [];
+            var seigetuesdayGames = [];
+            var seigewednesdayGames = [];
+            var seigethursdayGames = [];
+            var seigefridayGames = [];
+            var seigesaturdayGames = [];
+            for (i = 0; i < seigeGames.length; i++) {
+              switch (seigeGames[i][7]) {
+                case "Sun":
+                  seigesundayGames.push(seigeGames[i]);
+                  break;
+                case "Mon":
+                  seigemondayGames.push(seigeGames[i]);
+                  break;
+                case "Tue":
+                  seigetuesdayGames.push(seigeGames[i]);
+                  break;
+                case "Wed":
+                  seigewednesdayGames.push(seigeGames[i]);
+                  break;
+                case "Thu":
+                  seigethursdayGames.push(seigeGames[i]);
+                  break;
+                case "Fri":
+                  seigefridayGames.push(seigeGames[i]);
+                  break;
+                case "Sat":
+                  seigesaturdayGames.push(seigeGames[i]);
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
+            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
+            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
+            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
+            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
+            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
+            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
+
+            // Reset all info
+            //this.gameID = undefined;
+            //this.gameMode = undefined;
+            this.rkills = undefined;
+            this.rdeaths = undefined;
+            this.rassists = undefined;
+            this.matchResult = undefined;
+            this.roundTime = undefined;
+            this.gameTime = undefined;
+            this.date = undefined;
+            this.endLog = undefined;
           }
         }
         
@@ -3235,25 +3657,25 @@ class InGame extends AppWindow_1.AppWindow {
           if (info.game_info.phase !== undefined) {
             if (info.game_info.phase == "round_results") {
               // Use this to start time for tally
-              this.roundStart = new Date();
+              // this.roundStart = new Date();
 
-              if (this.gameTime == undefined) {
-                // game time
-                var hours = new Date().getHours();
-                var minutes = new Date().getMinutes();
-                hours = String(hours).padStart(2, "0");
-                minutes = String(minutes).padStart(2, "0");
-                this.gameTime = hours + ":" + minutes;
-              }
+              // if (this.gameTime == undefined) {
+              //   game time
+              //   var hours = new Date().getHours();
+              //   var minutes = new Date().getMinutes();
+              //   hours = String(hours).padStart(2, "0");
+              //   minutes = String(minutes).padStart(2, "0");
+              //   this.gameTime = hours + ":" + minutes;
+              // }
 
-              if (this.date == undefined) {
-                // Define the date
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, "0");
-                var mm = String(today.getMonth() + 1).padStart(2, "0");
-                var yyyy = today.getFullYear();
-                this.date = mm + "/" + dd + "/" + yyyy;
-              }
+              // if (this.date == undefined) {
+              //   Define the date
+              //   var today = new Date();
+              //   var dd = String(today.getDate()).padStart(2, "0");
+              //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+              //   var yyyy = today.getFullYear();
+              //   this.date = mm + "/" + dd + "/" + yyyy;
+              // }
             }
           }
         }
@@ -3801,26 +4223,26 @@ class InGame extends AppWindow_1.AppWindow {
             case "match_end":
               return true;
             case "roundStart":
-              // // Use this to start time for tally
-              // this.roundStart = new Date();
+              // Use this to start time for tally
+              this.roundStart = new Date();
 
-              // if (this.gameTime == undefined) {
-              //   // game time
-              //   var hours = new Date().getHours();
-              //   var minutes = new Date().getMinutes();
-              //   hours = String(hours).padStart(2, "0");
-              //   minutes = String(minutes).padStart(2, "0");
-              //   this.gameTime = hours + ":" + minutes;
-              // }
+              if (this.gameTime == undefined) {
+                // game time
+                var hours = new Date().getHours();
+                var minutes = new Date().getMinutes();
+                hours = String(hours).padStart(2, "0");
+                minutes = String(minutes).padStart(2, "0");
+                this.gameTime = hours + ":" + minutes;
+              }
 
-              // if (this.date == undefined) {
-              //   // Define the date
-              //   var today = new Date();
-              //   var dd = String(today.getDate()).padStart(2, "0");
-              //   var mm = String(today.getMonth() + 1).padStart(2, "0");
-              //   var yyyy = today.getFullYear();
-              //   this.date = mm + "/" + dd + "/" + yyyy;
-              // }
+              if (this.date == undefined) {
+                // Define the date
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, "0");
+                var mm = String(today.getMonth() + 1).padStart(2, "0");
+                var yyyy = today.getFullYear();
+                this.date = mm + "/" + dd + "/" + yyyy;
+              }
               return true;
             case "roundEnd":
               // Use this to end time for tally
