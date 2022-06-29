@@ -28,9 +28,19 @@ var rdeaths;
 var rassists;
 var endLog;
 
+if (!localStorage.hasOwnProperty("sufficientWater"))
+{
+    localStorage.setItem("sufficientWater", "false");
+}
+
+if (!localStorage.hasOwnProperty("sufficientSleep"))
+{
+    localStorage.setItem("sufficientSleep", "false");
+}
+
 // Biometric Vars
-var sufficientSleep;
-var sufficientWater;
+var sufficientSleep = (localStorage.getItem("sufficientSleep") === 'true');
+var sufficientWater = (localStorage.getItem("sufficientWater") === 'true');
 var bioInputDate;
 
 function biometricsSubmitted()
@@ -110,6 +120,13 @@ function biometricsSubmitted()
     var mm = String(today.getMonth() + 1).padStart(2, "0");
     var yyyy = today.getFullYear();
     localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+    localStorage.setItem("sufficientWater", sufficientWater.toString());
+    localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+  }
+  else
+  {
+    localStorage.setItem("sufficientWater", sufficientWater.toString());
+    localStorage.setItem("sufficientSleep", sufficientSleep.toString());
   }
 
   var today = new Date();
@@ -117,11 +134,14 @@ function biometricsSubmitted()
   var mm = String(today.getMonth() + 1).padStart(2, "0");
   var yyyy = today.getFullYear();
   var today = mm + "/" + dd + "/" + yyyy
+  localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
 
   if (today != localStorage.getItem("biometricsDate"))
   {
     sufficientSleep = false;
     sufficientWater = false;
+    localStorage.setItem("sufficientWater", "false");
+    localStorage.setItem("sufficientWater", "false");
   }
 
   // Convert dates to day of week
@@ -183,19 +203,19 @@ function biometricsSubmitted()
     }
   }
 
-  var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-  var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-  var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-  var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-  var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-  var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-  var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
   var valorantGames = [];
@@ -249,19 +269,19 @@ function biometricsSubmitted()
     }
   }
 
-  var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-  var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-  var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-  var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-  var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-  var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-  var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
   // Rainbow 6 Seige
@@ -316,19 +336,19 @@ function biometricsSubmitted()
     }
   }
 
-  var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-  var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-  var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-  var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-  var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-  var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-  var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
   document.getElementById("LeagueSundaySlot").innerHTML = localStorage.getItem("LeagueSundaySlot");
@@ -626,6 +646,13 @@ function UpdateSlots() {
     var mm = String(today.getMonth() + 1).padStart(2, "0");
     var yyyy = today.getFullYear();
     localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+    localStorage.setItem("sufficientWater", sufficientWater.toString());
+    localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+  }
+  else
+  {
+    localStorage.setItem("sufficientWater", sufficientWater.toString());
+    localStorage.setItem("sufficientSleep", sufficientSleep.toString());
   }
 
   var today = new Date();
@@ -638,6 +665,8 @@ function UpdateSlots() {
   {
     sufficientSleep = false;
     sufficientWater = false;
+    localStorage.setItem("sufficientWater", "false");
+    localStorage.setItem("sufficientWater", "false");
   }
 
   // Convert dates to day of week
@@ -699,19 +728,19 @@ function UpdateSlots() {
     }
   }
 
-  var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-  var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-  var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-  var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-  var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-  var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-  var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+  var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
   var valorantGames = [];
@@ -765,19 +794,19 @@ function UpdateSlots() {
     }
   }
 
-  var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-  var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-  var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-  var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-  var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-  var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-  var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+  var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
   // Rainbow 6 Seige
@@ -832,19 +861,19 @@ function UpdateSlots() {
     }
   }
 
-  var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-  var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-  var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-  var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-  var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-  var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-  var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+  var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
   localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
   document.getElementById("LeagueSundaySlot").innerHTML = localStorage.getItem("LeagueSundaySlot");
@@ -3169,18 +3198,18 @@ class InGame extends AppWindow_1.AppWindow {
             }
 
             // Console Log all info I need
-            console.log(this.enterData);
-            console.log(this.roundsCompleted);
-            console.log("Game Results:");
-            console.log("Game ID: " + this.gameID);
-            console.log("Game Mode: " + this.gameMode);
-            console.log("kills: " + this.kills);
-            console.log("deaths: " + this.deaths);
-            console.log("assists: " + this.assists);
-            console.log("Match Outcome: " + this.matchResult);
-            console.log("Match Length: " + this.mLength);
-            console.log("Game TIme: " + this.gameTime);
-            console.log("Date: " + this.date);
+            // console.log(this.enterData);
+            // console.log(this.roundsCompleted);
+            // console.log("Game Results:");
+            // console.log("Game ID: " + this.gameID);
+            // console.log("Game Mode: " + this.gameMode);
+            // console.log("kills: " + this.kills);
+            // console.log("deaths: " + this.deaths);
+            // console.log("assists: " + this.assists);
+            // console.log("Match Outcome: " + this.matchResult);
+            // console.log("Match Length: " + this.mLength);
+            // console.log("Game TIme: " + this.gameTime);
+            // console.log("Date: " + this.date);
 
             // Only add entry if this.enterData == true and rounds completed does not equal 1 (this means remake)
             if (this.enterData == true && !(this.roundsCompleted <= 4)) {
@@ -3286,6 +3315,13 @@ class InGame extends AppWindow_1.AppWindow {
               var mm = String(today.getMonth() + 1).padStart(2, "0");
               var yyyy = today.getFullYear();
               localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+              localStorage.setItem("sufficientWater", sufficientWater.toString());
+              localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+            }
+            else
+            {
+              localStorage.setItem("sufficientWater", sufficientWater.toString());
+              localStorage.setItem("sufficientSleep", sufficientSleep.toString());
             }
 
             var today = new Date();
@@ -3298,6 +3334,8 @@ class InGame extends AppWindow_1.AppWindow {
             {
               sufficientSleep = false;
               sufficientWater = false;
+              localStorage.setItem("sufficientWater", "false");
+              localStorage.setItem("sufficientWater", "false");
             }
 
             // Convert dates to day of week
@@ -3359,19 +3397,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
             var valorantGames = [];
@@ -3425,19 +3463,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
             // Rainbow 6 Seige
@@ -3492,19 +3530,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
             // Reset global vars
@@ -3535,7 +3573,7 @@ class InGame extends AppWindow_1.AppWindow {
             ) {
               if (this.gameClassic == undefined) {
                 this.gameClassic = true;
-                console.log("Game Classic: " + this.gameClassic);
+                //console.log("Game Classic: " + this.gameClassic);
               }
             }
           }
@@ -3544,7 +3582,7 @@ class InGame extends AppWindow_1.AppWindow {
             if (info.live_client_data.all_players.includes('"isBot":true')) {
               if (this.hasBots == undefined) {
                 this.hasBots = true;
-                console.log("Has Bots: " + this.hasBots);
+                //console.log("Has Bots: " + this.hasBots);
               }
             }
           }
@@ -3552,7 +3590,7 @@ class InGame extends AppWindow_1.AppWindow {
           if (info.live_client_data.events !== undefined) {
             if (info.live_client_data.events.includes("GameStart")) {
               if (this.matchStart == undefined) {
-                console.log("match started");
+                //console.log("match started");
                 // Reset global vars
                 this.gameID = undefined;
                 this.kills = undefined;
@@ -3602,7 +3640,7 @@ class InGame extends AppWindow_1.AppWindow {
           if (info.match_info.game_mode !== undefined) {
             if (this.isLol == undefined) {
               this.isLol = info.match_info.game_mode;
-              console.log(this.isLol);
+              //console.log(this.isLol);
             }
           }
         }
@@ -3611,7 +3649,7 @@ class InGame extends AppWindow_1.AppWindow {
 
         // log everything that doesn't have players tag
         if (info.players == undefined) {
-          console.log(info);
+          //console.log(info);
         }
 
         // Create game start and end loop around this
@@ -4072,8 +4110,8 @@ class InGame extends AppWindow_1.AppWindow {
           }
           // Get match end reason
           if (info.match_info.match_end_log !== undefined) {
-            console.log(typeof info.match_info.match_end_log);
-            console.log(info.match_info.match_end_log);
+            //console.log(typeof info.match_info.match_end_log);
+            //console.log(info.match_info.match_end_log);
             var matchEndLog = info.match_info.match_end_log.split(",");
             for (var i = 0; i < matchEndLog.length; i++) {
               if (matchEndLog[i].includes("ENDREASON")) {
@@ -4081,11 +4119,11 @@ class InGame extends AppWindow_1.AppWindow {
                 break;
               }
             }
-            console.log(this.endLog);
+            //console.log(this.endLog);
             this.endLog = this.endLog.split(":");
-            console.log(this.endLog);
+            //console.log(this.endLog);
             this.endLog = this.endLog[1];
-            console.log(this.endLog);
+            //console.log(this.endLog);
             // Format gameMode
             if (this.gameMode !== undefined) {
               if (this.gameMode.includes("MATCHMAKING_PVP_UNRANKED")) {
@@ -4129,16 +4167,16 @@ class InGame extends AppWindow_1.AppWindow {
 
             // Console Log all info I need
             //console.log(info.game_info.phase);
-            console.log("Game Results:");
-            console.log("Game ID: " + this.gameID);
-            console.log("Game Mode: " + this.gameMode);
-            console.log("rkills: " + this.rkills);
-            console.log("rdeaths: " + this.rdeaths);
-            console.log("rassists: " + this.rassists);
-            console.log("Match Outcome: " + this.matchResult);
-            console.log("Round Time: " + this.roundTime);
-            console.log("Game TIme: " + this.gameTime);
-            console.log("Date: " + this.date);
+            // console.log("Game Results:");
+            // console.log("Game ID: " + this.gameID);
+            // console.log("Game Mode: " + this.gameMode);
+            // console.log("rkills: " + this.rkills);
+            // console.log("rdeaths: " + this.rdeaths);
+            // console.log("rassists: " + this.rassists);
+            // console.log("Match Outcome: " + this.matchResult);
+            // console.log("Round Time: " + this.roundTime);
+            // console.log("Game TIme: " + this.gameTime);
+            // console.log("Date: " + this.date);
 
             // Normal Game Add:
             var maxKey = 0;
@@ -4276,6 +4314,13 @@ class InGame extends AppWindow_1.AppWindow {
               var mm = String(today.getMonth() + 1).padStart(2, "0");
               var yyyy = today.getFullYear();
               localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+              localStorage.setItem("sufficientWater", sufficientWater.toString());
+              localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+            }
+            else
+            {
+              localStorage.setItem("sufficientWater", sufficientWater.toString());
+              localStorage.setItem("sufficientSleep", sufficientSleep.toString());
             }
 
             var today = new Date();
@@ -4288,6 +4333,8 @@ class InGame extends AppWindow_1.AppWindow {
             {
               sufficientSleep = false;
               sufficientWater = false;
+              localStorage.setItem("sufficientWater", "false");
+              localStorage.setItem("sufficientWater", "false");
             }
 
             // Convert dates to day of week
@@ -4349,19 +4396,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+            var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
             var valorantGames = [];
@@ -4415,19 +4462,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+            var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
             // Rainbow 6 Seige
@@ -4482,19 +4529,19 @@ class InGame extends AppWindow_1.AppWindow {
               }
             }
 
-            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+            var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
             localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
             // Reset all info
@@ -4549,8 +4596,8 @@ class InGame extends AppWindow_1.AppWindow {
             }
           }
           if (rosterCheck != true) {
-            console.log("info.players");
-            console.log(info.players);
+            //console.log("info.players");
+            //console.log(info.players);
           }
         }
         this.logLine(this._infoLog, info, false);
@@ -4559,13 +4606,13 @@ class InGame extends AppWindow_1.AppWindow {
         const shouldHighlight = e.events.some((event) => {
           switch (event.name) {
             case "kill":
-              console.log("Kill");
+              //console.log("Kill");
               if (this.rkills == undefined) {
                 this.rkills = 0;
               }
               this.rkills += 1;
-              console.log(this.rkills);
-              console.log(e.events);
+              //console.log(this.rkills);
+              //console.log(e.events);
               // set global kills and filter for just the killNum
               if (this.gameID == 21640 || this.gameID == 5426) {
                 this.kills = e.events[0].data;
@@ -4575,13 +4622,13 @@ class InGame extends AppWindow_1.AppWindow {
               }
               return true;
             case "death":
-              console.log("Death");
+              //console.log("Death");
               if (this.rdeaths == undefined) {
                 this.rdeaths = 0;
               }
               this.rdeaths += 1;
-              console.log(this.rdeaths);
-              console.log(e.events);
+              //console.log(this.rdeaths);
+              //console.log(e.events);
               // set global deaths
               if (this.gameID == 21640 || this.gameID == 5426) {
                 this.deaths = e.events[0].data;
@@ -4608,11 +4655,11 @@ class InGame extends AppWindow_1.AppWindow {
                 // Get match outcome from announcer
                 if (e.events[0].data.includes("victory")) {
                   this.matchResult = "win";
-                  console.log(this.matchResult);
+                  //console.log(this.matchResult);
                 }
                 if (e.events[0].data.includes("defeat")) {
                   this.matchResult = "loss";
-                  console.log(this.matchResult);
+                  //console.log(this.matchResult);
                 }
                 // get match_end, matchLength, and print data, store in local storage
                 this.matchEnd = new Date();
@@ -4672,14 +4719,14 @@ class InGame extends AppWindow_1.AppWindow {
                   this.assists = 0;
                 }
 
-                console.log("Game ID: " + this.gameID);
-                console.log("Kills: " + this.kills);
-                console.log("Deaths: " + this.deaths);
-                console.log("Assists: " + this.assists);
-                console.log("Match Result: " + this.matchResult);
-                console.log("Match Length: " + mLength);
-                console.log("Game Time: " + this.gameTime);
-                console.log("Date: " + this.date);
+                // console.log("Game ID: " + this.gameID);
+                // console.log("Kills: " + this.kills);
+                // console.log("Deaths: " + this.deaths);
+                // console.log("Assists: " + this.assists);
+                // console.log("Match Result: " + this.matchResult);
+                // console.log("Match Length: " + mLength);
+                // console.log("Game Time: " + this.gameTime);
+                // console.log("Date: " + this.date);
 
                 if (
                   this.gameClassic == true &&
@@ -4695,11 +4742,11 @@ class InGame extends AppWindow_1.AppWindow {
                     this.date !== undefined
                   ) {
                     var gMinutes = mLength.split(":");
-                    console.log(gMinutes);
+                    //console.log(gMinutes);
                     var gMinutes = gMinutes[1];
-                    console.log(gMinutes[1]);
+                    //console.log(gMinutes[1]);
                     var gMinutes = parseInt(gMinutes);
-                    console.log(gMinutes);
+                    //console.log(gMinutes);
                     if (gMinutes >= 14) {
                       var dataString =
                         String(this.gameID) +
@@ -4796,6 +4843,13 @@ class InGame extends AppWindow_1.AppWindow {
                   var mm = String(today.getMonth() + 1).padStart(2, "0");
                   var yyyy = today.getFullYear();
                   localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+                  localStorage.setItem("sufficientWater", sufficientWater.toString());
+                  localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+                }
+                else
+                {
+                  localStorage.setItem("sufficientWater", sufficientWater.toString());
+                  localStorage.setItem("sufficientSleep", sufficientSleep.toString());
                 }
 
                 var today = new Date();
@@ -4808,6 +4862,8 @@ class InGame extends AppWindow_1.AppWindow {
                 {
                   sufficientSleep = false;
                   sufficientWater = false;
+                  localStorage.setItem("sufficientWater", "false");
+                  localStorage.setItem("sufficientWater", "false");
                 }
 
                 // Convert dates to day of week
@@ -4869,19 +4925,19 @@ class InGame extends AppWindow_1.AppWindow {
                   }
                 }
 
-                var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueSundaySlot = getAverageTimeSlotforDay(leaguesundayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("LeagueSundaySlot", leagueSundaySlot);
-                var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueMondaySlot = getAverageTimeSlotforDay(leaguemondayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueMondaySlot", leagueMondaySlot);
-                var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueTuesdaySlot = getAverageTimeSlotforDay(leaguetuesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueTuesdaySlot", leagueTuesdaySlot);
-                var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueWednesdaySlot = getAverageTimeSlotforDay(leaguewednesdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueWednesdaySlot", leagueWednesdaySlot);
-                var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueThursdaySlot = getAverageTimeSlotforDay(leaguethursdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueThursdaySlot", leagueThursdaySlot);
-                var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueFridaySlot = getAverageTimeSlotforDay(leaguefridayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueFridaySlot", leagueFridaySlot);
-                var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, sufficientWater, sufficientSleep, today);
+                var leagueSaturdaySlot = getAverageTimeSlotforDay(leaguesaturdayGames, leagueaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("leagueSaturdaySlot", leagueSaturdaySlot);
 
                 var valorantGames = [];
@@ -4935,19 +4991,19 @@ class InGame extends AppWindow_1.AppWindow {
                   }
                 }
 
-                var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantSundaySlot = getAverageTimeSlotforDay(valorantsundayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantSundaySlot", valorantSundaySlot);
-                var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantMondaySlot = getAverageTimeSlotforDay(valorantmondayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantMondaySlot", valorantMondaySlot);
-                var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantTuesdaySlot = getAverageTimeSlotforDay(valoranttuesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantTuesdaySlot", valorantTuesdaySlot);
-                var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantWednesdaySlot = getAverageTimeSlotforDay(valorantwednesdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantWednesdaySlot", valorantWednesdaySlot);
-                var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantThursdaySlot = getAverageTimeSlotforDay(valorantthursdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantThursdaySlot", valorantThursdaySlot);
-                var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantFridaySlot = getAverageTimeSlotforDay(valorantfridayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantFridaySlot", valorantFridaySlot);
-                var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, sufficientWater, sufficientSleep, today);
+                var valorantSaturdaySlot = getAverageTimeSlotforDay(valorantsaturdayGames, valorantaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("ValorantSaturdaySlot", valorantSaturdaySlot);
 
                 // Rainbow 6 Seige
@@ -5002,19 +5058,19 @@ class InGame extends AppWindow_1.AppWindow {
                   }
                 }
 
-                var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeSundaySlot = getAverageTimeSlotforDay(seigesundayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeSundaySlot", seigeSundaySlot);
-                var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeMondaySlot = getAverageTimeSlotforDay(seigemondayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeMondaySlot", seigeMondaySlot);
-                var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeTuesdaySlot = getAverageTimeSlotforDay(seigetuesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeTuesdaySlot", seigeTuesdaySlot);
-                var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeWednesdaySlot = getAverageTimeSlotforDay(seigewednesdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeWednesdaySlot", seigeWednesdaySlot);
-                var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeThursdaySlot = getAverageTimeSlotforDay(seigethursdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeThursdaySlot", seigeThursdaySlot);
-                var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeFridaySlot = getAverageTimeSlotforDay(seigefridayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeFridaySlot", seigeFridaySlot);
-                var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, sufficientWater, sufficientSleep, today);
+                var seigeSaturdaySlot = getAverageTimeSlotforDay(seigesaturdayGames, seigeaverageGameTime, localStorage.getItem("sufficientWater") === 'true', localStorage.getItem("sufficientSleep") === 'true', today);
                 localStorage.setItem("SeigeSaturdaySlot", seigeSaturdaySlot);
 
                 // Reset global vars
@@ -5039,7 +5095,7 @@ class InGame extends AppWindow_1.AppWindow {
               return true;
             case "matchStart":
             case "match_start":
-              console.log("match started");
+              //console.log("match started");
               // Reset global vars
               this.gameID = undefined;
               this.kills = undefined;
@@ -5107,13 +5163,13 @@ class InGame extends AppWindow_1.AppWindow {
               this.roundEnd = new Date();
 
               var currentRoundTime = this.roundEnd - this.roundStart;
-              console.log(currentRoundTime);
+              //console.log(currentRoundTime);
               if (this.roundTime == undefined) {
                 this.roundTime = currentRoundTime;
               } else {
                 this.roundTime += currentRoundTime;
               }
-              console.log(this.roundTime);
+              //console.log(this.roundTime);
               return true;
             case "matchOutcome":
               // Use this for match outcome
@@ -5131,7 +5187,7 @@ class InGame extends AppWindow_1.AppWindow {
           }
           return false;
         });
-        console.log(e);
+        //console.log(e);
         this.logLine(this._eventsLog, e, shouldHighlight);
       }
     async setToggleHotkeyText() {

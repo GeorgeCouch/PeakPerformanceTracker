@@ -36,9 +36,20 @@ __exportStar(__webpack_require__(/*! ./ow-window */ "./node_modules/@overwolf/ov
   \*************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
+    
+if (!localStorage.hasOwnProperty("sufficientWater"))
+{
+    localStorage.setItem("sufficientWater", "false");
+}
+
+if (!localStorage.hasOwnProperty("sufficientSleep"))
+{
+    localStorage.setItem("sufficientSleep", "false");
+}
+
 // Biometric Vars
-var sufficientSleep;
-var sufficientWater;
+var sufficientSleep = (localStorage.getItem("sufficientSleep") === 'true');
+var sufficientWater = (localStorage.getItem("sufficientWater") === 'true');
 
 // Get minimum key to loop through localStorage properly since it's an associative array
 var currentMinimumKey;
@@ -112,6 +123,13 @@ if (sufficientSleep || sufficientWater)
   var mm = String(today.getMonth() + 1).padStart(2, "0");
   var yyyy = today.getFullYear();
   localStorage.setItem("biometricsDate", mm + "/" + dd + "/" + yyyy);
+  localStorage.setItem("sufficientWater", sufficientWater.toString());
+  localStorage.setItem("sufficientSleep", sufficientSleep.toString());
+}
+else
+{
+  localStorage.setItem("sufficientWater", sufficientWater.toString());
+  localStorage.setItem("sufficientSleep", sufficientSleep.toString());
 }
 
 var today = new Date();
@@ -124,6 +142,8 @@ if (today != localStorage.getItem("biometricsDate"))
 {
   sufficientSleep = false;
   sufficientWater = false;
+  localStorage.setItem("sufficientWater", "false");
+  localStorage.setItem("sufficientWater", "false");
 }
 
 // Convert dates to day of week
