@@ -1378,6 +1378,7 @@ class OWHotkeys {
           if (result && result.name === hotkeyId) action(result);
 
           //localStorage.clear();
+          //console.log(localStorage);
           // document.getElementById("LeagueSundaySlot").innerHTML = localStorage.getItem("LeagueSundaySlot");
           // document.getElementById("leagueMondaySlot").innerHTML = localStorage.getItem("leagueMondaySlot");
           // document.getElementById("leagueTuesdaySlot").innerHTML = localStorage.getItem("leagueTuesdaySlot");
