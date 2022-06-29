@@ -13,7 +13,7 @@
 
   <header id="header" class="app-header">
     <img src="../../img/header_icon.svg" />
-    <h1>Sample App / in-game window</h1>
+    <h1>Peak Gaming Performance Tracker / in-game window</h1>
     <h1 class="hotkey-text">
       Show/Hide Hotkey:
       <kbd id="hotkey"></kbd>
@@ -27,6 +27,212 @@
 
   <!-- --------------------------------- Main -------------------------------- -->
   <main>
+    <div>
+      <table style="width:100%">
+        <tr>
+          <!-- Empty Cell for Formatting -->
+          <td></td>
+          <td style="text-align:center">
+            <h1>
+              Sunday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Monday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Tuesday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Wednesday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Thursday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Friday
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1>
+              Saturday
+            </h1>
+          </td>
+        </tr>
+        <tr style="height:150px">
+          <td>
+            <h1>
+              League of Legends
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="LeagueSundaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueMondaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueTuesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueWednesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueThursdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueFridaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="leagueSaturdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+        </tr>
+        <tr style="height:150px">
+          <td>
+            <h1>
+              Valorant
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantSundaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantMondaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantTuesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantWednesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantThursdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantFridaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="ValorantSaturdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+        </tr>
+        <tr style="height:150px">
+          <td>
+            <h1>
+              Rainbow 6 Siege
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeSundaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeMondaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeTuesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeWednesdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeThursdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeFridaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+          <td style="text-align:center">
+            <h1 id="SeigeSaturdaySlot">
+              11:11 AM - 12:12 PM
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <h1 style="text-align:center">
+              Water
+            </h1>
+          </td>
+          <td>
+            <h1 style="text-align:center">
+              Sleep
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="text-align:center">
+            <input type="checkbox" id="water" style="width:20px;height:20px;">
+          </td>
+          <td style="text-align:center">
+            <input type="checkbox" id="sleep" style="width:20px;height:20px;">
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan="2" style="text-align:center">
+            <button type="button" onclick="biometricsSubmitted()">Submit</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </main>
+
+  <!-- <main>
     <div id="logs">
       <div id="events" class="logColumn">
         <h1>Game Events</h1>
@@ -48,7 +254,7 @@
         logged to the developers console.
       </p>
     </div>
-  </main>
+  </main> -->
 
   <script>
     // Standard Google Universal Analytics code
