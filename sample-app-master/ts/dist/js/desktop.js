@@ -375,24 +375,34 @@ document.getElementById("SeigeThursdaySlot").innerHTML = localStorage.getItem("S
 document.getElementById("SeigeFridaySlot").innerHTML = localStorage.getItem("SeigeFridaySlot");
 document.getElementById("SeigeSaturdaySlot").innerHTML = localStorage.getItem("SeigeSaturdaySlot");
 
+// Get the average time slot for the array passed
 function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, sufficientSleep, dayofWeek)
 {
+  // make new empty array
   var dayGamesWeight = [];
+        // loop through array
         for (var i = 0; i < array.length; i++) {
+          // assign kda to vars from array elements
           var dayKills = array[i][1];
           var dayDeaths = array[i][2];
           var dayAssists = array[i][3];
+          // Determine how to calculate KDA based on if 0 deaths
           if (dayDeaths != 0) {
             var dayKDA = (dayKills + dayAssists) / dayDeaths;
           }
           else {
             var dayKDA = dayKills + dayAssists;
           }
+          // Create var gameWeight and set its default to KDA
           var gameWeight = dayKDA;
+          // Check if match won, if so add weight
           if (array[i][4] == "win") {
             gameWeight += 5;
+            // Check if game ended faster than usual
             if (array[i][5] <= gameAverageGameTime) {
+              // Set tmpDayGameTime to equal length of match
               var tmpDayGameTime = array[i][5];
+              // Add game weight for every target time shorter than average time
               while (tmpDayGameTime <= gameAverageGameTime) {
                 tmpDayGameTime += 120000;
                 if (tmpDayGameTime <= gameAverageGameTime) {
@@ -400,6 +410,7 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
                 }
               } 
             }
+            // Else, subtract game weight for every target time longer than average time
             else {
               var tmpDayGameTime = array[i][5];
               while (tmpDayGameTime > gameAverageGameTime) {
@@ -409,9 +420,12 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
                 }
               }
             }
-          } else {
+          }
+          // Else, lost game subtract weight 
+          else {
             gameWeight -= 5;
           }
+          // Round and push to array
           gameWeight = Math.round(gameWeight);
           if (gameWeight < 0) {
             gameWeight = 0;
@@ -419,19 +433,28 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
           dayGamesWeight.push(gameWeight);
         }
         
+        // New array for competing time slots
         var competingTimeSlots = []
+        // loop through array and add converted time to competing time slots array
         for (var i = 0; i < array.length; i++) {
           competingTimeSlots[i] = array[i][6] / 3600000;
         }
 
+        // Vars for time calc
         var totalCompetingTimeSlots = 0;
         var avgCompetingTimeSlots;
         var totalGameWeight = 0;
+        
+        // Get totals
         for (var i = 0; i < competingTimeSlots.length; i++) {
           totalCompetingTimeSlots += competingTimeSlots[i] * dayGamesWeight[i];
           totalGameWeight += dayGamesWeight[i];
         }
+
+        // Get avg time slots (the calculated average based on game performance)
         avgCompetingTimeSlots = totalCompetingTimeSlots / totalGameWeight;
+        
+        // Add time to beginning and end and ensure time doesn't fall out of day
         var startTime = 0;
         var endTime = 0;
         if (avgCompetingTimeSlots - 1 < 0)
@@ -504,9 +527,11 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
           }
         }
 
+        // Convert decimal to time
         var startTimeConverted = convertNumToTime(startTime);
         var endTimeConverted = convertNumToTime(endTime);
 
+        // Further conversions
         var startTimeConvertedArray = startTimeConverted.split(":");
         var startTimeConvertedHours = startTimeConvertedArray[0];
         startTimeConvertedHours = parseInt(startTimeConvertedHours);
@@ -517,9 +542,11 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
         startTimeConvertedHours = ((startTimeConvertedHours + 11) % 12 + 1);
         endTimeConvertedHours = ((endTimeConvertedHours + 11) % 12 + 1);
 
+        // Hours and Minutes
         var startTimeString = startTimeConvertedHours + ":" + startTimeConvertedArray[1];
         var endTimeString = endTimeConvertedHours + ":" + endTimeConvertedArray[1];
 
+        // Add AM and PM
         if (startTime < 12)
         {
           startTimeString = startTimeString + " AM";
@@ -537,7 +564,14 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
         {
           endTimeString = endTimeString + " PM";
         }
+        
+        // If NaN, Not enough data
+        if (startTimeString.includes("NaN") || endTimeString.includes("NaN"))
+        {
+          return "Not Enough Data";
+        }
 
+        // Return time slot
         return startTimeString + " - " + endTimeString;
 }
 

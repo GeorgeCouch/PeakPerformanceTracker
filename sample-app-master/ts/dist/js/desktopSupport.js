@@ -495,6 +495,12 @@ function getAverageTimeSlotforDay(array, gameAverageGameTime, sufficientWater, s
           endTimeString = endTimeString + " PM";
         }
 
+        // If NaN, Not enough data
+        if (startTimeString.includes("NaN") || endTimeString.includes("NaN"))
+        {
+          return "Not Enough Data";
+        }
+
         return startTimeString + " - " + endTimeString;
 }
 
